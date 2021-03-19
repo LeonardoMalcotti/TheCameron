@@ -1,0 +1,19 @@
+{
+  "name": "thecameron",
+  "version": "1.0.0",
+  "description": "Blog WebApp",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeonardoMalcotti/TheCameron.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeonardoMalcotti/TheCameron/issues"
+  },
+  "homepage": "https://github.com/LeonardoMalcotti/TheCameron#readme"
+}
