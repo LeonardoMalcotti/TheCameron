@@ -52,6 +52,8 @@ paths:
                   description: Link to the new user.
           '400':
             description: "Errore."
+          '403':
+            description: "Username already exist."
     
 components:
   schemas:
