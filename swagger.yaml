@@ -10,7 +10,48 @@ servers:
     description: Localhost
     
 paths:
-    /xxx:
+    /user:
+      post:
+        description: >-
+          Create a new user.
+        summary: New user.
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                required: 
+                  - name
+                  - surname
+                  - email
+                  - password
+                  - username
+                properties:
+                  name:
+                    type: string
+                    description: "Name"
+                  surname:
+                    type: string
+                    description: "Surname"
+                  email:
+                    type: string
+                    description: "email"
+                  password:
+                    type: string
+                    description: "Password"
+                  username:
+                    type: string
+                    description: "Username"
+        responses:
+          '201':
+            description: "Created new user."
+            headers:
+              'Location':
+                schema:
+                  type: string
+                  description: Link to the new user.
+          '400':
+            description: "Errore."
     
 components:
   schemas:
