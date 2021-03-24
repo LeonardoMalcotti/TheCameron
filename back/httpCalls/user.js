@@ -48,7 +48,7 @@ router.post("/",async (req,res)=>{
 
 	user.save();
 
-	res.location("/users/" + user.username).status(201).send();
+	res.location("/user/" + user.username).status(201).send();
 });
 
 

@@ -13,10 +13,11 @@ const users = require("./httpCalls/user.js");
 
 //punto d'entrata
 app.use('/',express.static('front/pages'));
+app.use(express.static('front'));
 
 //collegamenti alle chiamate http
 
-app.use("/users",users);
+app.use("/user",users);
 
 //-------------
 
