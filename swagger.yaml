@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: '1.0'
+  version: '1.1'
   title: "TheCameron"
   description: TheCameron is an API that allows users to view and write articles, post reactions to them and follow and stay updated on the various authors
   license:
@@ -10,50 +10,115 @@ servers:
     description: Localhost
     
 paths:
-    /user:
-      post:
-        description: >-
-          Create a new user.
-        summary: New user.
-        requestBody:
+  /user:
+    post:
+      description: >-
+        Create a new user.
+      summary: New user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - name
+                - surname
+                - email
+                - password
+                - username
+              properties:
+                name:
+                  type: string
+                  description: "Name"
+                surname:
+                  type: string
+                  description: "Surname"
+                email:
+                  type: string
+                  description: "email"
+                password:
+                  type: string
+                  description: "Password"
+                username:
+                  type: string
+                  description: "Username"
+      responses:
+        '201':
+          description: "Created new user."
+          headers:
+            'Location':
+              schema:
+                type: string
+                description: Link to the new user.
+        '400':
+          description: "Error."
+        '403':
+          description: "Username already exist."
+          
+  /user/{username}/subscription:
+    post:
+      description: >-
+        Create a new subscription.
+      summary: New subscription.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - username
+                - email
+              properties:
+                username:
+                  type: string
+                  description: "Username"
+                email:
+                  type: string
+                  description: "email"
+      responses:
+        '201':
+          description: "Created new subscription."
+          headers:
+            'Location':
+              schema:
+                type: string
+                description: Link to the new subscription.
+        '400':
+          description: "Error."
+        '403':
+          description: "Error. Subscription already exist."
+    get:
+      description: >-
+        Get the date of subscription about user.
+      summary: Get date payment
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            required: true
+            description: 'Username of the user.'
+      responses:
+        '200':
+          description: 'Date payment.'
           content:
             application/json:
               schema:
-                type: object
-                required: 
-                  - name
-                  - surname
-                  - email
-                  - password
-                  - username
-                properties:
-                  name:
-                    type: string
-                    description: "Name"
-                  surname:
-                    type: string
-                    description: "Surname"
-                  email:
-                    type: string
-                    description: "email"
-                  password:
-                    type: string
-                    description: "Password"
-                  username:
-                    type: string
-                    description: "Username"
-        responses:
-          '201':
-            description: "Created new user."
-            headers:
-              'Location':
-                schema:
-                  type: string
-                  description: Link to the new user.
-          '400':
-            description: "Errore."
-          '403':
-            description: "Username already exist."
-    
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '400':
+          description: 'Error.'
+        '404':
+          description: 'Error. The username does not exist.'
+
 components:
   schemas:
+    Subscription:
+      type: object
+      required:
+        - dateSubsription
+      properties:
+        dateSubscription:
+          type: string
+          description: 'Date start the subscription.'
