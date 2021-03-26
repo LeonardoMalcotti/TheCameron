@@ -1,9 +1,35 @@
 const express = require('express');
 const router = express.Router();
 //modello mongoose
-const Users = require('../models/Users');
+const Users = require('../models/User');
 const Subscription = require('../models/Subscription');
 
+// user/:username GET
+router.get("/:username/subscription",async (req,res)=>{
+
+  let user = await User.find({'username':req.params.username}).exec();
+
+	if(!user){
+		res.status(404).send();
+		return;
+	}
+
+	if(user.stats.length == 0){
+		res.status(404).json({errore: "Nessun user trovato"});
+		return;
+	}
+
+	let ret = {
+		name : user.name,
+		sruname : user.surname,
+		username : user.username,
+		password : user.pass,
+		email : user.email
+	}
+
+	res.status(200).json(ret);
+
+})
 
 // user/:username/subscription POST
 router.post("/:username/subscription",async(req,res)=>{
