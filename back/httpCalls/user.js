@@ -32,7 +32,7 @@ router.post("/",async (req,res)=>{
 
 	//inserimento db
 	//controlla che non ci sia un altro utente con lo stesso username
-	let us = await User.find({'username':req.body.username}).exec();
+	let us = await User.find({'username':req.body.username});
 	if (us.length != 0){
 		res.status(403).json({ error: "Username già presente" });
 		return;
