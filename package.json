@@ -4,7 +4,12 @@
   "description": "Blog WebApp",
   "main": "api.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node api.js",
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true
   },
   "repository": {
     "type": "git",
@@ -21,5 +26,9 @@
   "bugs": {
     "url": "https://github.com/LeonardoMalcotti/TheCameron/issues"
   },
-  "homepage": "https://github.com/LeonardoMalcotti/TheCameron#readme"
+  "homepage": "https://github.com/LeonardoMalcotti/TheCameron#readme",
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
+  }
 }
