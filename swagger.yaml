@@ -113,23 +113,15 @@ paths:
         '200':
           description: "success"
           content:
-              application/json:
-                schema:
-                  type: object
-                  required:
-                    - success
-                    - message
-                    - token
-                  properties:
-                    success:
-                      type: boolean
-                      description: "tell if the authentication was successful"
-                    message:
-                      type: string
-                      descritpion: "description of the success or failure"
-                    token:
-                      type: string
-                      description: "the token for the session"
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginRes'
+        '403':
+          description: "failure"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
         '400':
           description: "missing parameter"
           
@@ -159,6 +151,22 @@ components:
         password:
           type: string
           description: "Password fof authentication"
+    LoginRes:
+      type: object
+      required:
+        - success
+        - message
+        - token
+      properties:
+        success:
+          type: boolean
+          description: "tell if the authentication was successful"
+        message:
+          type: string
+          descritpion: "description of the success or failure"
+        token:
+          type: string
+          description: "the token for the session"
     Subscription:
       type: object
       required:
