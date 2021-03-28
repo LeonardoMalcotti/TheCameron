@@ -15,7 +15,7 @@ router.post('', async function(req, res) {
 		return;
 	}
 
-	let us = await User.findOne({'username':req.body.username});
+	let us = await user.findOne({'username':req.body.username});
 	if(!us){
 		res.status(403).json({ success: false, message: "user not found" });
 		return;
@@ -27,7 +27,7 @@ router.post('', async function(req, res) {
 	}
 
 	var payload = {
-		username: us.username
+		username: us.username,
 		email: us.email
 	};
 
