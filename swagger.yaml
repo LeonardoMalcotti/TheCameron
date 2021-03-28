@@ -19,29 +19,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: 
-                - name
-                - surname
-                - email
-                - password
-                - username
-              properties:
-                name:
-                  type: string
-                  description: "Name"
-                surname:
-                  type: string
-                  description: "Surname"
-                email:
-                  type: string
-                  description: "email"
-                password:
-                  type: string
-                  description: "Password"
-                username:
-                  type: string
-                  description: "Username"
+              $ref: '#/components/schemas/User'
       responses:
         '201':
           description: "Created new user."
@@ -111,9 +89,74 @@ paths:
           description: 'Error.'
         '404':
           description: 'Error. The username does not exist.'
-
+  /login:
+    post:
+      description: >-
+        Autenticate an user.
+      summary: Authentication.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: "Username"
+                email:
+                  type: string
+                  description: "password"
+      responses:
+        '200':
+          description: "success"
+          content:
+              application/json:
+                schema:
+                  type: object
+                  required:
+                    - success
+                    - token
+                  properties:
+                    success:
+                      type: boolean
+                      description: "tell if the authentication was successful"
+                    token:
+                      type: string
+                      description: "the token for the session"
+        '400':
+          description: "missing parameter"
+        '404':
+          description: "user not exist"
+          
 components:
   schemas:
+    User:
+      type: object
+      required:
+        - name
+        - surname
+        - username
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          description: "Name of the user"
+        surname:
+          type: string
+          description: "Surname of the user"
+        username:
+          type: string
+          description: "Username, user key"
+        email:
+          type: string
+          description: "The email of the user"
+        password:
+          type: string
+          description: "Password fof authentication"
     Subscription:
       type: object
       required:
