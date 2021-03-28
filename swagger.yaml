@@ -118,18 +118,20 @@ paths:
                   type: object
                   required:
                     - success
+                    - message
                     - token
                   properties:
                     success:
                       type: boolean
                       description: "tell if the authentication was successful"
+                    message:
+                      type: string
+                      descritpion: "description of the success or failure"
                     token:
                       type: string
                       description: "the token for the session"
         '400':
           description: "missing parameter"
-        '404':
-          description: "user not exist"
           
 components:
   schemas:
