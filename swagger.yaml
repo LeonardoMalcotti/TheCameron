@@ -33,6 +33,32 @@ paths:
         '403':
           description: "Username already exist."
           
+    /user/{username}:
+    get:
+      description: >-
+        Get the info about user.
+      summary: Get specific user
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            required: true
+            description: 'Username of the user.'
+      responses:
+        '200':
+          description: 'Info user.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: 'Error.'
+        '404':
+          description: 'Error. The username does not exist.'     
+          
   /user/{username}/subscription:
     post:
       description: >-
@@ -45,14 +71,14 @@ paths:
               type: object
               required: 
                 - username
-                - email
+                - dateSubscription
               properties:
                 username:
                   type: string
                   description: "Username"
-                email:
+                dateSubscription:
                   type: string
-                  description: "email"
+                  description: "Date Subscription"
       responses:
         '201':
           description: "Created new subscription."
@@ -89,6 +115,29 @@ paths:
           description: 'Error.'
         '404':
           description: 'Error. The username does not exist.'
+    delete:
+      description: >-
+        Delete subscription.
+      summary: Delete date payment
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            required: true
+            description: 'Username of the user.'
+      responses:
+        '204':
+          description: 'Delete payment.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '404':
+          description: 'Error. The username does not exist.'
+          
   /login:
     post:
       description: >-
