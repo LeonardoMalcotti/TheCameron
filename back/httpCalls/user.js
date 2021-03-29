@@ -29,6 +29,7 @@ router.get("/:username",async (req,res)=>{
 	});
 
 });
+
 // user/:username/subscription POST
 router.post("/:username/subscription",async(req,res)=>{
 
@@ -36,7 +37,7 @@ router.post("/:username/subscription",async(req,res)=>{
   let subscription = await Subscription.findOne({'username':req.params.username});
 
   if(!user){
-		res.status(404).json({errore:"Non presente"});
+		res.status(404).json({errore:"Non presente utente"});
 		return;
 	}
 
@@ -45,8 +46,8 @@ router.post("/:username/subscription",async(req,res)=>{
 		return;
 	}
 
-  if(!subscription){
-		res.status(404).json({errore:"Non presente"});
+  if(subscription){
+		res.status(404).json({errore:"Sei gia abbonato"});
 		return;
   }
 
