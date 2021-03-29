@@ -1,9 +1,9 @@
 function loadSubscription(){
     var username = decodeURIComponent(window.location.search).substring(10); //Recupero l'id
-    console.log("username: " + username);
     var url = '../user/' + username + '/subscription';    //Costruisco l'url con l'id
+    console.log("username: " + username);
 
-		//document.getElementById('hiddenAbbonamento').value = username;
+    //Controllo token se presente
 
 		fetch(url, {
         method: 'GET',
@@ -11,12 +11,12 @@ function loadSubscription(){
     })
     .then((resp) => resp.json())
     .then(function(data) {
-        console.log(data);
+        console.log("Data:" + data);
         document.getElementById('abbonamento').innerHTML = "Sei abbonato dal " + data.dateSubscription;
         //paypal non visibile
     })
     .catch( error => console.error(error)
-				//document.getElementById('abbonamento').innerHTML = "Non sei abbonato! Abbonati! ";
+        //document.getElementById('abbonamento').innerHTML = "Non sei abbonato ";
         //paypal visibile
     );
 }
@@ -24,29 +24,27 @@ function loadSubscription(){
 
 function addSubscription(){
 		var username = decodeURIComponent(window.location.search).substring(10); //Recupero l'id
-		console.log("username: " + username);
-    var date = new Date().toLocaleDateString("en-IT")
-    var user;
-
-
     var url = '../user/' + username + '/subscription';
+    var date = new Date().toLocaleDateString("it-IT");
+
+    console.log("username: " + username);
+    console.log("date: " + date);
 
 		fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-            username : user.username,
-            email : user.email,
+            username : username,
             dateSubscription : date,
         }),
     })
     .then((resp) => resp.json())
     .then(function(data) {
         console.log(data);
-        document.getElementById('abb').innerHTML = "Sei abbonato dal " + data.dateSubscription;
+        document.getElementById('abbonato').innerHTML = "Ottimo! Ti sei abbonato";
     })
-    .catch( //error => console.error(error)
-						//document.getElementById('abb').innerHTML = "Non sei abbonato";
+    .catch( error => console.error(error)
+						//document.getElementById('abb').innerHTML = "Peccato! Non ti sei abbonato";
 		);
 
     return;

@@ -5,7 +5,7 @@ const Users = require('../models/User');
 const Subscription = require('../models/Subscription');
 
 // user/:username GET
-router.get("/:username/subscription",async (req,res)=>{
+router.get("/:username",async (req,res)=>{
 
   let user = await User.find({'username':req.params.username}).exec();
 
@@ -35,14 +35,10 @@ router.get("/:username/subscription",async (req,res)=>{
 router.post("/:username/subscription",async(req,res)=>{
 
 	let user = await User.find({'username':req.params.username}).exec();
+  let subscription = await Subscription.find({'username':req.params.username}).exec();
 
-	if(!user){
+  if(!user){
 		res.status(404).send();
-		return;
-	}
-
-  if (!req.body.email){
-		res.status(400).json({ error: "Email dell' utente non specificata" });
 		return;
 	}
 
@@ -51,7 +47,10 @@ router.post("/:username/subscription",async(req,res)=>{
 		return;
 	}
 
-  let subscription = await Subscription.find({'username':req.params.username}).exec();
+  if(!subscription){
+		res.status(404).send();
+		return;
+	}
 
   if (subscription.length != 0){
 		res.status(403).json({ error: "Iscrizione già presente" });
@@ -60,7 +59,6 @@ router.post("/:username/subscription",async(req,res)=>{
 
 	let sub = new Subscription({
 		username : req.params.username,
-    email : req.body.email,
     dateSubscription : req.body.dateSubscription
 	});
 
@@ -79,13 +77,13 @@ router.get("/:username/subscription",async (req,res)=>{
 		return;
 	}
 
-	if(subscription.stats.length == 0){
+	if(subscription.dateSubscription == ""){
 		res.status(404).json({errore: "Nessun abbonamento trovato"});
 		return;
 	}
 
 	let ret = {
-		email : subscription.email,
+		username : subscription.username,
 		dateSubscription : subscription.dateSubscription
 	}
 

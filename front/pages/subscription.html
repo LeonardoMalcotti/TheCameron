@@ -7,12 +7,11 @@
     <!--<link rel="stylesheet" href="style.css">-->
   </head>
 
-  <body onload="loadSubscription()">
+  <body onload="loadSubscription();">
 
   	<form id="formSubscription">
       <span id="abbonamento"> </span>
-      <!--<span id="hiddenAbbonamento" style="  visibility: hidden;"></span>-->
-      <div id="paypal-button-container-P-7TE65063DA5269340MBOF2AA"></div>
+      <!--<div id="paypal-button-container-P-7TE65063DA5269340MBOF2AA"></div>
       <script src="https://www.paypal.com/sdk/js?client-id=ARSxcy21WDx7itoe-HhZfWi5sYlb_-0mLrn3WUtIHrHEW6oqRVBtE0Eh9LsyWtOejkGlL1vIIzb-GAPs&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
       <script>
         paypal.Buttons({
@@ -34,9 +33,8 @@
               addSubscription();
             }
         }).render('#paypal-button-container-P-7TE65063DA5269340MBOF2AA'); // Renders the PayPal button
-      </script>
+      </script>-->
       <button id="subscription" onclick="addSubscription()">Crea l'abbonamento</button>
-      <span id="abb"> </span>
     </form>
   </body>
 </html>
