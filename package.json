@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/LeonardoMalcotti/TheCameron/issues"
   },
-  "homepage": "https://github.com/LeonardoMalcotti/TheCameron#readme"
+  "homepage": "https://github.com/LeonardoMalcotti/TheCameron#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "heroku": "^7.51.0",
+    "mongoose": "^5.12.2"
+  }
 }
