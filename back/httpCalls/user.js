@@ -92,7 +92,7 @@ router.delete("/:username/subscription",async (req,res)=>{
 		return;
 	}
 
-	let ret = await Subscription.delete(req.params.username);
+	let ret = await Subscription.deleteOne({'username':req.params.username});
 
 	if (ret) {
 		res.status(204).send();
