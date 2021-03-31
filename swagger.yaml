@@ -199,7 +199,56 @@ paths:
                 $ref: '#/components/schemas/Article'
         '400':
           description: "missing parameter"
-            
+    get:
+      description: >-
+        Get article.
+      summary: Get article
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: object
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: title
+          schema:
+            type: object
+            required: true
+            description: 'Title of the article.'
+      responses:
+        '200':
+          description: 'Article.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '400':
+          description: 'Error.'
+        '404':
+          description: 'Error. The title or id does not exist.'
+  /article/filters?:
+    get:
+      description: >-
+        Get articles filtered.
+      summary: Filter articles
+      parameters:
+        - in: query
+          name: filters
+          schema:
+            type: array
+            description: "The filters to applay"
+      responses:
+        '200':
+          description: 'Filtered articles.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
 components:
   schemas:
     User:
@@ -278,3 +327,13 @@ components:
         date:
           type: date
           description: 'Date when the article was written.'
+    ArticleInfo:
+      type: object
+      required:
+        - id
+        - author
+      properties:
+        id:
+          type: number
+        author:
+          type: string
