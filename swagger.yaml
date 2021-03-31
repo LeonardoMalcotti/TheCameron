@@ -199,6 +199,7 @@ paths:
                 $ref: '#/components/schemas/Article'
         '400':
           description: "missing parameter"
+  /article/{id}/{author}:
     get:
       description: >-
         Get article.
@@ -211,11 +212,11 @@ paths:
             required: true
             description: 'ID of the article.'
         - in: path
-          name: title
+          name: author
           schema:
             type: object
             required: true
-            description: 'Title of the article.'
+            description: 'Author of the article.'
       responses:
         '200':
           description: 'Article.'
