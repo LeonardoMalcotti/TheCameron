@@ -229,7 +229,7 @@ paths:
         '400':
           description: 'Error.'
         '404':
-          description: 'Error. The title or id does not exist.'
+          description: 'Error. The author or id does not exist.'
   /article/filters?:
     get:
       description: >-
