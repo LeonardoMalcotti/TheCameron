@@ -6,7 +6,7 @@ const Article = require('../models/Article');
 // user/:username GET
 router.get("/:id/:author",async (req,res)=>{
 
-  let article = await Article.findOne({'id':req.params.id, 'author':req.params.title});
+  let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
 
 	if(!article){
 		res.status(404).json({error: "Autore o id non presente"});
