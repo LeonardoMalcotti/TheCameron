@@ -170,7 +170,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscription'
+                $ref: '#/components/schemas/LoginRes'
         '400':
           description: "missing parameter"
           
@@ -309,6 +309,7 @@ components:
         - summary
         - text
         - date
+        - tag
       properties:
         id:
           type: number
@@ -328,6 +329,9 @@ components:
         date:
           type: date
           description: 'Date when the article was written.'
+        tag:
+          type: [string]
+          description: 'Tag to describe the article'
     ArticleInfo:
       type: object
       required:
