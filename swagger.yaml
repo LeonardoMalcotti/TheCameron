@@ -250,6 +250,26 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ArticleInfo'
+  /article/search/{title}:
+    get:
+      description: >-
+        Get articles matching given title
+      summary: Search by title
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: object
+            description: "Title to match"
+      responses:
+        '200':
+          description: 'Title-matching articles'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
 components:
   schemas:
     User:
@@ -337,8 +357,11 @@ components:
       required:
         - id
         - author
+        - title
       properties:
         id:
           type: number
         author:
+          type: string
+        title:
           type: string
