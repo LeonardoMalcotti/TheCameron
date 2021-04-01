@@ -24,6 +24,11 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
+	if (!req.body.tag){
+		res.status(400).json({ error: "Tag dell'articolo non specificati" });
+		return;
+	}
+
 	//inserimento db
 	let allArticle = await Article.find({}).exec();
 	let ids = allArticle.map(tmp => tmp.id);
@@ -34,11 +39,12 @@ router.post("/",async (req,res)=>{
 		title : req.body.title,
 		summary : req.body.summary,	
 		text : req.body.text,
-		date : new Date(year, month, day, hours, minutes)
+		date : new Date(year, month, day, hours, minutes),
+		tag: [req.body.tag].split(','),
 	});
 	newArticle.save();
 
-	res.location("/Article/" + newArticle.id).status(201).send();
+	res.location("/Article/" + newArticle.id+"/"+newArticle.author).status(201).send();
 });
 
 
