@@ -256,7 +256,7 @@ paths:
         Get articles matching given title
       summary: Search by title
       parameters:
-        - in: query
+        - in: path
           name: title
           schema:
             type: object
