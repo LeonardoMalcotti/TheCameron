@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
+//modello mongoose
 const Article = require('../models/Article');
 
-
-router.get("/article/search/:title", async(req,res) => {
+// Search by title
+router.get("/search/:title", async(req,res) => {
 
 	let regex = req.param.title;
 	regex.replace(' ','.*');
@@ -18,3 +18,5 @@ router.get("/article/search/:title", async(req,res) => {
 	res.status(200).json(article.map(mapFun));
 	
 });
+
+module.exports = router;
