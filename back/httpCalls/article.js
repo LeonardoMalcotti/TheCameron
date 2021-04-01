@@ -20,7 +20,8 @@ router.get("/:id/:author",async (req,res)=>{
   	title : article.title,
   	summary : article.summary,
   	text : article.text,
-    date : article.date
+    date : article.date,
+    tag : article.tag
 	});
 
 });

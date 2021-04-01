@@ -8,4 +8,5 @@ module.exports = mongoose.model("Article", new Schema({
 	summary : {type: String, required: true},
 	text : {type: String, required: true},
   date : {type: Date, required: true},
+	tag: {type: [String], required: true}
 }));

@@ -16,6 +16,7 @@ function loadArticle(){
     document.getElementById('txt_author').innerHTML = data.author;
     document.getElementById('txt_text').innerHTML = data.text;
     document.getElementById('txt_date').innerHTML = data.date;
+    document.getElementById('txt_tag').innerHTML = data.tag;
   })
   .catch( error => console.error(error) );
 }
