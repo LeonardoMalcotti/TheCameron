@@ -30,7 +30,7 @@ router.get("/filters",async(req,res)=>{
 	}
 
 	function mapFun(article){
-		return {id: article.id, author: article.author};
+		return {id: article.id, author: article.author, title: article.title, summary: article.summary};
 	}
 
 	let risp = art.filter(checkFilters).map(mapFun);
