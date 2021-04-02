@@ -8,8 +8,9 @@ router.get("/search/:title", async(req,res) => {
 
 	let regex = req.params.title;
 	regex.replace(' ','.*');
+	regex += "/i"
 
-	let article = await Article.find({'title':regex});
+	let article = await Article.find({'title': {$regex: regex, $options: 'i'}}).limit(50);
 
 	function mapFun(art){
 		return {id: art.id, author: art.author, title: art.title, summary: art.summary};
