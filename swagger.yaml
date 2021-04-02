@@ -270,6 +270,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ArticleInfo'
+  /article/search/:
+    get:
+      description: >-
+        Get last 50 articles (if more)
+      summary: Get recent articles
+      responses:
+        '200':
+          description: 'Recent articles'
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
 components:
   schemas:
     User:
