@@ -1,12 +1,12 @@
-function searchTitle(){
+function searchArticles(){
 
-    var text = document.getElementById("txt_search");
+    var text = document.getElementById("txt_search").value;
 
     if(text && text != ""){
         // Sanificazione dell'input
         text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         fetch('../article/search/'+text, {
-            method: GET,
+            method: 'GET',
             headers:{ 'Content-Type': 'application/json' }
         })
         .then((resp) => resp.json())
@@ -20,7 +20,7 @@ function searchTitle(){
     }
     else{
         fetch('../article/search/', {
-            method: GET,
+            method: 'GET',
             headers:{ 'Content-Type': 'application/json' }
         })
         .then((resp) => resp.json())

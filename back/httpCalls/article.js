@@ -6,11 +6,12 @@ const Article = require('../models/Article');
 // Search by title
 router.get("/search/:title", async(req,res) => {
 
-	let regex = req.params.title;
-	regex.replace(' ','.*');
-	regex += "/i";
+	let regexp = req.params.title;
+	regexp.replace(' ','/.*/');
 
-	let article = await Article.find({'title': {$regex: regex, $options: 'i'}}).limit(50);
+	let allArticles = await Article.find({'title': {$regex: regexp, $options: 'i'}});
+
+	let article = allArticles.slice(0,50);
 
 	function mapFun(art){
 		return {id: art.id, author: art.author, title: art.title, summary: art.summary};
@@ -21,7 +22,7 @@ router.get("/search/:title", async(req,res) => {
 });
 
 // Get last 50 articles
-router.get("/search/:title", async(req,res) => {
+router.get("/search/", async(req,res) => {
 
 	let article = await Article.find().sort({"date":-1, "id": 1}).limit(50);
 
