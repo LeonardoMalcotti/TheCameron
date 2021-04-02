@@ -19,4 +19,18 @@ router.get("/search/:title", async(req,res) => {
 	
 });
 
+// Get last 50 articles
+router.get("/search/:title", async(req,res) => {
+
+	let article = await Article.find().sort({"date":-1, "id": 1}).limit(50);
+
+	function mapFun(art){
+		return {id: art.id, author: art.author, title: art.title, summary: art.summary};
+	}
+
+	res.status(200).json(article.map(mapFun));
+	
+});
+
+
 module.exports = router;
