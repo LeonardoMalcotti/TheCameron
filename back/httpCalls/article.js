@@ -6,7 +6,7 @@ const Article = require('../models/Article');
 // Search by title
 router.get("/search/:title", async(req,res) => {
 
-	let regex = req.param.title;
+	let regex = req.params.title;
 	regex.replace(' ','.*');
 
 	let article = await Article.find({'title':regex});
