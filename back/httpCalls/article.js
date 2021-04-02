@@ -8,7 +8,7 @@ router.get("/search/:title", async(req,res) => {
 
 	let regex = req.params.title;
 	regex.replace(' ','.*');
-	regex += "/i"
+	regex += "/i";
 
 	let article = await Article.find({'title': {$regex: regex, $options: 'i'}}).limit(50);
 
