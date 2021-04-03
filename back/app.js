@@ -15,6 +15,7 @@ const article = require("./httpCalls/article.js");
 app.use('/',express.static('front/pages'));
 app.use(express.static('front'));
 
+
 //collegamenti alle chiamate http
 
 app.use("/article", article);
