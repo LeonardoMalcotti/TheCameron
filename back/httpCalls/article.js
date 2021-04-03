@@ -11,7 +11,8 @@ router.get("/search/:title", async(req,res) => {
 		return regexp.test(info.title);
 	}
 	// Get all the articles
-	let allArticles = await Article.find().sort({"date":-1});
+	let tmp = await Article.find();
+	let allArticles = tmp.sort((a, b) => -(a - b));
 	// Filter them
 	let resArticles = allArticles.filter(inc);
 	// Mapping the output 
@@ -26,7 +27,8 @@ router.get("/search/:title", async(req,res) => {
 // Get last 50 articles
 router.get("/search/", async(req,res) => {
 
-	let article = await Article.find().sort({"date":-1, "id": 1}).limit(50);
+	 let tmp = await Article.find();
+	 let article = tmp.sort((a, b) => -(a - b));
 
 	function mapFun(art){
 		return {id: art.id, author: art.author, title: art.title, summary: art.summary};

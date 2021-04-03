@@ -14,39 +14,39 @@ describe('search article by title', () =>{
 	        		id: "1", 
 	        		author: "tizio", 
 	        		title: "Breve guida su come testare con jest", 
-	        		summary: "summ"
+	        		summary: "summ",
+                    date: "1"
 	        	},
 	        	{
 	        		id: "2", 
 	        		author: "tizio", 
-	        		title: "Come utilizzare jest e spyOn al meglio", 
-	        		summary: "summ"
+	        		title: "Come utilizzare jEsT e spyOn al meglio", 
+	        		summary: "summ",
+                    date: "2"
         		},
         		{
 	        		id: "3", 
 	        		author: "tizio", 
 	        		title: "Altro titolo con jestAll'interno", 
-	        		summary: "summ"
+	        		summary: "summ",
+                    date: "3"
 	        	},
 	        	{
 	        		id: "4", 
 	        		author: "tizio", 
 	        		title: "Altro titolo", 
-	        		summary: "summ"
+	        		summary: "summ",
+                    date: "4"
 	        	},
 	        	{
 	        		id: "5", 
 	        		author: "tizio", 
 	        		title: "Qualcos'altro a caso", 
-	        		summary: "summ"
+	        		summary: "summ",
+                    date: "5"
 	        	},
         	];
-        	function inc(info){
-        		let reg = new RegExp(criterias.title);
-        		return reg.test(info.title);
-        		//return info.title.includes(criterias.title);
-        	}
-        	return pool.filter(inc);
+        	return pool;
         });
     });
 
