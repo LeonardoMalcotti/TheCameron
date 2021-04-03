@@ -13,6 +13,7 @@ const article = require("./httpCalls/article.js");
 
 //punto d'entrata
 app.use('/',express.static('front/pages'));
+app.use('/scripts/',express.static('front/scripts'));
 
 //collegamenti alle chiamate http
 

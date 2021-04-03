@@ -5,19 +5,21 @@ const Article = require('../models/Article');
 
 // Search by title
 router.get("/search/:title", async(req,res) => {
-
-	let regexp = req.params.title;
-	regexp.replace(' ','/.*/');
-
-	let allArticles = await Article.find({'title': {$regex: regexp, $options: 'i'}});
-
-	let article = allArticles.slice(0,50);
-
+	// Filtering function
+	function inc(info){
+		let regexp = new RegExp(req.params.title, "i");
+		return regexp.test(info.title);
+	}
+	// Get all the articles
+	let allArticles = await Article.find().sort({"date":-1});
+	// Filter them
+	let resArticles = allArticles.filter(inc);
+	// Mapping the output 
 	function mapFun(art){
 		return {id: art.id, author: art.author, title: art.title, summary: art.summary};
 	}
 
-	res.status(200).json(article.map(mapFun));
+	res.status(200).json(resArticles.map(mapFun));
 	
 });
 
