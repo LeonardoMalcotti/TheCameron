@@ -2,12 +2,11 @@ const supertest = require('supertest');
 const app = require('../../app');
 const request = supertest(app);
 
-describe('POST /user/username/subscribe', () =>{
+describe('user test', () =>{
 
 	//mock function per il metodo find in post /user/username/subscribe
     let findSpyUser;
     let findSpySub;
-
 
     beforeAll( () => {
         const User = require("../../models/User");
@@ -46,7 +45,6 @@ describe('POST /user/username/subscribe', () =>{
     //--------------------------------------------------------------------------
 
     test('POST /subscription missing data', async done =>{
-        expect.assertions(1);
         const response = await request
         .post('/user/username/subscription')
         .set('Accept', 'application/json')
@@ -58,7 +56,6 @@ describe('POST /user/username/subscribe', () =>{
     });
 
     test('POST /user not exist', async done =>{
-        expect.assertions(1);
         const response = await request
         .post('/user/username/subscription')
         .set('Accept', 'application/json')
@@ -71,7 +68,6 @@ describe('POST /user/username/subscribe', () =>{
     });
 
     test('POST /subscription already exists', async done =>{
-        expect.assertions(1);
         const response = await request
             .post('/user/username/subscription')
             .set('Accept', 'application/json')
@@ -84,7 +80,6 @@ describe('POST /user/username/subscribe', () =>{
     });
 
     test('POST /user and subscription valid data', async done =>{
-        expect.assertions(1);
         const response = await request
             .post('/user/username/subscription')
             .set('Accept', 'application/json')
@@ -95,5 +90,45 @@ describe('POST /user/username/subscribe', () =>{
 
         done();
     });
+    test('GET /user not exist', async done =>{
+        const response = await request.get('/usernameProva');
+        expect(response.statusCode).toBe(404);
+        done();
+    });
+
+    test('GET /user exist', async done =>{
+        const response = await request.get('/dantealighieri');
+        let user = {
+            name: "Dante",  
+            surname: "Alighieri", 
+            email: "dante.alighieri@loremipsum.it", 
+            password: "12345678", 
+            username: "dantealighieri"
+        }
+        expect(response.statusCode).toBe(200);
+        expect(response).toBe(user);
+        done();
+    });
+
+    test('GET /:username/subscription  sub not exist', async done =>{
+        const response = await request.get('/danteAlighieri/subscription');
+        expect(response.statusCode).toBe(404);
+        done();
+    });
+
+    test('GET /:username/subscription succes', async done =>{
+        const response = await request.get('/dantealighieri/subscription');
+        expect(response.statusCode).toBe(200);
+        expect(response).toBe({username: "dantealighieri",
+        dateSubscription: "1/04/2021"})
+        done();
+    });
+
+    test('DELETE /:username/subscription succes', async done =>{
+        let response = await request.delete("/dantealighieri/subscription");
+		expect(response.status).toBe(204);
+        done();
+    });
+
 
 });
