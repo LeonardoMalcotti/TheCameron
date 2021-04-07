@@ -4,7 +4,12 @@
   "description": "Blog WebApp",
   "main": "api.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node api.js",
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true
   },
   "repository": {
     "type": "git",
@@ -12,19 +17,19 @@
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.4"
+  },
   "bugs": {
     "url": "https://github.com/LeonardoMalcotti/TheCameron/issues"
   },
   "homepage": "https://github.com/LeonardoMalcotti/TheCameron#readme",
   "devDependencies": {
-    "jest": "^26.6.3"
-  }
-  "scripts": {
-    "start": "node api.js",
-    "test": "jest"
-  }
-  "jest": {
-    "verbose": true,
-    "collectCoverage": true
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
   }
 }
