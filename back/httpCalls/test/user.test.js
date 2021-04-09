@@ -10,7 +10,7 @@ describe('user test', () =>{
 
     beforeAll( () => {
         const User = require("../../models/User");
-        const Subscription = require("../../models/Subscritpion");
+        const Subscription = require("../../models/Subscription");
         
         findSpyUser = jest.spyOn(User, 'findOne').mockImplementation((criterias) =>{
         	if(criterias.username == "dantealighieri"){
@@ -46,9 +46,8 @@ describe('user test', () =>{
 
     test('POST /subscription missing data', async done =>{
         const response = await request
-        .post('/user/username/subscription')
-        .set('Accept', 'application/json')
-        .send({username: "dantealighieri"})
+        .post('/user/dantealighieri/subscription')
+        .set('Accept', 'application/json');
 
         expect(response.statusCode).toBe(400);
 
@@ -57,10 +56,8 @@ describe('user test', () =>{
 
     test('POST /user not exist', async done =>{
         const response = await request
-        .post('/user/username/subscription')
-        .set('Accept', 'application/json')
-        .send({ username: "loremipsum",
-                dateSubscription: "2/04/2021"});
+        .post('/user/loremipsum/subscription')
+        .set('Accept', 'application/json');
 
         expect(response.statusCode).toBe(404);
 
@@ -69,10 +66,8 @@ describe('user test', () =>{
 
     test('POST /subscription already exists', async done =>{
         const response = await request
-            .post('/user/username/subscription')
-            .set('Accept', 'application/json')
-            .send({ username: "dantealighieri",
-            dateSubscription: "1/04/2021"});
+            .post('/user/dantealighieri/subscription')
+            .set('Accept', 'application/json');
 
         expect(response.statusCode).toBe(404);
 
@@ -81,10 +76,8 @@ describe('user test', () =>{
 
     test('POST /user and subscription valid data', async done =>{
         const response = await request
-            .post('/user/username/subscription')
-            .set('Accept', 'application/json')
-            .send({ username: "dantealighieri",
-            dateSubscription: "3/04/2021"});
+            .post('/user/dantealighieri/subscription')
+            .set('Accept', 'application/json');
 
         expect(response.statusCode).toBe(201);
 
