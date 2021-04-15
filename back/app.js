@@ -6,7 +6,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //requires vari
-const user = require("./httpCalls/user.js");
+
+const tokenChecker = require("./tokenChecker.js");
+
+const users = require("./httpCalls/user.js");
+const login = require("./httpCalls/login.js");
 
 //-------------
 
@@ -16,6 +20,16 @@ app.use(express.static('front'));
 
 //collegamenti alle chiamate http
 app.use("/user", user);
+
+
+//autenticazione
+app.use("/login",login);
+
+//chiamate http che hanno bisogno di un token
+/*
+app.use("qualcosa",tokenChecker);
+*/
+
 
 //-------------
 
