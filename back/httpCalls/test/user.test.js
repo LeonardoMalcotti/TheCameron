@@ -11,17 +11,25 @@ describe('user test', () =>{
     beforeAll( () => {
         const User = require("../../models/User");
         const Subscription = require("../../models/Subscription");
-        
+
         findSpyUser = jest.spyOn(User, 'findOne').mockImplementation((criterias) =>{
         	if(criterias.username == "dantealighieri"){
 	            return {
-	                name: "Dante",  
-	                surname: "Alighieri", 
-	                email: "dante.alighieri@loremipsum.it", 
-	                password: "12345678", 
+	                name: "Dante",
+	                surname: "Alighieri",
+	                email: "dante.alighieri@loremipsum.it",
+	                password: "12345678",
 	                username: "dantealighieri"
 	            };
-	        } else {
+	        } else if(criterias.username == "giovannipascoli"){
+              return {
+                  name: "Giovanni",
+                  surname: "Pascoli",
+                  email: "giovanni.pascoli@loremipsum.it",
+                  password: "12345678",
+                  username: "giovannipascoli"
+                }
+          } else {
 	        	return null;
 	        }
         });
@@ -31,6 +39,13 @@ describe('user test', () =>{
                     username: "dantealighieri",
                     dateSubscription: "1/04/2021"
 	            };
+	        } else {
+	        	return null;
+	        }
+        });
+        findSpySub = jest.spyOn(Subscription, 'deleteOne').mockImplementation((criterias) =>{
+        	if(criterias.username == "dantealighieri"){
+	            return "true";
 	        } else {
 	        	return null;
 	        }
@@ -67,7 +82,8 @@ describe('user test', () =>{
     test('POST /subscription already exists', async done =>{
         const response = await request
             .post('/user/dantealighieri/subscription')
-            .set('Accept', 'application/json');
+            .set('Accept', 'application/json')
+            .send({"dateSubscription": "1/04/2021"});
 
         expect(response.statusCode).toBe(404);
 
@@ -76,50 +92,53 @@ describe('user test', () =>{
 
     test('POST /user and subscription valid data', async done =>{
         const response = await request
-            .post('/user/dantealighieri/subscription')
-            .set('Accept', 'application/json');
+            .post('/user/giovannipascoli/subscription')
+            .set('Accept', 'application/json')
+            .send({"dateSubscription": "12/05/2020"});
 
         expect(response.statusCode).toBe(201);
 
         done();
     });
-    test('GET /user not exist', async done =>{
-        const response = await request.get('/usernameProva');
+    /*test('GET /user not exist', async done =>{
+        const response = await request.get('/user/usernameProva');
         expect(response.statusCode).toBe(404);
         done();
     });
 
     test('GET /user exist', async done =>{
-        const response = await request.get('/dantealighieri');
+        const response = await request.get('/user/dantealighieri');
         let user = {
-            name: "Dante",  
-            surname: "Alighieri", 
-            email: "dante.alighieri@loremipsum.it", 
-            password: "12345678", 
+            name: "Dante",
+            surname: "Alighieri",
+            email: "dante.alighieri@loremipsum.it",
+            password: "12345678",
             username: "dantealighieri"
         }
         expect(response.statusCode).toBe(200);
         expect(response).toBe(user);
         done();
-    });
+    });*/
 
-    test('GET /:username/subscription  sub not exist', async done =>{
-        const response = await request.get('/danteAlighieri/subscription');
+    test('GET /user/:username/subscription  sub not exist', async done =>{
+        const response = await request.get('/user/loremipsum/subscription');
         expect(response.statusCode).toBe(404);
         done();
     });
 
-    test('GET /:username/subscription succes', async done =>{
-        const response = await request.get('/dantealighieri/subscription');
+    test('GET /user/:username/subscription succes', async done =>{
+        const response = await request.get('/user/dantealighieri/subscription');
         expect(response.statusCode).toBe(200);
-        expect(response).toBe({username: "dantealighieri",
-        dateSubscription: "1/04/2021"})
+
+        expect(response.body.username).toBe('dantealighieri');
+        expect(response.body.dateSubscription).toBe('1/04/2021');
+
         done();
     });
 
-    test('DELETE /:username/subscription succes', async done =>{
-        let response = await request.delete("/dantealighieri/subscription");
-		expect(response.status).toBe(204);
+    test('DELETE /user/:username/subscription succes', async done =>{
+        let response = await request.delete("/user/dantealighieri/subscription");
+		    expect(response.statusCode).toBe(204);
         done();
     });
 
