@@ -37,7 +37,7 @@ router.post("/:username/subscription",async(req,res)=>{
   let subscription = await Subscription.findOne({'username':req.params.username});
 
   if(!user){
-		res.status(404).json({errore:"Non presente utente"});
+		res.status(404).json({errore:"Utente non presente"});
 		return;
 	}
 
