@@ -67,6 +67,7 @@ describe('user test', () =>{
 	            return "true";
 	        } else {
 	        	return null;
+		}
           });
     });
           
