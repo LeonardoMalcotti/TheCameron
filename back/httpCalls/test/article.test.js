@@ -11,9 +11,8 @@ describe('POST /article', () =>{
         const Article = require("../../models/Article");
 
         findSpy = jest.spyOn(Article, 'find').mockImplementation((criterias) =>{
-        	if(criterias.author == "Dante Alighieri" && criterias.id == 0){
+        	if(criterias.author == "Dante Alighieri"){
 	            return [{
-                  id : 0,
                 	author : "Dante Alighieri",
                 	title : "La divina commedia",
                 	summary : "inferno",
@@ -45,7 +44,7 @@ describe('POST /article', () =>{
         const response = await request
             .post('/article')
             .set('Accept', 'application/json')
-            .send({ id : 1,
+            .send({
                     author : "Alessandro Manzoni",
                     title : "Promessi Sposi",
                     summary : "..",
