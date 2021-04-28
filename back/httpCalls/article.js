@@ -24,27 +24,25 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
-	if (!req.body.date){
-		res.status(400).json({ error: "Data dell'articolo non specificata" });
-		return;
-	}
-
 	if (!req.body.tag){
 		res.status(400).json({ error: "Tag dell'articolo non specificati" });
 		return;
 	}
 
+	//creazione data
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+
+
 	//inserimento db
-	let allArticle = await Article.find({}).exec();
-	let ids = allArticle.map(tmp => tmp.id);
-	let id = ( allArticle.length==0 ? 1 : Math.max(...ids) + 1);
 	let newArticle = new Article({
-		id : id,
 		author : req.body.author,
 		title : req.body.title,
 		summary : req.body.summary,
 		text : req.body.text,
-		date : req.body.date,
+		date : mm + '/' + dd + '/' + yyyy,
 		tag: req.body.tag.split(","),
 	});
 	newArticle.save();

@@ -1,7 +1,7 @@
 function newArticle(){
-	var url = '../article/';
+	var url = '../article';
 	//var date = new Date().toLocaleDateString("it-IT");
-	var date = new Date(year, month, day, hours, minutes, seconds, milliseconds).toLocaleDateString("it-IT");
+	//var data = new Date(year, month, day, hours, minutes, seconds, milliseconds).toLocaleDateString("it-IT");
 	var title = document.getElementById("title").value;
   var summary = document.getElementById("summary").value;
   var text = document.getElementById("text").value;
@@ -17,16 +17,21 @@ function newArticle(){
 				author : author,
 				text : text,
 				tag : tag,
-				date : "20/04/2021"
 			}),
 	})
-	.then((resp) => resp.json())
-	.then(function(data) {
-			console.log(data);
-			console.log(date);
-			alert("dati inviati");
-	})
-	.catch( error => console.error(error));
+	.then(function(response) {
+        //la risposta è un successo
+        if(response.ok){
+            alert("Articolo creato");
+        }
+        //Da una spiegazione nel caso di fallimento
+        else {
+            response.json().then(data => {
+                alert(data.error)
+            })
+        }
+    })
+	.catch( error => console.log(error));
 
 	return;
 }
