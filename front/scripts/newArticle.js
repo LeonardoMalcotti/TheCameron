@@ -1,7 +1,6 @@
 function newArticle(){
 	var url = '../article';
-	//var date = new Date().toLocaleDateString("it-IT");
-	//var data = new Date(year, month, day, hours, minutes, seconds, milliseconds).toLocaleDateString("it-IT");
+
 	var title = document.getElementById("title").value;
   var summary = document.getElementById("summary").value;
   var text = document.getElementById("text").value;

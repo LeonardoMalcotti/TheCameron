@@ -35,7 +35,6 @@ router.post("/",async (req,res)=>{
 	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 	var yyyy = today.getFullYear();
 
-
 	//inserimento db
 	let newArticle = new Article({
 		author : req.body.author,
