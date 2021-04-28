@@ -35,8 +35,13 @@ router.post("/",async (req,res)=>{
 	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 	var yyyy = today.getFullYear();
 
+	let allArticle = await Article.find({}).exec();
+ 	let ids = allArticle.map(tmp => tmp.id);
+ 	let id = ( allArticle.length==0 ? 1 : Math.max(...ids) + 1);
+
 	//inserimento db
 	let newArticle = new Article({
+		id : id,
 		author : req.body.author,
 		title : req.body.title,
 		summary : req.body.summary,
