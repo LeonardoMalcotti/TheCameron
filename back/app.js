@@ -7,8 +7,12 @@ app.use(express.urlencoded({ extended: true }));
 
 //requires vari
 
+
+const tokenChecker = require("./tokenChecker.js");
+
+const articles = require("./httpCalls/article.js");
 const users = require("./httpCalls/user.js");
-const article = require("./httpCalls/article.js");
+const login = require("./httpCalls/login.js");
 
 //-------------
 
@@ -18,8 +22,19 @@ app.use(express.static('front'));
 
 //collegamenti alle chiamate http
 
+
 app.use("/user",users);
-app.use("/article", article);
+app.use("/article", articles);
+
+
+//autenticazione
+app.use("/login",login);
+
+//chiamate http che hanno bisogno di un token
+/*
+app.use("qualcosa",tokenChecker);
+*/
+
 
 //-------------
 

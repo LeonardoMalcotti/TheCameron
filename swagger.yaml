@@ -77,7 +77,7 @@ paths:
                   type: string
                   description: "Username"
                 dateSubscription:
-                  type: string
+                  type: date
                   description: "Date Subscription"
       responses:
         '201':
@@ -170,7 +170,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscription'
+                $ref: '#/components/schemas/LoginRes'
         '400':
           description: "missing parameter"
           
@@ -199,7 +199,91 @@ paths:
                 $ref: '#/components/schemas/Article'
         '400':
           description: "missing parameter"
-            
+  /article/{id}/{author}:
+    get:
+      description: >-
+        Get article.
+      summary: Get article
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: object
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: author
+          schema:
+            type: object
+            required: true
+            description: 'Author of the article.'
+      responses:
+        '200':
+          description: 'Article.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '400':
+          description: 'Error.'
+        '404':
+          description: 'Error. The author or id does not exist.'
+  /article/filters?:
+    get:
+      description: >-
+        Get articles filtered.
+      summary: Filter articles
+      parameters:
+        - in: query
+          name: filters
+          schema:
+            type: array
+            description: "The filters to applay"
+      responses:
+        '200':
+          description: 'Filtered articles.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
+  /article/search/{title}:
+    get:
+      description: >-
+        Get articles matching given title
+      summary: Search by title
+      parameters:
+        - in: path
+          name: title
+          schema:
+            type: object
+            description: "Title to match"
+      responses:
+        '200':
+          description: 'Title-matching articles'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
+  /article/search/:
+    get:
+      description: >-
+        Get last 50 articles (if more)
+      summary: Get recent articles
+      responses:
+        '200':
+          description: 'Recent articles'
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
 components:
   schemas:
     User:
@@ -248,7 +332,7 @@ components:
         - dateSubsription
       properties:
         dateSubscription:
-          type: string
+          type: date
           description: 'Date start the subscription.'
     Article:
       type: object
@@ -259,6 +343,7 @@ components:
         - summary
         - text
         - date
+        - tag
       properties:
         id:
           type: number
@@ -278,3 +363,19 @@ components:
         date:
           type: date
           description: 'Date when the article was written.'
+        tag:
+          type: [string]
+          description: 'Tag to describe the article'
+    ArticleInfo:
+      type: object
+      required:
+        - id
+        - author
+        - title
+      properties:
+        id:
+          type: number
+        author:
+          type: string
+        title:
+          type: string
