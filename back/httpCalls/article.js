@@ -3,6 +3,28 @@ const router = express.Router();
 //modello mongoose
 const Article = require('../models/Article');
 
+
+// user/:username GET
+router.get("/:id/:author",async (req,res)=>{
+
+  let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
+
+	if(!article){
+		res.status(404).json({error: "Autore o id non presente"});
+		return;
+	}
+  
+	res.status(200).json({
+    id : article.id,
+  	author : article.author,
+  	title : article.title,
+  	summary : article.summary,
+  	text : article.text,
+    date : article.date,
+    tag : article.tag
+	});
+});
+
 router.post("/",async (req,res)=>{
 	if (!req.body.title){
 		res.status(400).json({ error: "Titolo dell'articolo non specificato" });
@@ -59,8 +81,7 @@ router.post("/",async (req,res)=>{
 	newArticle.save();
 
 	res.location("/Article/" + newArticle.id+"/"+newArticle.author).status(201).send();
+
 });
-
-
 
 module.exports = router;

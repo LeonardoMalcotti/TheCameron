@@ -22,8 +22,9 @@ app.use(express.static('front'));
 
 //collegamenti alle chiamate http
 
+
+app.use("/user",users);
 app.use("/article", articles);
-app.use("/user", user);
 
 
 //autenticazione
