@@ -19,29 +19,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: 
-                - name
-                - surname
-                - email
-                - password
-                - username
-              properties:
-                name:
-                  type: string
-                  description: "Name"
-                surname:
-                  type: string
-                  description: "Surname"
-                email:
-                  type: string
-                  description: "email"
-                password:
-                  type: string
-                  description: "Password"
-                username:
-                  type: string
-                  description: "Username"
+              $ref: '#/components/schemas/User'
       responses:
         '201':
           description: "Created new user."
@@ -55,6 +33,32 @@ paths:
         '403':
           description: "Username already exist."
           
+    /user/{username}:
+    get:
+      description: >-
+        Get the info about user.
+      summary: Get specific user
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            required: true
+            description: 'Username of the user.'
+      responses:
+        '200':
+          description: 'Info user.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: 'Error.'
+        '404':
+          description: 'Error. The username does not exist.'     
+          
   /user/{username}/subscription:
     post:
       description: >-
@@ -67,14 +71,14 @@ paths:
               type: object
               required: 
                 - username
-                - email
+                - dateSubscription
               properties:
                 username:
                   type: string
                   description: "Username"
-                email:
-                  type: string
-                  description: "email"
+                dateSubscription:
+                  type: date
+                  description: "Date Subscription"
       responses:
         '201':
           description: "Created new subscription."
@@ -111,14 +115,267 @@ paths:
           description: 'Error.'
         '404':
           description: 'Error. The username does not exist.'
-
+    delete:
+      description: >-
+        Delete subscription.
+      summary: Delete date payment
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            required: true
+            description: 'Username of the user.'
+      responses:
+        '204':
+          description: 'Delete payment.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '404':
+          description: 'Error. The username does not exist.'
+          
+  /login:
+    post:
+      description: >-
+        Autenticate an user.
+      summary: Authentication.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: "Username"
+                email:
+                  type: string
+                  description: "password"
+      responses:
+        '200':
+          description: "success"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginRes'
+        '403':
+          description: "failure"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginRes'
+        '400':
+          description: "missing parameter"
+          
+  /article:
+    post:
+      description: >-
+        Create an article.
+      summary: Creation of an article.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+      responses:
+        '200':
+          description: "success"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '403':
+          description: "failure"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '400':
+          description: "missing parameter"
+  /article/{id}/{author}:
+    get:
+      description: >-
+        Get article.
+      summary: Get article
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: object
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: author
+          schema:
+            type: object
+            required: true
+            description: 'Author of the article.'
+      responses:
+        '200':
+          description: 'Article.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '400':
+          description: 'Error.'
+        '404':
+          description: 'Error. The author or id does not exist.'
+  /article/filters?:
+    get:
+      description: >-
+        Get articles filtered.
+      summary: Filter articles
+      parameters:
+        - in: query
+          name: filters
+          schema:
+            type: array
+            description: "The filters to applay"
+      responses:
+        '200':
+          description: 'Filtered articles.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
+  /article/search/{title}:
+    get:
+      description: >-
+        Get articles matching given title
+      summary: Search by title
+      parameters:
+        - in: path
+          name: title
+          schema:
+            type: object
+            description: "Title to match"
+      responses:
+        '200':
+          description: 'Title-matching articles'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
+  /article/search/:
+    get:
+      description: >-
+        Get last 50 articles (if more)
+      summary: Get recent articles
+      responses:
+        '200':
+          description: 'Recent articles'
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleInfo'
 components:
   schemas:
+    User:
+      type: object
+      required:
+        - name
+        - surname
+        - username
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          description: "Name of the user"
+        surname:
+          type: string
+          description: "Surname of the user"
+        username:
+          type: string
+          description: "Username, user key"
+        email:
+          type: string
+          description: "The email of the user"
+        password:
+          type: string
+          description: "Password fof authentication"
+    LoginRes:
+      type: object
+      required:
+        - success
+        - message
+        - token
+      properties:
+        success:
+          type: boolean
+          description: "tell if the authentication was successful"
+        message:
+          type: string
+          descritpion: "description of the success or failure"
+        token:
+          type: string
+          description: "the token for the session"
     Subscription:
       type: object
       required:
         - dateSubsription
       properties:
         dateSubscription:
-          type: string
+          type: date
           description: 'Date start the subscription.'
+    Article:
+      type: object
+      required:
+        - id
+        - author
+        - title
+        - summary
+        - text
+        - date
+        - tag
+      properties:
+        id:
+          type: number
+          description: 'Id of the article.'
+        author:
+          type: string
+          description: 'Author of the article.'
+        title:
+          type: string
+          description: 'Title of the article.'
+        summary:
+          type: string
+          description: 'Summary of the article.'
+        text:
+          type: string
+          description: 'Text of the article.'
+        date:
+          type: date
+          description: 'Date when the article was written.'
+        tag:
+          type: [string]
+          description: 'Tag to describe the article'
+    ArticleInfo:
+      type: object
+      required:
+        - id
+        - author
+        - title
+      properties:
+        id:
+          type: number
+        author:
+          type: string
+        title:
+          type: string
