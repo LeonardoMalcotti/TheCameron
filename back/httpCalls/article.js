@@ -35,9 +35,16 @@ router.post("/",async (req,res)=>{
 	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 	var yyyy = today.getFullYear();
 
-	let allArticle = await Article.find({}).exec();
- 	let ids = allArticle.map(tmp => tmp.id);
- 	let id = ( allArticle.length==0 ? 1 : Math.max(...ids) + 1);
+	let author = req.body.author;
+	let allArticle = await Article.find();
+	let filterArticle = allArticle.filter(x => x.author === author)
+	let id;
+
+	if(filterArticle){
+		let ids = filterArticle.map(tmp => tmp.id);
+	 	id = ( filterArticle.length==0 ? 1 : Math.max(...ids) + 1);
+	}
+
 
 	//inserimento db
 	let newArticle = new Article({

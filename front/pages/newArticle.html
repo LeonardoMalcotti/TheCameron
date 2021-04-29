@@ -8,7 +8,7 @@
 
 <body>
 
-	<form id="formNewArticle" onsubmit="newArticle()">
+	<form id="formNewArticle" >
         <label>Titolo</label>
         <input type="text" id="title">
         <label>Sottotitolo</label>
@@ -19,7 +19,7 @@
         <input type="text" id="tag">
 				<label>Autore</label>
 				<input type="text" id="author" value="username">
-				<input type="submit" value="Send Request">
+				<input type="button" onclick="newArticle()" value="Send Request">
 	</form>
 
 </body>
