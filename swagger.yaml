@@ -208,13 +208,13 @@ paths:
         - in: path
           name: id
           schema:
-            type: object
+            type: number
             required: true
             description: 'ID of the article.'
         - in: path
           name: author
           schema:
-            type: object
+            type: string
             required: true
             description: 'Author of the article.'
       responses:
@@ -284,6 +284,80 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ArticleInfo'
+  /reaction:
+    post:
+      description: >-
+        Create a reaction.
+      summary: Creation of a reaction.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reaction'
+      responses:
+        '200':
+          description: "success"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reaction'
+        '403':
+          description: "failure"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reaction'
+        '400':
+          description: "missing parameter"
+    
+  /reaction/{id}/{author}:
+    get:
+      description: >-
+        Get reaction about an article .
+      summary: Filter reaction
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: author
+          schema:
+            type: string
+            required: true
+            description: 'Author of the article.'
+      responses:
+        '200':
+          description: 'Filtered reaction.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reaction'
+  /reaction/{username}:
+    get:
+      description: >-
+        Get reaction about an user .
+      summary: Filter reaction
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+            required: true
+            description: 'user of the reaction.'
+      responses:
+        '200':
+          description: 'Filtered reaction.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reaction'
 components:
   schemas:
     User:
@@ -379,3 +453,19 @@ components:
           type: string
         title:
           type: string
+    Reaction:
+      type: object
+      required:
+        - username
+        - author
+        - id
+        - reaction
+      properties:
+        username:
+          type: string
+        author:
+          type: string
+        id:
+          type: number
+        reaction:
+          type: number
