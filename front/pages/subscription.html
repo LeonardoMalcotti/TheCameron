@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+
+  <head>
+    <title>TheCameron</title>
+    <script src="../scripts/subscription.js"></script>
+    <!--<link rel="stylesheet" href="style.css">-->
+  </head>
+
+  <body onload="loadSubscription();">
+
+  	<form id="formSubscription">
+      <span id="abbonamento"> </span>
+      <!--<div id="paypal-button-container-P-7TE65063DA5269340MBOF2AA"></div>
+      <script src="https://www.paypal.com/sdk/js?client-id=ARSxcy21WDx7itoe-HhZfWi5sYlb_-0mLrn3WUtIHrHEW6oqRVBtE0Eh9LsyWtOejkGlL1vIIzb-GAPs&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+      <script>
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                color: 'blue',
+                layout: 'horizontal',
+                label: 'subscribe'
+            },
+            createSubscription: function(data, actions) {
+              return actions.subscription.create({
+                /* Creates the subscription */
+                plan_id: 'P-7TE65063DA5269340MBOF2AA'
+              });
+            },
+            onApprove: function(data, actions) {
+              alert(data.subscriptionID); // You can add optional success message for the subscriber here
+              alert("Ti sei abbonato")
+              addSubscription();
+            }
+        }).render('#paypal-button-container-P-7TE65063DA5269340MBOF2AA'); // Renders the PayPal button
+      </script>-->
+      <button id="subscription" onclick="addSubscription()">Crea l'abbonamento</button>
+    </form>
+  </body>
+</html>

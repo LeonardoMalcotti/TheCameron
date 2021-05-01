@@ -9,16 +9,34 @@ app.use(express.urlencoded({ extended: true }));
 
 const article = require("./httpCalls/article.js");
 
+const tokenChecker = require("./tokenChecker.js");
+
+const articles = require("./httpCalls/article.js");
+const users = require("./httpCalls/user.js");
+const login = require("./httpCalls/login.js");
+
 //-------------
 
 //punto d'entrata
 app.use('/',express.static('front/pages'));
 app.use(express.static('front'));
 
-
 //collegamenti alle chiamate http
 
 app.use("/article", article);
+
+app.use("/user",users);
+app.use("/article", articles);
+
+
+//autenticazione
+app.use("/login",login);
+
+//chiamate http che hanno bisogno di un token
+/*
+app.use("qualcosa",tokenChecker);
+*/
+
 
 //-------------
 
