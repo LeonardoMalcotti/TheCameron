@@ -7,6 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //requires vari
 
+const article = require("./httpCalls/article.js");
 
 const tokenChecker = require("./tokenChecker.js");
 
@@ -22,6 +23,7 @@ app.use(express.static('front'));
 
 //collegamenti alle chiamate http
 
+app.use("/article", article);
 
 app.use("/user",users);
 app.use("/article", articles);
