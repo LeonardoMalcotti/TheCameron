@@ -7,10 +7,9 @@ describe('GET /filters', () =>{
 	//mock function per il metodo find in get /filters
     let findSpy;
 
-    let Spy;
     beforeAll( () => {
         const Article = require("../../models/Article");
-        Spy = jest.spyOn(Article, 'find').mockImplementation((criterias) =>{
+        findSpy = jest.spyOn(Article, 'find').mockImplementation(() =>{
         	let pool =[
 	        	{
 	        		id: "1", 
@@ -72,15 +71,14 @@ describe('GET /filters', () =>{
             .get('/search?author=tizio')
             .set('Accept', 'application/json')
             .send();
-
         expect(response.statusCode).toBe(201);
         expect(response.body.length).toBe(3);
         done();
     });
 
-    test('GET /search tags[0]=hello tags[1]=world ok', async done =>{
+    test('GET /search tags=[hello, world] success', async done =>{
         const response = await request
-            .get('/search?tags[0]=hello&tags[1]=world')
+            .get('/search?tags[]=hello&tags[]=world')
             .set('Accept', 'application/json')
             .send();
 
@@ -89,9 +87,9 @@ describe('GET /filters', () =>{
         done();
     });
 
-    test('GET /search tags[0]=hello tags[1]=world ok', async done =>{
+    test('GET /search author=caio tags=[world] success', async done =>{
         const response = await request
-            .get('/search?author=caio&tags[0]=world')
+            .get('/search?author=caio&tags[]=world')
             .set('Accept', 'application/json')
             .send();
 
@@ -100,7 +98,7 @@ describe('GET /filters', () =>{
         done();
     });
 
-    test('GET /search author=supermario success-no results', async done =>{
+    test('GET /search author=supermario success no results', async done =>{
         const response = await request
             .get('/search?author=supermario')
             .set('Accept', 'application/json')

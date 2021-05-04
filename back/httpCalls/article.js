@@ -11,7 +11,7 @@ tipi di filtro:
 */
 
 router.get("/filters",async(req,res)=>{
-	let art = await Article.find({});
+	let art = await Article.find();
 
 	function checkFilters(article){
 		var ret = true;
