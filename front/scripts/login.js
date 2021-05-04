@@ -4,7 +4,7 @@ var loggedUser = {};
 function LogInUser(){
 	var username = document.getElementById("txt_username").value;
     var password = document.getElementById("txt_password").value;
-
+	var myStorage = window.sessionStorage;
     fetch('../login', {
     	method: 'POST',
     	headers: { 'Content-Type': 'application/json' },
@@ -26,7 +26,9 @@ function LogInUser(){
 	    	if(response.status == 200){
 	    		if(json.success == true){
 	    			loggedUser.username = username;
-	    			loggedUser.token = json.token;
+					loggedUser.token = json.token;
+					myStorage.setItem('loggedUser', loggedUser);
+					
 	    		}
 	    	}
     	});
