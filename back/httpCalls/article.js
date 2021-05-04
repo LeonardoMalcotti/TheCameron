@@ -20,7 +20,7 @@ router.get("/filters",async(req,res)=>{
 		}
 		if(req.query.tags && ret){
 			for( t in req.query.tags ){
-				if(!article.tags.includes(t)){
+				if(!article.tags.includes(req.query.tags[t])){
 					ret = false;
 				}
 			}
