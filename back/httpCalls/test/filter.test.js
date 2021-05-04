@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const app = require('../.././app');
 const request = supertest(app);
 
-describe('GET /filters', () =>{
+describe('GET /article/filters', () =>{
 
 	//mock function per il metodo find in get /filters
     let findSpy;
@@ -40,7 +40,7 @@ describe('GET /filters', () =>{
 	        	},
 	        	{
 	        		id: "4", 
-	        		author: "caio", 
+	        		author: "tizio", 
 	        		title: "Altro titolo", 
 	        		summary: "summ",
                     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -49,12 +49,12 @@ describe('GET /filters', () =>{
 	        	},
 	        	{
 	        		id: "5", 
-	        		author: "tizio", 
+	        		author: "caio", 
 	        		title: "Qualcos'altro a caso", 
 	        		summary: "summ",
                     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                     date: "5",
-                    tags: ["thecameron"]
+                    tags: ["hello", "world", "thecameron"]
 	        	},
         	];
         	return pool;
@@ -65,10 +65,19 @@ describe('GET /filters', () =>{
     });
 
     //--------------------------------------------------------------------------
-
-    test('GET /search author=tizio ok', async done =>{
+    test('GET /article/filters no params', async done =>{
         const response = await request
-            .get('/search?author=tizio')
+            .get('/article/filters')
+            .set('Accept', 'application/json')
+            .send();
+        expect(response.statusCode).toBe(201);
+        expect(response.body.length).toBe(5);
+        done();
+    });
+
+    test('GET /article/filters author=tizio ok', async done =>{
+        const response = await request
+            .get('/article/filters?author=tizio')
             .set('Accept', 'application/json')
             .send();
         expect(response.statusCode).toBe(201);
@@ -76,20 +85,20 @@ describe('GET /filters', () =>{
         done();
     });
 
-    test('GET /search tags=[hello, world] success', async done =>{
+    test('GET /article/filters tags=[hello, world] success', async done =>{
         const response = await request
-            .get('/search?tags[]=hello&tags[]=world')
+            .get('/article/filters?tags[]=hello&tags[]=world')
             .set('Accept', 'application/json')
             .send();
 
         expect(response.statusCode).toBe(201);
-        expect(response.body.length).toBe(3);
+        expect(response.body.length).toBe(2);
         done();
     });
 
-    test('GET /search author=caio tags=[world] success', async done =>{
+    test('GET /article/filters author=caio tags=[world] success', async done =>{
         const response = await request
-            .get('/search?author=caio&tags[]=world')
+            .get('/article/filters?author=caio&tags[]=world')
             .set('Accept', 'application/json')
             .send();
 
@@ -98,9 +107,9 @@ describe('GET /filters', () =>{
         done();
     });
 
-    test('GET /search author=supermario success no results', async done =>{
+    test('GET /article/filters author=supermario success no results', async done =>{
         const response = await request
-            .get('/search?author=supermario')
+            .get('/article/filters?author=supermario')
             .set('Accept', 'application/json')
             .send();
 

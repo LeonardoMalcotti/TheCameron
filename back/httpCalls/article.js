@@ -38,3 +38,5 @@ router.get("/filters",async(req,res)=>{
 	res.status(201).json(risp);
 
 });
+
+module.exports = router;
