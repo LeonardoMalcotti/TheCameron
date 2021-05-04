@@ -8,6 +8,7 @@ app.use(express.urlencoded({ extended: true }));
 //requires vari
 
 const users = require("./httpCalls/user.js");
+const articles = require("./httpCalls/article.js");
 
 //-------------
 
@@ -18,7 +19,7 @@ app.use(express.static('front'));
 //collegamenti alle chiamate http
 
 app.use("/user",users);
-
+app.use("/article",articles)
 //-------------
 
 app.use((req, res) => {
