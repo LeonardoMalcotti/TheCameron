@@ -14,9 +14,9 @@ router.get("/filters",async(req,res)=>{
 	let art = await Article.find();
 
 	function checkFilters(article){
-		var ret = true;
+		var ret = true;		
 		if(req.query.author && ret){
-			ret = req.query.autore == article.author;
+			ret = req.query.author == article.author;
 		}
 		if(req.query.tags && ret){
 			for( t in req.query.tags ){
@@ -25,10 +25,9 @@ router.get("/filters",async(req,res)=>{
 				}
 			}
 		}
-
 		return ret;
 	}
-
+	
 	function mapFun(article){
 		return {id: article.id, author: article.author, title: article.title, summary: article.summary};
 	}
