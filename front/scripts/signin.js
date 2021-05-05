@@ -30,6 +30,6 @@ function signInUser(){
             })
         }
     })
-    .catch(error => console.log("errore"));
+    .catch(error => console.log(error));
 
 }
