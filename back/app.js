@@ -14,6 +14,7 @@ const tokenChecker = require("./tokenChecker.js");
 const articles = require("./httpCalls/article.js");
 const users = require("./httpCalls/user.js");
 const login = require("./httpCalls/login.js");
+const reactions = require("./httpCalls/reaction.js");
 
 //-------------
 
@@ -27,7 +28,7 @@ app.use("/article", article);
 
 app.use("/user",users);
 app.use("/article", articles);
-
+app.use("/reaction", reactions);
 
 //autenticazione
 app.use("/login",login);
