@@ -106,6 +106,7 @@ describe('reaction test', () =>{
         findArticleSpy.mockRestore();
         findUserSpy.mockRestore();
         findOneSpy.mockRestore();
+        findSpy.mockRestore();
     });
 
     //--------------------------------------------------------------------------
