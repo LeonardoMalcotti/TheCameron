@@ -26,12 +26,12 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
-  let user = await User.find({'username':req.body.username});
+  let user = await User.findOne({'username':req.body.username});
   if(!user){
 		res.status(404).send();
 		return;
 	}
-  let article = await Article.find({'id':req.body.id, 'author':req.body.author});
+  let article = await Article.findOne({'id':req.body.id, 'author':req.body.author});
   if(!article){
 		res.status(404).send();
 		return;
@@ -51,7 +51,7 @@ router.post("/",async (req,res)=>{
 	});
 	newReaction.save();
 
-	res.location("/Reaction/").status(201).send();
+	res.location("/reaction/").status(201).send();
 
 });
 
@@ -59,36 +59,46 @@ router.post("/",async (req,res)=>{
 router.get("/:id/:author",async (req,res)=>{
 
   let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
-
 	if(!article){
 		res.status(404).json({error: "Articolo non presente"});
 		return;
 	}
-  let reaction = await Reaction.find({'id':req.params.id, 'author':req.params.author})
-  if(reaction.length == 0){
+
+  let reaction = await Reaction.findOne({'id':req.params.id, 'author':req.params.author})
+  if(!reaction){
 		res.status(404).json({error: "Reaction non presente"});
 		return;
 	}
 
-	res.status(200).json({reaction});
+	res.status(200).json({
+		id : reaction.id,
+		author : reaction.author,
+		username : reaction.username,
+		reaction : reaction.reaction
+	});
 });
 
-// reaction/:id/:author GET
+// reaction/:username GET
 router.get("/:username",async (req,res)=>{
 
   let user = await User.findOne({'username':req.params.username});
-
 	if(!user){
 		res.status(404).json({error: "Username non presente"});
 		return;
 	}
+
   let reaction = await Reaction.find({'username':req.params.username})
-  if(reaction.length == 0){
+  if(!reaction){
 		res.status(404).json({error: "Reaction non presente"});
 		return;
 	}
 
-	res.status(200).json({reaction});
+	res.status(200).json({
+		id : reaction.id,
+		author : reaction.author,
+		username : reaction.username,
+		reaction : reaction.reaction
+	});
 });
 
 module.exports = router;
