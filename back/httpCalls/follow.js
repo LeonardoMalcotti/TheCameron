@@ -12,25 +12,25 @@ const Follow = require("../models/Follow");
 
 // Set the user to follow another one (passed in post body as target)
 // user/:username/follow POST  
-router.post("/:username/follow", async (req,res)=>{
+router.post("/follow", async (req,res)=>{
 	if(!req.body.target){
 		res.status(400).json({ error: "Utente da seguire non specificato" });
 		return;
 	}
 
-    let follow = await Follow.find({'user':req.params.username});
+    let follow = await Follow.find({'user':req.body.user});
 
 	if(!follow){
 		// Creating the follow link
 		let newFollow = new Follow({
-			user: req.params.username,
+			user: req.body.user,
 			target: req.body.target,
 		});
 		newFollow.save();
 	}
     else{
         // Check if already following
-        follow = await Follow.find({'user':req.params.user})
+        follow = await Follow.find({'user':req.body.user})
             .update({ $addToSet: {'target': req.body.target}});
         
     }
@@ -40,9 +40,9 @@ router.post("/:username/follow", async (req,res)=>{
 
 
 // user/:user/follow/:target DELETE
-router.delete("/:user/follow/:target",async (req,res)=>{
+router.delete("/unfollow",async (req,res)=>{
 
-	let link = await Follow.findOne({'user':req.params.user, 'target':req.params.target});
+	let link = await Follow.findOne({'user':req.body.user, 'target':req.body.target});
 
 	if(!link){
 		res.status(404).send();

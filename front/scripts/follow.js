@@ -41,7 +41,7 @@ function getFollowing(user){
 
 // Follow a user
 function follow(user, target){
-    fetch('../user/' + user + '/follow', {
+    fetch('../follow', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -68,7 +68,7 @@ function follow(user, target){
 
 //Unfollow a user
 function unfollow(user, target){
-    fetch('../user/' + user + '/follow/' + target, {
+    fetch('../user/unfollow/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
