@@ -33,7 +33,7 @@ paths:
         '403':
           description: "Username already exist."
           
-    /user/{username}:
+  /user/{username}:
     get:
       description: >-
         Get the info about user.
@@ -358,6 +358,83 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reaction'
+  /follow:
+    post:
+      description: >-
+        Add a target in the follow list of a user.
+      summary: Follow a user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Follow'
+      responses:
+        '204':
+          description: "success"
+        '400':
+          description: "missing parameter"
+  /unfollow:
+    post:
+      description: >-
+        Remove a target in the follow list of a user.
+      summary: Unollow a user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Follow'
+      responses:
+        '204':
+          description: "success"
+        '400':
+          description: "missing parameter"
+        '404':
+          description: "already not following"
+  /{username}/following:
+    get:
+      description: >-
+        Get the list of followed users [targets] by the given one
+      summary: Get Following.
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            description: "username of the user"
+      responses:
+        '200':
+          description: 'Followed users'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: 'no results'
+  /{username}/followers:
+    get:
+      description: >-
+        Get the list of users that follow the given one
+      summary: Get followers.
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            description: "username of the user"
+      responses:
+        '200':
+          description: 'Following users'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: 'no results'
+
 components:
   schemas:
     User:
@@ -469,3 +546,15 @@ components:
           type: number
         reaction:
           type: number
+    Follow:
+      type: object
+      required:
+        - user
+        - target
+      properties:
+        user:
+          type: string
+          description: 'username of the user that follows'
+        target:
+          type: [string]
+          description: 'usernames of followed users'
