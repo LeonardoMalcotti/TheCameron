@@ -90,7 +90,8 @@ router.get("/:id/:author",async (req,res)=>{
   	summary : article.summary,
   	text : article.text,
     date : article.date,
-    tag : article.tag
+    tag : article.tag,
+    isRestricted : article.isRestricted
 	});
 });
 
@@ -120,12 +121,18 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
+	if (!req.body.isRestricted){
+		res.status(400).json({ error: "Restrizione dell'articolo non specificata" });
+		return;
+	}
+
 	//creazione data
 	var today = new Date();
 	var dd = String(today.getDate()).padStart(2, '0');
 	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 	var yyyy = today.getFullYear();
 
+	//crea id
 	let author = req.body.author;
 	let allArticle = await Article.find();
 	let filterArticle = allArticle.filter(x => x.author === author)
@@ -146,6 +153,7 @@ router.post("/",async (req,res)=>{
 		text : req.body.text,
 		date : mm + '/' + dd + '/' + yyyy,
 		tag: req.body.tag.split(","),
+		isRestricted : req.body.isRestricted
 	});
 	newArticle.save();
 
