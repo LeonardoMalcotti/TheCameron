@@ -11,9 +11,9 @@ const Follow = require("../models/Follow");
 */
 
 // Set the user to follow another one (passed in post body as target)
-// user/:username/follow POST  
+// /follow POST  
 router.post("/follow", async (req,res)=>{
-	if(!req.body.target){
+	if(!req.body.target && !req.body.user){
 		res.status(400).json({ error: "Utente da seguire non specificato" });
 		return;
 	}
@@ -39,8 +39,13 @@ router.post("/follow", async (req,res)=>{
 })
 
 
-// user/:user/follow/:target DELETE
-router.delete("/unfollow",async (req,res)=>{
+// /unfollow POST
+router.post("/unfollow",async (req,res)=>{
+
+	if(!req.body.target && !req.body.user){
+		res.status(400).json({ error: "Utente da seguire non specificato" });
+		return;
+	}
 
 	let link = await Follow.findOne({'user':req.body.user, 'target':req.body.target});
 
@@ -58,7 +63,7 @@ router.delete("/unfollow",async (req,res)=>{
 
 
 // GET the usernames of the users that are followed by the given one
-// user/:username/following GET
+// /:username/following GET
 router.get("/:username/following",async (req,res)=>{
 	
 	function mapFun(art){
@@ -77,7 +82,7 @@ router.get("/:username/following",async (req,res)=>{
 })
 
 // GET the users that follow the given user
-// user/:username/followers GET
+// /:username/followers GET
 router.get("/:username/followers",async (req,res)=>{
 	
 	function mapFun(art){

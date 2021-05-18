@@ -1,9 +1,9 @@
 
 //const { response } = require("express");
 
-// Retrieve the usernames of followed users
+// Retrieve the usernames of users we are followed by
 function getFollowers(user){
-    fetch('../user/' + user + '/following', {
+    fetch('../' + user + '/followers', {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
     })
@@ -16,13 +16,13 @@ function getFollowers(user){
             htmlOut += ("<li>" + data[i].username + "</li>");
         }
         htmlOut += "</ul>";
-        document.getElementById("following").innerHTML = htmlOut;
+        document.getElementById("followers").innerHTML = htmlOut;
     })
 }
 
-// Retrieve the usernames of the users who follow the given one
+// Retrieve the usernames of the users that our user is following
 function getFollowing(user){
-    fetch('../user/' + user + '/followers', {
+    fetch('../' + user + '/following', {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
     })
@@ -35,7 +35,7 @@ function getFollowing(user){
             htmlOut += ("<li>" + data[i].username + "</li>");
         }
         htmlOut += "</ul>";
-        document.getElementById("followers").innerHTML = htmlOut;
+        document.getElementById("following").innerHTML = htmlOut;
     })
 }
 
@@ -46,7 +46,7 @@ function follow(user, target){
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             user: user,
-            target: target,
+            target: [target],
         }),
     })
     .then(function(response) {
@@ -68,12 +68,12 @@ function follow(user, target){
 
 //Unfollow a user
 function unfollow(user, target){
-    fetch('../user/unfollow/', {
+    fetch('../unfollow/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             user: user,
-            target: target,
+            target: [target],
         }),
     })
     .then(function(response) {
