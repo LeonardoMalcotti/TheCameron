@@ -230,6 +230,37 @@ paths:
           description: 'Error.'
         '404':
           description: 'Error. The author or id does not exist.'
+  /article/{id}/{author}/user/{username}/canAccess:
+    get:
+      description: >-
+        Tells if the article is restricted or not.
+      summary:  Tells if the article is restricted
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: author
+          schema:
+            type: string
+            required: true
+            description: 'Author of the article.'
+        - in: path
+          name: username
+          schema:
+            type: object
+            required: true
+            description: 'Username of the user.'
+      responses:
+        '204':
+          description: 'user can read'
+        '403':
+          description: 'user cannot read'
+        '404':
+          description: 'Error. The author or id or user does not exist.'
   /article/filters?:
     get:
       description: >-
@@ -495,6 +526,7 @@ components:
         - text
         - date
         - tag
+        - restricted
       properties:
         id:
           type: number
@@ -517,6 +549,9 @@ components:
         tag:
           type: [string]
           description: 'Tag to describe the article'
+        restricted:
+          type: boolean
+          description: 'Tells if the article can be read by everyone or not'
     ArticleInfo:
       type: object
       required:
