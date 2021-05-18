@@ -91,7 +91,7 @@ router.get("/:id/:author",async (req,res)=>{
   	text : article.text,
     date : article.date,
     tag : article.tag,
-    isRestricted : article.isRestricted
+    restricted : article.restricted
 	});
 });
 
@@ -121,7 +121,7 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
-	if (!req.body.isRestricted){
+	if (!req.body.restricted){
 		res.status(400).json({ error: "Restrizione dell'articolo non specificata" });
 		return;
 	}
@@ -153,7 +153,7 @@ router.post("/",async (req,res)=>{
 		text : req.body.text,
 		date : mm + '/' + dd + '/' + yyyy,
 		tag: req.body.tag.split(","),
-		isRestricted : req.body.isRestricted
+		restricted : req.body.restricted
 	});
 	newArticle.save();
 
