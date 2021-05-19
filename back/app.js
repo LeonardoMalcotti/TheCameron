@@ -15,7 +15,7 @@ const articles = require("./httpCalls/article.js");
 const users = require("./httpCalls/user.js");
 const login = require("./httpCalls/login.js");
 const reactions = require("./httpCalls/reaction.js");
-
+const follow = require("./httpCalls/follow.js");
 //-------------
 
 //punto d'entrata
@@ -25,18 +25,19 @@ app.use(express.static('front'));
 //collegamenti alle chiamate http
 
 app.use("/article", article);
-
-app.use("/user",users);
+app.use("/follow", follow);
+app.use("/user", users);
 app.use("/article", articles);
 app.use("/reaction", reactions);
 
 //autenticazione
-app.use("/login",login);
+app.use("/login", login);
 
 //chiamate http che hanno bisogno di un token
 /*
 app.use("qualcosa",tokenChecker);
 */
+app.use("/follow", tokenChecker);
 
 //-------------
 
