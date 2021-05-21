@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: '1.1'
+  version: '2.0'
   title: "TheCameron"
   description: TheCameron is an API that allows users to view and write articles, post reactions to them and follow and stay updated on the various authors
   license:
@@ -199,6 +199,31 @@ paths:
                 $ref: '#/components/schemas/Article'
         '400':
           description: "missing parameter"
+  /article/{author}:
+    get:
+      description: >-
+        Get list of article.
+      summary: Get list of article
+      parameters:
+        - in: path
+          name: author
+          schema:
+            type: string
+            required: true
+            description: 'Author of articles.'
+      responses:
+        '200':
+          description: 'Articles.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '400':
+          description: 'Error.'
+        '404':
+          description: 'Error. The author does not exist.'
   /article/{id}/{author}:
     get:
       description: >-
