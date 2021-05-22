@@ -52,14 +52,22 @@ router.get("/user/:username",async (req,res)=>{
 
 router.delete("/user/:username/favorite/:id",async (req,res)=>{
     
-    let tag = await FavoriteTags.findOne({'username':req.params.username, 'id': req.params.id});
+    let tag = await FavoriteTags.findOne({'username':req.params.username});
 
     if(!tag){
         res.status(404).send();
-		res.json({error: "Username o id errato"});
+		res.json({error: "Username errato o nessun preferito"});
     }
 
-    let ret = await FavoriteTags.deleteOne({'username':req.params.username, 'id': req.params.id});
+    if(tag.id.length==0){
+        
+        res.status(404).send();
+        res.json({error: "Nessun preferito"});
+    }
+    
+    delete tag.id[tag.id.indexOf(req.params.id)];
+    tag.save();
+    
     if (ret) {
 		res.status(204).send();
 	} else {
