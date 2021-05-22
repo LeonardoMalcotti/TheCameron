@@ -37,7 +37,7 @@ router.post("/user/:username",async(req,res)=>{
 
 router.get("/user/:username",async (req,res)=>{
 
-    let favoriteTags = await FavoriteTags.find({'username':req.params.username});
+    let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
     if(favoriteTags.length<=0){
         res.status(404).send();
         return;
