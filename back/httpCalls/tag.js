@@ -18,13 +18,10 @@ router.post("/:username",async(req,res)=>{
         res.status(400).json({ error: "Nessun tag selezionato" });
         return;
     }
+    let favoriteTags = await FavoriteTags.find({'username':req.params.username});
+    favoriteTags.id.push(tags.id);
 
-    let favorite = new FavoriteTags({
-        username,
-        id : tags,
-    });
-
-    favorite.save();
+    favoriteTags.save();
 
     res.location("/tag/" + username).status(201).send();
 })
@@ -36,11 +33,12 @@ router.get("/:username",async (req,res)=>{
         res.status(404).send();
         return;
     }
-    let tagName = await Tag.find({'id':favoriteTags.id});
-    res.status(200).json({
-        id : tagName.id,
-        name : tagName.name,
-    });
+    let tagName = await Tag.find();
+    let final = tagName.filter(x=> favoriteTags.id.includes(x.id));
+    
+    res.status(201).json(
+       final
+    );
 });
 
 module.exports = router;
