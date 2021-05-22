@@ -15,11 +15,6 @@ router.post("/user/:username",async(req,res)=>{
         return;
     }
 
-    if (tags.length<=0){
-        res.status(400).json({ error: "Nessun tag selezionato" });
-        return;
-    }
-
     let existUser = await User.findOne({'username': username});
     if(!existUser){
         res.status(404).json({ error: "Nessun Username trovato"});
@@ -38,7 +33,7 @@ router.post("/user/:username",async(req,res)=>{
 router.get("/user/:username",async (req,res)=>{
 
     let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
-    if(favoriteTags.length<=0){
+    if(favoriteTags.id.length<=0){
         res.status(404).send();
         return;
     }
@@ -59,7 +54,7 @@ router.delete("/user/:username/favorite/:id",async (req,res)=>{
 		res.json({error: "Username errato o nessun preferito"});
     }
 
-    if(tag.id.length==0){
+    if(tag.id.length()==0){
         
         res.status(404).send();
         res.json({error: "Nessun preferito"});
@@ -67,7 +62,7 @@ router.delete("/user/:username/favorite/:id",async (req,res)=>{
     
     delete tag.id[tag.id.indexOf(req.params.id)];
     tag.save();
-    
+
     if (ret) {
 		res.status(204).send();
 	} else {
