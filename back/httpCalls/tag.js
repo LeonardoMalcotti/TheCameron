@@ -3,8 +3,9 @@ const router = express.Router();
 //modello mongoose
 const Tag = require('../models/Tag');
 const FavoriteTags = require('../models/FavoriteTags');
+const User = require('../models/User');
 
-router.post("/:username",async(req,res)=>{
+router.post("/user/:username",async(req,res)=>{
 
     let username = req.params.username;
     let tags = req.body.tags;
@@ -18,6 +19,14 @@ router.post("/:username",async(req,res)=>{
         res.status(400).json({ error: "Nessun tag selezionato" });
         return;
     }
+
+    let existUser = await User.findOne({'username': username});
+    if(!existUser){
+        res.status(404).json({ error: "Nessun Username trovato"});
+        return;
+    }
+
+
     let favoriteTags = await FavoriteTags.find({'username':req.params.username});
     favoriteTags.id.push(tags.id);
 
@@ -26,7 +35,7 @@ router.post("/:username",async(req,res)=>{
     res.location("/tag/" + username).status(201).send();
 })
 
-router.get("/:username",async (req,res)=>{
+router.get("/user/:username",async (req,res)=>{
 
     let favoriteTags = await FavoriteTags.find({'username':req.params.username});
     if(favoriteTags.length<=0){
@@ -40,5 +49,25 @@ router.get("/:username",async (req,res)=>{
        final
     );
 });
+
+router.delete("/user/:username/favorite/:id",async (req,res)=>{
+    
+    let tag = await FavoriteTags.findOne({'username':req.params.username, 'id': req.params.id});
+
+    if(!tag){
+        res.status(404).send();
+		res.json({error: "Username o id errato"});
+    }
+
+    let ret = await FavoriteTags.deleteOne({'username':req.params.username, 'id': req.params.id});
+    if (ret) {
+		res.status(204).send();
+	} else {
+		res.status(400).send();
+        res.json({error: "Errore nella cancellazione del tag preferito"});
+        return;
+	}
+
+})
 
 module.exports = router;
