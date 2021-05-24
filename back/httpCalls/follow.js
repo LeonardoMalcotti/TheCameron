@@ -112,8 +112,6 @@ router.post("/unfollow",async (req,res)=>{
 	res.status(204).send();
 });
 
-// ! retuning 404
-
 // GET the usernames of the users that are followed by the given one
 // followers/user/:username/following GET
 router.get("/user/:username/following",async (req,res)=>{
@@ -134,8 +132,6 @@ router.get("/user/:username/following",async (req,res)=>{
 
 });
 
-// ! returning 404
-
 // GET the users that follow the given user
 // followers/user/:username/followers GET
 router.get("/user/:username/followers",async (req,res)=>{
@@ -155,7 +151,7 @@ router.get("/user/:username/followers",async (req,res)=>{
 
 	for(var i=0;i<fll.length;i++){
 		if(fll[i].target.includes(req.params.username)){
-			ret.push(req.params.username);
+			ret.push(fll[i].user);
 		}
 	}
 
