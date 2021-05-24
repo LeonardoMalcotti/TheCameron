@@ -1,15 +1,14 @@
-
-//const { response } = require("express");
-
 // Retrieve the usernames of users we are followed by
 function getFollowers(user){
-    fetch('../' + user + '/followers', {
+    fetch('followers/user/' + user + '/followers/', {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
     })
     .then((resp) => resp.json())
     .then(async function(data){
-        if(response.ok){alert("Got 'em!");}
+        console.log(data);
+        
+        /*
         let htmlOut = "<ul>";
         for(let i=0; i<data.length; i++){
             // data[i].username
@@ -17,18 +16,24 @@ function getFollowers(user){
         }
         htmlOut += "</ul>";
         document.getElementById("followers").innerHTML = htmlOut;
+        */
     })
+    .catch(error => console.log(error));
 }
 
 // Retrieve the usernames of the users that our user is following
 function getFollowing(user){
-    fetch('../' + user + '/following', {
+    fetch('followers/user/' + user + '/following/', {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
     })
     .then((resp) => resp.json())
     .then(async function(data){
-        if(response.ok){alert("Got 'em!");}
+        console.log(data);
+
+        
+        
+        /*
         let htmlOut = "<ul>"
         for(let i=0; i<data.length; i++){
             // data[i].username
@@ -36,12 +41,14 @@ function getFollowing(user){
         }
         htmlOut += "</ul>";
         document.getElementById("following").innerHTML = htmlOut;
+        */
     })
+    .catch(error => console.log(error));
 }
 
 // Follow a user
 function follow(user, target){
-    fetch('../follow', {
+    fetch('followers/follow/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -53,8 +60,6 @@ function follow(user, target){
         //la risposta è un successo
         if(response.ok){
             alert("Seguito!");
-            document.getElementById("btn_follow").disabled = true;
-            document.getElementById("btn_unfollow").disabled = false;
         }
         //Da una spiegazione nel caso di fallimento 
         else {
@@ -68,20 +73,18 @@ function follow(user, target){
 
 //Unfollow a user
 function unfollow(user, target){
-    fetch('../unfollow/', {
+    fetch('followers/unfollow/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             user: user,
-            target: [target],
+            target: target,
         }),
     })
     .then(function(response) {
         //la risposta è un successo
         if(response.ok){
             alert("Non più seguito!");
-            document.getElementById("btn_follow").disabled = false;
-            document.getElementById("btn_unfollow").disabled = true;
         }
         //Da una spiegazione nel caso di fallimento 
         else {

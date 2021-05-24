@@ -3,15 +3,16 @@ const router = express.Router();
 //modello mongoose
 const Follow = require("../models/Follow");
 
+
 /* API order: (username = id)
 * new user-target follow
-* delete a user-target follow
+* remove a user-target follow
 * get id of the targets followed by the user
 * get id of users that follow a given username
 */
 
 // Set the user to follow another one (passed in post body as target)
-// /follow POST  
+// followers/follow POST  
 router.post("/follow", async (req,res)=>{
 	if(!req.body.target && !req.body.user){
 		res.status(400).json({ error: "Utente da seguire non specificato" });
@@ -23,23 +24,23 @@ router.post("/follow", async (req,res)=>{
 	if(!follow){
 		// Creating the follow link
 		let newFollow = new Follow({
-			user: req.body.user,
-			target: req.body.target,
+			'user': req.body.user,
+			'target': req.body.target,
 		});
 		newFollow.save();
+		res.status(200).send();
 	}
     else{
-        // Check if already following
-        follow = await Follow.find({'user':req.body.user})
-            .update({ $addToSet: {'target': req.body.target}});
-        
+        // Adding the target
+        follow = await Follow.updateOne({'user':req.body.user}, {$addToSet: {'target': req.body.target}});
+            
+        res.status(204).send();
     }
-
-	res.status(204);
+	return;
 })
 
 
-// /unfollow POST
+// followers/unfollow POST
 router.post("/unfollow",async (req,res)=>{
 
 	if(!req.body.target && !req.body.user){
@@ -47,49 +48,61 @@ router.post("/unfollow",async (req,res)=>{
 		return;
 	}
 
-	let link = await Follow.findOne({'user':req.body.user, 'target':req.body.target});
-
+	let link = await Follow.findOne({'user':req.body.user});
+	
 	if(!link){
 		res.status(404).send();
 		return;
+	}else{
+		let tmp = link.target;
+		let index = tmp.indexOf(req.body.target);
+		if(index>=0){
+			tmp.splice(index, 1)
+		}
+		let newRecord = new Follow({
+			'user': req.body.user,
+			'target': tmp,
+		});
+		// Delete not working
+		Follow.deleteOne({'_id':link.id});
+		newRecord.save();
+		res.status(204).send();
 	}
-
-    link.update({$pull: {'target':req.body.target}});
-	
-
-	res.status(204).send();
-	
+	return;
 });
 
+// ! retuning 404
 
 // GET the usernames of the users that are followed by the given one
-// /:username/following GET
-router.get("/:username/following",async (req,res)=>{
+// followers/user/:username/following GET
+router.get("user/:username/following",async (req,res)=>{
 	
-	function mapFun(art){
-		return {username: art.target}
-	}
+	/*function mapFun(art){
+		return {'usernames': [art.target]};
+	}*/
 
-	let following = await Follow.find({'user':req.params.username});
+	let following = await Follow.findOne({'username': req.params.username});
 	
 	if(!following){
 		res.status(404).send();
 		return;
 	}
 
-	res.status(200).json(following.map(mapFun));
+	res.status(200).json(following.target);
 
 })
 
+// ! returning 404
+
 // GET the users that follow the given user
-// /:username/followers GET
-router.get("/:username/followers",async (req,res)=>{
+// followers/user/:username/followers GET
+router.get("user/:username/followers",async (req,res)=>{
 	
 	function mapFun(art){
-		return {username: art.user}
+		return {'username': art.user}
 	}
 
-	let followers = await Follow.find({'target':req.params.username});
+	let followers = await Follow.find({'target': {$all: req.params.username}});
 	
 	if(!followers){
 		res.status(404).send();

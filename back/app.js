@@ -25,7 +25,7 @@ app.use(express.static('front'));
 //collegamenti alle chiamate http
 
 app.use("/article", article);
-app.use("/follow", follow);
+app.use("/followers", follow);
 app.use("/user", users);
 app.use("/article", articles);
 app.use("/reaction", reactions);
@@ -37,7 +37,7 @@ app.use("/login", login);
 /*
 app.use("qualcosa",tokenChecker);
 */
-app.use("/follow", tokenChecker);
+//app.use("/followers", tokenChecker);
 
 //-------------
 
