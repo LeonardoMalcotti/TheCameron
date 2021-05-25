@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const app = require('../../app');
+const app = require('../.././app');
 const request = supertest(app);
 
 describe("article restriction test", () =>{
@@ -20,7 +20,7 @@ describe("article restriction test", () =>{
 	                password: "12345678", 
 	                username: "dantealighieri"
 	            }];
-	        } else {
+	        } else if(criterias.username == "boccaccio"){
 	        	return [{
                     name: "Giovanni",
                     surname: "Boccaccio",
@@ -28,7 +28,9 @@ describe("article restriction test", () =>{
                     password: "987654321",
                     username: "boccaccio"
                 }];
-	        }
+	        } else{
+                return null;
+            }
         })
 
         spyFindArticle = jest.spyOn(Article, 'findOne').mockImplementation((criterias) =>{ 
@@ -80,33 +82,33 @@ describe("article restriction test", () =>{
     });
 
     // Tests
-    test('GET /article/:id/:author/user/:username/isRestricted , access granted', async done =>{
-        const response = await request.get("/article/1/decamerone/user/dantealighieri/isRestricted/");
+    test('GET /restricted/article/:id/:author/user/:username , access granted', async done =>{
+        const response = await request.get("/restricted/article/1/decamerone/user/dantealighieri");
         expect(response.statusCode).toBe(204);
         done();
     });
     
-    test('GET /article/:id/:author/user/:username/isRestricted , access denied', async done =>{
-        const response = await request.get("/article/1/decamerone/user/boccaccio/isRestricted/");
+    test('GET /restricted/article/:id/:author/user/:username, access denied', async done =>{
+        const response = await request.get("/restricted/article/1/decamerone/user/boccaccio");
         expect(response.statusCode).toBe(403);
         done();
     });
 
-    test('GET /article/:id/:author/user/:username/isRestricted , non existing article', async done =>{
-        const response = await request.get("/article/2/boccaccio/user/dantealighieri/isRestricted/");
+    test('GET /restricted/article/:id/:author/user/:username, non existing article', async done =>{
+        const response = await request.get("/restricted/article/2/boccaccio/user/dantealighieri");
         expect(response.statusCode).toBe(404);
         expect(response.error).toBe("Autore o id non presente");
         done();
     });
 
-    test('GET /article/:id/:author/user/:username/isRestricted , non restricted article access granted', async done =>{
-        const response = await request.get("/article/2/decamerone/user/dantealighieri/isRestricted/");
+    test('GET /restricted/article/:id/:author/user/:username , non restricted article access granted', async done =>{
+        const response = await request.get("/restricted/article/2/decamerone/user/dantealighieri");
         expect(response.statusCode).toBe(204);
         done();
     });
     
-    test('GET /article/:id/:author/user/:username/isRestricted , non existing user', async done =>{
-        const response = await request.get("/article/1/decamerone/user/manzoni/isRestricted/");
+    test('GET /restricted/article/:id/:author/user/:username, non existing user', async done =>{
+        const response = await request.get("/restricted/article/1/decamerone/user/manzoni");
         expect(response.statusCode).toBe(404);
         expect(response.error).toBe("User non esiste");
         done();
