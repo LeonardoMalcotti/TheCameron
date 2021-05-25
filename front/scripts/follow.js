@@ -6,17 +6,14 @@ function getFollowers(user){
     })
     .then((resp) => resp.json())
     .then(async function(data){
-        console.log(data);
-        
-        /*
-        let htmlOut = "<ul>";
-        for(let i=0; i<data.length; i++){
-            // data[i].username
-            htmlOut += ("<li>" + data[i].username + "</li>");
+        // We obtain an object containing an array named users
+        let flwd = data.users;     
+        let htmlOut = "<ul>"
+        for(let i=0; i<flwd.length; i++){
+            htmlOut += ("<li>" + flwd[i] + "</li>");
         }
         htmlOut += "</ul>";
         document.getElementById("followers").innerHTML = htmlOut;
-        */
     })
     .catch(error => console.log(error));
 }
@@ -29,19 +26,15 @@ function getFollowing(user){
     })
     .then((resp) => resp.json())
     .then(async function(data){
-        console.log(data);
-
-        
-        
-        /*
+        // We obtain an object containing an array named users
+        let flwd = data.users;     
         let htmlOut = "<ul>"
-        for(let i=0; i<data.length; i++){
-            // data[i].username
-            htmlOut += ("<li>" + data[i].username + "</li>");
+        for(let i=0; i<flwd.length; i++){
+            htmlOut += ("<li>" + flwd[i] + "</li>");
         }
         htmlOut += "</ul>";
         document.getElementById("following").innerHTML = htmlOut;
-        */
+        
     })
     .catch(error => console.log(error));
 }
@@ -53,7 +46,7 @@ function follow(user, target){
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             user: user,
-            target: [target],
+            target: target,
         }),
     })
     .then(function(response) {
