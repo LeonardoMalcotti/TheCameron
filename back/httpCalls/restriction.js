@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 //modello mongoose
 const Article = require('../models/Article');
-const Subscription = require('..models/Subscription');
-const User = require('..models/User');
+const Subscription = require('../models/Subscription');
+const User = require('../models/User');
 
 router.get("",async (req,res)=>{
 
@@ -35,6 +35,6 @@ router.get("",async (req,res)=>{
 
 	//se l'utente ha un abbonamento allora ritorna un successo senza contenuto
 	res.status(204).send();
-})
+});
 
 module.exports = router;
