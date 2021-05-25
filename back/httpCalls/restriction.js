@@ -5,7 +5,7 @@ const Article = require('../models/Article');
 const Subscription = require('../models/Subscription');
 const User = require('../models/User');
 
-router.get("",async (req,res)=>{
+router.get("/article/:id/:author/user/:username",async (req,res)=>{
 
 	//conrtollo dei dati
 
@@ -28,7 +28,7 @@ router.get("",async (req,res)=>{
 	let sub = await Subscription.findOne({'username':req.params.username});
 
 	//se l'articolo è ristretto e l'utente non ha un abbonamento restituisce forbidden
-	if(!sub && article.isRestricted){
+	if(!sub && article.restricted){
 		res.status(403).send();
 		return;
 	}
