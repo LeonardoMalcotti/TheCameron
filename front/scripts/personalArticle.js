@@ -2,7 +2,8 @@ function loadArticle(){
 
     let htmlOutput = "";
     var author = getUrlVars()["author"];
-    let url = '../article/'+author;
+    var url = '../article/' + author;
+
     fetch(url, {
         method: 'GET',
         headers:{ 'Content-Type': 'application/json' }
@@ -19,4 +20,12 @@ function loadArticle(){
         document.getElementById("result").innerHTML = htmlOutput;
         return;
     })
+}
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
 }
