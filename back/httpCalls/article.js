@@ -166,7 +166,7 @@ router.get("/:author",async (req,res)=>{
 	}
 
 	function mapFun(art){
-		return {id: art.id, author: art.author, title: art.title, summary: art.summary};
+		return {id: art.id, author: art.author, title: art.title, summary: art.summary, text: art.text, date: art.date, tag: art.tag};
 	}
 
 	res.status(200).json(filterArticle.map(mapFun));
