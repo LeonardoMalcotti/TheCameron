@@ -414,7 +414,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reaction'
-  /follow:
+  /followers/follow:
     post:
       description: >-
         Add a target in the follow list of a user.
@@ -423,30 +423,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Follow'
+              $ref: '#/components/schemas/FollowReq'
       responses:
         '204':
           description: "success"
         '400':
           description: "missing parameter"
-  /unfollow:
+  /followers/unfollow:
     post:
       description: >-
         Remove a target in the follow list of a user.
-      summary: Unollow a user.
+      summary: Unfollow a user.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Follow'
+              $ref: '#/components/schemas/FollowReq'
       responses:
         '204':
           description: "success"
         '400':
-          description: "missing parameter"
+          description: "missing parameter or user equal to target"
         '404':
-          description: "already not following"
-  /{username}/following:
+          description: "invalid user or target"
+  /followers/user/{username}/following:
     get:
       description: >-
         Get the list of followed users [targets] by the given one
@@ -463,12 +463,10 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                $ref: '#/components/schemas/FollowRes'
         '404':
           description: 'no results'
-  /{username}/followers:
+  /followers/user/{username}/followers:
     get:
       description: >-
         Get the list of users that follow the given one
@@ -485,9 +483,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                $ref: '#/components/schemas/FollowRes'
         '404':
           description: 'no results'
 
@@ -606,7 +602,7 @@ components:
           type: number
         reaction:
           type: number
-    Follow:
+    FollowReq:
       type: object
       required:
         - user
@@ -616,5 +612,13 @@ components:
           type: string
           description: 'username of the user that follows'
         target:
+          type: string
+          description: 'username of the target user'
+    FollowRes:
+      type: object
+      required:
+        - users
+      properties:
+        users:
           type: [string]
-          description: 'usernames of followed users'
+          description: 'list of requested usernames'
