@@ -15,20 +15,22 @@ describe("article restriction test", () =>{
             if(criterias.username == "dantealighieri"){
 	            return [{
 	                name: "Dante",  
-	                surname: "Alighieri", 
-	                email: "dante.alighieri@loremipsum.it", 
+	                surname: "Alighieri",
+                    username: "dantealighieri",
 	                password: "12345678", 
-	                username: "dantealighieri"
+                    email: "dante.alighieri@loremipsum.it", 
 	            }];
-	        } else if(criterias.username == "boccaccio"){
+	        } 
+            else if(criterias.username == "boccaccio"){
 	        	return [{
                     name: "Giovanni",
                     surname: "Boccaccio",
-                    email: "gio.boccaccio@loremipsum.it",
+                    username: "boccaccio",
                     password: "987654321",
-                    username: "boccaccio"
+                    email: "gio.boccaccio@loremipsum.it",
                 }];
-	        } else{
+	        } 
+            else{
                 return null;
             }
         })
@@ -43,7 +45,7 @@ describe("article restriction test", () =>{
                     text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
                     date: "01012020",
                     tags: "mock",
-                    restricted : true
+                    restricted : true,
                 }];
             }else if(criterias.id=="2" && criterias.author == "decamerone"){
                 return [{
@@ -54,7 +56,7 @@ describe("article restriction test", () =>{
                     text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
                     date: "01012020",
                     tags: "mock",
-                    restricted : false
+                    restricted : false,
                 }];
             }
             else
@@ -82,35 +84,34 @@ describe("article restriction test", () =>{
     });
 
     // Tests
-    test('GET /restricted/article/:id/:author/user/:username , access granted', async done =>{
+    // valid user with valid sub, restricted article 
+    test('GET /restricted/article/:id/:author/user/:username, access granted', async done =>{
         const response = await request.get("/restricted/article/1/decamerone/user/dantealighieri");
         expect(response.statusCode).toBe(204);
         done();
     });
-    
+   // valid user with no sub, non restricted article 
+    test('GET /restricted/article/:id/:author/user/:username, non restricted article => access granted', async done =>{
+        const response = await request.get("/restricted/article/2/decamerone/user/boccaccio");
+        expect(response.statusCode).toBe(204);
+        done();
+    });
+    // valid user with no sub, restricted article     
     test('GET /restricted/article/:id/:author/user/:username, access denied', async done =>{
         const response = await request.get("/restricted/article/1/decamerone/user/boccaccio");
         expect(response.statusCode).toBe(403);
         done();
     });
-
-    test('GET /restricted/article/:id/:author/user/:username, non existing article', async done =>{
-        const response = await request.get("/restricted/article/2/boccaccio/user/dantealighieri");
-        expect(response.statusCode).toBe(404);
-        expect(response.error).toBe("Autore o id non presente");
-        done();
-    });
-
-    test('GET /restricted/article/:id/:author/user/:username , non restricted article access granted', async done =>{
-        const response = await request.get("/restricted/article/2/decamerone/user/dantealighieri");
-        expect(response.statusCode).toBe(204);
-        done();
-    });
-    
-    test('GET /restricted/article/:id/:author/user/:username, non existing user', async done =>{
+    // non valid username 
+    test('GET /restricted/article/:id/:author/user/:username, non valid username', async done =>{
         const response = await request.get("/restricted/article/1/decamerone/user/manzoni");
         expect(response.statusCode).toBe(404);
-        expect(response.error).toBe("User non esiste");
+        done();
+    });
+   // non vaid article
+    test('GET /restricted/article/:id/:author/user/:username, non valid article', async done =>{
+        const response = await request.get("/restricted/article/2/boccaccio/user/dantealighieri");
+        expect(response.statusCode).toBe(404);
         done();
     });
 })
