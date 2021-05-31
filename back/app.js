@@ -35,8 +35,8 @@ app.use("qualcosa",tokenChecker);
 */
 
 //è da aggiungere una chiamata a restriction per gli utenti non registrati
-//app.use("/article/:id/:author/user/:username/isRestricted",tokenChecker);
-app.use("/article/:id/:author/user/:username/isRestricted",restriction);
+//app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
+app.use("/restricted/article/:id/:author/user/:username",restriction);
 
 //-------------
 
