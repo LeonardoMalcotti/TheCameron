@@ -8,12 +8,7 @@ const User = require('../models/User');
 router.post("/user/:username",async(req,res)=>{
 
     let username = req.params.username;
-    let tags = req.body.tags;
-
-    if(!username){
-        res.status(404).json({errore:"Utente non presente"});
-        return;
-    }
+    let tags = [];
 
     let existUser = await User.findOne({'username': username});
     if(!existUser){
@@ -21,13 +16,62 @@ router.post("/user/:username",async(req,res)=>{
         return;
     }
 
+    let spl = req.body.tags.split(",");
+
+    for( t in spl ){
+      let temp = Tag.findOne({'name' : spl[t]})
+      if(temp){
+        tags = tags.concat(temp.id);
+      }
+    }
+
+    if(!tags){
+      res.status(404).json({ error: "Nessun Tag corrispondente"});
+      return;
+    }
 
     let favoriteTags = await FavoriteTags.find({'username':req.params.username});
-    favoriteTags.id.push(tags.id);
+
+    if(!favoriteTags){
+      let favoriteTags = new FavoriteTags({
+        username : username,
+        id : tags
+      });
+    }else{//se esiste gia
+      for( t in tags ){
+        tags = tags.concat(temp.id);
+        favoriteTags.id = favoriteTags.id.concat(tags[t]);
+      }
+    }
 
     favoriteTags.save();
 
     res.location("/tag/" + username).status(201).send();
+})
+
+router.post("/:name",async(req,res)=>{
+
+    let name = req.params.name;
+
+    let allTag = await Tag.find();
+  	let id;
+    if(allTag){
+  		let ids = allTag.map(tmp => tmp.id);
+  	 	id = ( allTag.length==0 ? 1 : Math.max(...ids) + 1);
+  	}
+
+    let existTag = await Tag.findOne({'name': name});
+    if(!existTag){
+        let tag = new Tag({
+          id : id,
+          name : name
+        })
+        tag.save();
+        res.status(201).send();
+    }else{
+      res.status(404).json({ error: "Tag gia presente"});
+    }
+
 })
 
 router.get("/user/:username",async (req,res)=>{
@@ -39,14 +83,32 @@ router.get("/user/:username",async (req,res)=>{
     }
     let tagName = await Tag.find();
     let final = tagName.filter(x=> favoriteTags.id.includes(x.id));
-    
-    res.status(201).json(
-       final
-    );
+
+    res.status(201).json(final);
+});
+
+router.get("/:name",async (req,res)=>{
+
+    let tagName = await Tag.findOne({'name': req.params.name});
+    if(!tagName){
+        res.status(404).send();
+        return;
+    }
+    res.status(201).json(tagName);
+});
+
+router.get("/",async (req,res)=>{
+
+    let tagName = await Tag.find();
+    if(!tagName){
+        res.status(404).send();
+        return;
+    }
+    res.status(201).json(tagName);
 });
 
 router.delete("/user/:username/favorite/:id",async (req,res)=>{
-    
+
     let tag = await FavoriteTags.findOne({'username':req.params.username});
 
     if(!tag){
@@ -55,11 +117,11 @@ router.delete("/user/:username/favorite/:id",async (req,res)=>{
     }
 
     if(tag.id.length()==0){
-        
+
         res.status(404).send();
         res.json({error: "Nessun preferito"});
     }
-    
+
     delete tag.id[tag.id.indexOf(req.params.id)];
     tag.save();
 

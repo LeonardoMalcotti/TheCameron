@@ -15,6 +15,7 @@ const articles = require("./httpCalls/article.js");
 const users = require("./httpCalls/user.js");
 const login = require("./httpCalls/login.js");
 const reactions = require("./httpCalls/reaction.js");
+const tags = require("./httpCalls/tag.js");
 
 //-------------
 
@@ -29,7 +30,7 @@ app.use("/article", article);
 app.use("/user",users);
 app.use("/article", articles);
 app.use("/reaction", reactions);
-
+app.use("/tag", tags);
 //autenticazione
 app.use("/login",login);
 
