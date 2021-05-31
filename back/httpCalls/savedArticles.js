@@ -41,13 +41,17 @@ router.post("/user/:username",async(req,res)=>{
 })
 
 router.get("/user/:username",async (req,res)=>{
-
+    let i=0;
+    let art=[];
     let savedArticles = await SavedArticles.findOne({'username':req.params.username});
     if(savedArticles.id.length<=0){
         res.status(404).send();
         return;
     }
-    res.status(201).json(savedArticles);
+    for(i=0;i<savedArticles.id.length;i++){
+        art[i] = await Article.findOne({'id':savedArticles.id[i],'author': savedArticles.author[i]})
+    }
+    res.status(201).json(art);
 });
 
 router.get("/user/:username/article/:author/:id",async (req,res)=>{
@@ -57,7 +61,7 @@ router.get("/user/:username/article/:author/:id",async (req,res)=>{
         res.status(404).send();
         return;
     }
-    let article = await Article.findOne({'id':req.params.id},{'author':req.params.author});
+    let article = await Article.findOne({'id':req.params.id,'author':req.params.author});
     if(!article)
     {
         res.status(404).send();
