@@ -5,7 +5,22 @@ const Article = require('../models/Article');
 const Subscription = require('../models/Subscription');
 const User = require('../models/User');
 
-router.get("/article/:id/:author/user/:username",async (req,res)=>{
+router.get("",async (req,res)=>{
+
+	if(!req.params.id){
+		res.status(400).json({error: "id articolo non specificato"});
+		return;
+	}
+
+	if(!req.params.author){
+		res.status(400).json({error: "autore articolo non specificato"});
+		return;
+	}
+
+	if(!req.params.username){
+		res.status(400).json({error: "user non specificato"});
+		return;
+	}
 
 	//conrtollo dei dati
 
@@ -15,6 +30,8 @@ router.get("/article/:id/:author/user/:username",async (req,res)=>{
 		res.status(404).json({error: "Autore o id non presente"});
 		return;
 	}
+
+
 
 	let user = await User.findOne({'username':req.params.username});
 
@@ -29,9 +46,11 @@ router.get("/article/:id/:author/user/:username",async (req,res)=>{
 
 	//se l'articolo è ristretto e l'utente non ha un abbonamento restituisce forbidden
 	if(!sub && article[0].restricted){
-		res.status(403).send();
-		return;
+			res.status(403).send();
+			return;
 	}
+	
+	
 
 	//se l'utente ha un abbonamento allora ritorna un successo senza contenuto
 	res.status(204).send();
