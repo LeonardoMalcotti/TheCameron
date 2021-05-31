@@ -560,6 +560,26 @@ paths:
                 $ref: '#/components/schemas/Tag'
         '404':
           description: 'no results'
+  /tag/{id}:
+    get:
+      description: >-
+        Get information about a tag
+      summary: Get tag.
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: object
+            description: "id of the tag"
+      responses:
+        '200':
+          description: 'name of the tag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '404':
+          description: 'no results'
   /tag:
     get:
       description: >-
