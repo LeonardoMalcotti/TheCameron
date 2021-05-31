@@ -58,20 +58,19 @@ function getArticles(){
         .then(function(data) 
         {
             for( i=0;i<data.id.lenght;i++){
-                htmlOut+="<input type='button' onClick='operArticle("+data[i].id+","+data[i].author")'><span>Title: "+data[i].title+"</span><br><span>Author :"+data[i].author+"
-                </span><br><input type='button' onclick='deleteArticle("+data[i].id+","+data[i].author")'>Cancella</input></input><br>"
+                htmlOut+="<input type='button' onClick='operArticle("+data[i].id+","+data[i].author+")'><span>Title: "+data[i].title+"</span><br><span>Author :"+data[i].author+"</span><br><input type='button' onclick='deleteArticle("+data[i].id+","+data[i].author+")'>Cancella</input></input><br>";
             }
-        });
+        })
         .catch( error => console.log(error));
     document.getElementById("savedArticles").innerHTML=htmlOut;
     return;
 }
 
-function openArticle(var id, var author){
+function openArticle( id, author){
     window.open("../pages/article?id="+id+"&author="+author);
 }
 
-function deleteArticle(var id, var author){
+function deleteArticle( id, author){
     var url = '../savedArticles/user/' + loggedUser.username + '/author/' + author+"/id"+id; 
     fetch(url, {
         method: 'DELETE',
