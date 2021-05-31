@@ -1,13 +1,58 @@
 <!DOCTYPE html>
 <html lang="it">
-
-<body>
-
-  <button type="button" class="btn btn-light" onclick="window.location.href = 'readarticle.html?id=1&author=User'">
-    Guarda Articolo
-  </button>
+<head>
+  <title>TheCameron</title>
+  <script src="../scripts/homepage.js"></script>
+  <script src="../scripts/logout.js"></script>
+  <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body onload="setup_homepage()">
+    <header>
+        <h1>TheCameron</h1>
+    </header>
+    <nav class="flex-container">
+        <a id="header_home" href="">
+            Home
+        </a>
+        <div id="header_unlogged">
+            <a id="header_login" href="login.html">
+                Log in
+            </a>
+            <a id="header_signin" href="signin.html">
+                Sign in
+            </a>
+        </div>
+        <div id="header_logged" hidden>
+            <a id="header_newArticle" href="newArticle.html"> 
+                Write article
+            </a>
+            <a id="header_profile" href=""> <!-- Missing link -->
+                Your profile
+            </a>
+            <a id="header_logout" onclick="logOut()">
+                Log out
+            </a>
+        </div>
+    </nav> 
+    <div id="main_content">
+        <section id="article_show" hidden>
+            <button id="btn_backToList" onclick="backToList()">Torna a tutti gli articoli</button>
+            <hr>
+            <em>Autore - Data</em>
+            <h2>Titolo</h2>
+            <p>Sottotitolo</p>
+            <br>
+            <a>Leggi tutto</a>
+        </section>
+        <div id="article_list"></div>
+    </div>
+    <aside>
+        <div id="search_box">
+            <input type="text" id="txt_search" placeholder="Search.."> 
+            <button class="btn_search" onclick=""> Search </button> <!-- Missing link -->
+        </div>
+        <div id="tags_box"></div>
+    </aside>
   
-  <button type="button" class="btn btn-light" onclick="window.location.href = 'subscription.html?username=test'">
-    abbonamento
-  </button>
+
 </body>
