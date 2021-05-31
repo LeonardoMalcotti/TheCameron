@@ -8,7 +8,7 @@ const User = require('../models/User');
 router.post("/user/:username",async(req,res)=>{
 
     let username = req.params.username;
-    let tags = [];
+    let tag = req.body.tag;
 
     let existUser = await User.findOne({'username': username});
     if(!existUser){
@@ -19,7 +19,7 @@ router.post("/user/:username",async(req,res)=>{
     let spl = req.body.tags.split(",");
 
     for( t in spl ){
-      let temp = Tag.findOne({'name' : spl[t]})
+      let temp = await Tag.findOne({'name' : spl[t]})
       if(temp){
         tags = tags.concat(temp.id);
       }
@@ -30,23 +30,78 @@ router.post("/user/:username",async(req,res)=>{
       return;
     }
 
-    let favoriteTags = await FavoriteTags.find({'username':req.params.username});
+    let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
 
     if(!favoriteTags){
-      let favoriteTags = new FavoriteTags({
+        favoriteTags = new FavoriteTags({
+         username : username,
+         id : [tag.id]
+       });
+    } else {
+        favoriteTags.id.push(tag.id)
+    }
+
+
+    /*
+    for( t in tags ){
+     tags = tags.concat(temp.id);
+     favoriteTags.id = favoriteTags.id.concat(tags[t]);
+    }*/
+
+
+    favoriteTags.save();
+
+    res.location("/tag/" + username).status(201).send();
+})
+
+router.post("/user/:username",async(req,res)=>{
+
+    let username = req.params.username;
+    let tags = [];
+
+    let existUser = await User.findOne({'username': username});
+    if(!existUser){
+        res.status(404).json({ error: "Nessun Username trovato"});
+        return;
+    }
+
+    let spl = req.body.tags.split(",");
+console.log(req.body.tags);
+    for( t in spl ){
+      console.log(spl[t]);
+      let temp = await Tag.findOne({'name' : spl[t]})
+      if(temp){
+        tags = tags.concat(temp.id);
+        console.log(temp.id);
+      }
+    }
+
+    if(!tags){
+      res.status(404).json({ error: "Nessun Tag corrispondente"});
+      return;
+    }
+
+    let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
+
+    console.log(username);
+    console.log(tags);
+    if(!favoriteTags){
+      let fav = new FavoriteTags({
         username : username,
         id : tags
       });
+      fav.save();
+      res.location("/tag/" + username).status(201).send();
+
     }else{//se esiste gia
       for( t in tags ){
-        tags = tags.concat(temp.id);
-        favoriteTags.id = favoriteTags.id.concat(tags[t]);
+        favoriteTags.id[favoriteTags.id.length] = tags[t];
       }
     }
 
     favoriteTags.save();
 
-    res.location("/tag/" + username).status(201).send();
+
 })
 
 router.post("/:name",async(req,res)=>{
