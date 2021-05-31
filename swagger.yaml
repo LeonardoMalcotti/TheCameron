@@ -255,7 +255,7 @@ paths:
           description: 'Error.'
         '404':
           description: 'Error. The author or id does not exist.'
-  /article/{id}/{author}/user/{username}/canAccess:
+  /restricted/article/{id}/{author}/user/{username}/:
     get:
       description: >-
         Tells if the article is restricted or not.
