@@ -7,7 +7,8 @@ describe('tag test',()=> {
 	let TagSpy;
 	let FavoriteSpy;
 	let UserSpy;
-	let favoriteDelSpy;
+	let TagSpyOne;
+
 	beforeAll( () => {
 		const Tag = require("../../models/Tag");
 		const Favorite = require("../../models/FavoriteTags");
@@ -43,10 +44,24 @@ describe('tag test',()=> {
 			return ret;
 		});
 
+		TagSpyOne = jest.spyOn(Tag,'findOne').mockImplementation((criterias) =>{
+			let ret = {
+				id : 1,
+				name : "Science"
+			};
+			if(criterias.id == "1"){
+				return ret;
+			}
+			if(criterias.name == "Science"){
+				return ret;
+			}
+			return {};
+		});
+
     FavoriteSpy = jest.spyOn(Favorite,'findOne').mockImplementation((criterias) =>{
 			let ret = {
 				username : "dantealighieri",
-				id : [1,2,3]
+				id : [1,2]
 			};
 			if(criterias.username == "dantealighieri"){
 				return ret;
@@ -59,6 +74,7 @@ describe('tag test',()=> {
 	   UserSpy.mockRestore();
      Tagspy.mockRestore();
      FavoriteSpy.mockRestore();
+		 TagSpyOne.mockRestore();
    });
 
 //-------------------------------------------------------------------
@@ -72,19 +88,69 @@ describe('tag test',()=> {
 		expect(response.statusCode).toBe(201);
 	});
 
-  test("POST tag/user/:username, missing user", async done =>{
+  test("POST tag/user/:username, miss user", async done =>{
 		const response = await request.post("/tag/user/username")
     .set('Accept', 'application/json')
     .send({id:3});
 		expect(response.statusCode).toBe(404);
 	});
 
+	test("POST tag/:name, already exist", async done =>{
+		const response = await request.post("/tag/Science")
+    .set('Accept', 'application/json')
+
+		expect(response.statusCode).toBe(404);
+	});
+
+	test("POST tag/:name, success", async done =>{
+		const response = await request.post("/tag/Romantic")
+    .set('Accept', 'application/json')
+
+		expect(response.statusCode).toBe(201);
+	});
+
 	test("GET tag/user/:username", async done =>{
     const response = await request.get("/tag/user/dantealighieri")
     .set('Accept', 'application/json');
 
+		expect(response.body.id).toBe([1,2,3]);
     expect(response.statusCode).toBe(201);
   });
 
+	test("GET tag/user/:username, miss user", async done =>{
+    const response = await request.get("/tag/user/username")
+    .set('Accept', 'application/json');
 
+    expect(response.statusCode).toBe(404);
+  });
+
+	test("GET tag/:name, success", async done =>{
+    const response = await request.get("/tag/user/Science")
+    .set('Accept', 'application/json');
+
+		expect(response.body.id).toBe(1);
+    expect(response.statusCode).toBe(201);
+  });
+
+	test("GET tag/:name, miss tag", async done =>{
+    const response = await request.get("/tag/test")
+    .set('Accept', 'application/json');
+
+    expect(response.statusCode).toBe(404);
+  });
+
+	test("GET tag/id/:id, success", async done =>{
+    const response = await request.get("/tag/id/1")
+    .set('Accept', 'application/json');
+
+		expect(response.body.name).toBe("Science");
+    expect(response.statusCode).toBe(201);
+  });
+
+	test("GET tag/id/:id, miss tag", async done =>{
+    const response = await request.get("/tag/id/100")
+    .set('Accept', 'application/json');
+
+    expect(response.statusCode).toBe(404);
+  });
 });
