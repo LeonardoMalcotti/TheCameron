@@ -86,11 +86,5 @@ describe('tag test',()=> {
     expect(response.statusCode).toBe(201);
   });
 
-	test("DELETE tag/user/:username/favorite/:id", async done =>{
-    const response = await request.delete("/tag/user/dantealighieri/favorite/1")
-    .set('Accept', 'application/json');
-    expect(response.statusCode).toBe(204);
-  });
-
 
 });

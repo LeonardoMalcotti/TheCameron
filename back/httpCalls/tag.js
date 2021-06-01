@@ -16,93 +16,31 @@ router.post("/user/:username",async(req,res)=>{
         return;
     }
 
-    let spl = req.body.tags.split(",");
-
-    for( t in spl ){
-      let temp = await Tag.findOne({'name' : spl[t]})
-      if(temp){
-        tags = tags.concat(temp.id);
-      }
-    }
-
-    if(!tags){
-      res.status(404).json({ error: "Nessun Tag corrispondente"});
-      return;
+    let existTag = await Tag.findOne({'id' : tag});
+    if(!existTag){
+        res.status(404).json({ error: "Nessun tag trovato"});
+        return;
     }
 
     let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
-
     if(!favoriteTags){
         favoriteTags = new FavoriteTags({
          username : username,
-         id : [tag.id]
+         id : tag
        });
     } else {
-        favoriteTags.id.push(tag.id)
+      if(!favoriteTags.id.includes(tag)){
+        favoriteTags.id.push(tag)
+      }else{
+        res.status(404).json({ error: "Tag gia inserito"});
+        return;
+      }
     }
-
-
-    /*
-    for( t in tags ){
-     tags = tags.concat(temp.id);
-     favoriteTags.id = favoriteTags.id.concat(tags[t]);
-    }*/
-
 
     favoriteTags.save();
 
     res.location("/tag/" + username).status(201).send();
-})
-
-router.post("/user/:username",async(req,res)=>{
-
-    let username = req.params.username;
-    let tags = [];
-
-    let existUser = await User.findOne({'username': username});
-    if(!existUser){
-        res.status(404).json({ error: "Nessun Username trovato"});
-        return;
-    }
-
-    let spl = req.body.tags.split(",");
-console.log(req.body.tags);
-    for( t in spl ){
-      console.log(spl[t]);
-      let temp = await Tag.findOne({'name' : spl[t]})
-      if(temp){
-        tags = tags.concat(temp.id);
-        console.log(temp.id);
-      }
-    }
-
-    if(!tags){
-      res.status(404).json({ error: "Nessun Tag corrispondente"});
-      return;
-    }
-
-    let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
-
-    console.log(username);
-    console.log(tags);
-    if(!favoriteTags){
-      let fav = new FavoriteTags({
-        username : username,
-        id : tags
-      });
-      fav.save();
-      res.location("/tag/" + username).status(201).send();
-
-    }else{//se esiste gia
-      for( t in tags ){
-        favoriteTags.id[favoriteTags.id.length] = tags[t];
-      }
-    }
-
-    favoriteTags.save();
-
-
-})
+});
 
 router.post("/:name",async(req,res)=>{
 
@@ -127,9 +65,15 @@ router.post("/:name",async(req,res)=>{
       res.status(404).json({ error: "Tag gia presente"});
     }
 
-})
+});
 
 router.get("/user/:username",async (req,res)=>{
+
+  let existUser = await User.findOne({'username': username});
+  if(!existUser){
+      res.status(404).json({ error: "Nessun Username trovato"});
+      return;
+  }
 
     let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
     if(favoriteTags.id.length<=0){
@@ -152,6 +96,16 @@ router.get("/:name",async (req,res)=>{
     res.status(201).json(tagName);
 });
 
+router.get("/id/:id",async (req,res)=>{
+
+    let tagName = await Tag.findOne({'id': req.params.id});
+    if(!tagName){
+        res.status(404).send();
+        return;
+    }
+    res.status(201).json(tagName);
+});
+
 router.get("/",async (req,res)=>{
 
     let tagName = await Tag.find();
@@ -161,33 +115,5 @@ router.get("/",async (req,res)=>{
     }
     res.status(201).json(tagName);
 });
-
-router.delete("/user/:username/favorite/:id",async (req,res)=>{
-
-    let tag = await FavoriteTags.findOne({'username':req.params.username});
-
-    if(!tag){
-        res.status(404).send();
-		res.json({error: "Username errato o nessun preferito"});
-    }
-
-    if(tag.id.length()==0){
-
-        res.status(404).send();
-        res.json({error: "Nessun preferito"});
-    }
-
-    delete tag.id[tag.id.indexOf(req.params.id)];
-    tag.save();
-
-    if (ret) {
-		res.status(204).send();
-	} else {
-		res.status(400).send();
-        res.json({error: "Errore nella cancellazione del tag preferito"});
-        return;
-	}
-
-})
 
 module.exports = router;
