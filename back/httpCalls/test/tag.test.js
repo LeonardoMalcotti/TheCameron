@@ -81,19 +81,19 @@ describe('tag test',()=> {
 //tests
 
 
-	test("POST tag/user/:username, success", async done =>{
+/*	test("POST tag/user/:username, success", async done =>{
 		const response = await request.post("/tag/user/dantealighieri")
     .set('Accept', 'application/json')
     .send({id:3});
 		expect(response.statusCode).toBe(201);
-	});
+	});*/
 
-  test("POST tag/user/:username, miss user", async done =>{
+  /*test("POST tag/user/:username, miss user", async done =>{
 		const response = await request.post("/tag/user/username")
     .set('Accept', 'application/json')
     .send({id:3});
 		expect(response.statusCode).toBe(404);
-	});
+	});*/
 
 	test("POST tag/:name, already exist", async done =>{
 		const response = await request.post("/tag/Science")
