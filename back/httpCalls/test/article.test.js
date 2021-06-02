@@ -6,7 +6,8 @@ const request = supertest(app);
 describe('article test', () =>{
   	
   	let findOneSpy;
-  	//let filterSpy;
+  	let findSpy;
+  	let findOneUser;
 
   	let tags = [
   	{
@@ -23,9 +24,40 @@ describe('article test', () =>{
   	},
   	];
 
+  	let articles = [
+  	{
+  		id: 1, 
+  		author: "tizio", 
+  		title: "Breve guida su come testare con jest", 
+  		summary: "summ",
+  		text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  		date: "1",
+  		tags: []
+  	},
+  	{
+  		id: 2, 
+  		author: "caio", 
+  		title: "Come utilizzare jEsT e spyOn al meglio", 
+  		summary: "summ",
+  		text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  		date: "2",
+  		tags: [1]
+  	},
+  	{
+  		id: 3, 
+  		author: "tizio", 
+  		title: "Altro titolo con jestAll'interno", 
+  		summary: "summ",
+  		text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  		date: "3",
+  		tags: [2]
+  	},
+  	];
+
   	beforeAll( () => {
 		const Article = require("../../models/Article");
-		
+		const User = require("../../models/User");
+
 		findOneSpy = jest.spyOn(Article, 'findOne').mockImplementation((criterias) =>{
 			if(criterias.author == "Dante Alighieri" && criterias.id == 1){
 
@@ -54,23 +86,32 @@ describe('article test', () =>{
 			return null;
 
 		});
-/*
-	filterSpy = jest.fn(Article, 'filter').mockImplementation((criterias) =>{
-	  	if(criterias.author == "Alessandro Manzoni"){
-			return [{
-		  		id: 1,
-		  		author : "Alessandro Manzoni",
-		  		title : "Promessi Sposi",
-		  		summary : "..",
-		  		text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-		  		tags: "romanzo, italiano"
-			}];
-	  }
-	});*/
+
+		findSpy = jest.spyOn(Article, 'find').mockImplementation((criterias) => {
+			return articles;
+		});
+
+		findOneUser = jest.spyOn(User, 'findOne').mockImplementation((criterias) =>{
+
+			if(criterias.username == "tizio"){
+  				
+  				return {
+  					name: "tizio",
+  					surname: "tizio",
+  					email: "tizio.tizio@loremipsum.it",
+  					password: "12345678",
+  					username: "tizio"
+  				};
+
+  			}
+
+  			return null;
+		});
  	});
 
   	afterAll( async () =>{
-	  	//filterSpy.mockRestore();
+	  	findOneUser.mockRestore();
+	  	findOneSpy.mockRestore();
 	  	findOneSpy.mockRestore();
   	});
 
@@ -86,7 +127,7 @@ describe('article test', () =>{
 			title : "La divina commedia",
 			summary : "inferno",
 			text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
-			tags: "poema epico, italiano"
+			tags: [1,3]
 		};
 
 		expect(response.statusCode).toBe(200);
@@ -95,7 +136,7 @@ describe('article test', () =>{
 		expect(response.body.title).toBe(article.title);
 		expect(response.body.summary).toBe(article.summary);
 		expect(response.body.text).toBe(article.text);
-		expect(response.body.tags).toBe(article.tags);
+		expect(response.body.tags).toStrictEqual(article.tags);
 		done();
   	});
 
@@ -134,7 +175,7 @@ describe('article test', () =>{
 				title : "Promessi Sposi",
 				summary : "..",
 				text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-				tags: ["romanzo, italiano"],
+				tags: [1,2],
 				restricted: 'false',
 			});
 	
@@ -148,7 +189,7 @@ describe('article test', () =>{
 		const response = await request.get('/article/tizio');
 
 		expect(response.statusCode).toBe(200);
-		expect(response.body.length).toBe(5);
+		expect(response.body.length).toBe(2);
 		done();
   	});
 
