@@ -130,4 +130,9 @@ aside{
 #main_content_full input{
   padding: 6px 12px;
   display: inline-block;
+  max-width: 100%;
+
+}
+.v-form{
+  margin: 5px;
 }

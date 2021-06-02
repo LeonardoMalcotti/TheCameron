@@ -1,20 +1,37 @@
 <!DOCTYPE html>
-<html lang="it">
-
+<html lang="en">
 <head>
-<script src="../scripts/signin.js"></script>
-
+  <title>TheCameron</title>
+  <script src="../scripts/signin.js"></script>
+  <link rel="stylesheet" href="../styles/style.css">
 </head>
-
 <body>
-
-	<form id="formSignIn">
-		name: <input name="txt_name" value="aaaaa" id="txt_name"/><br>
-    surname: <input name="txt_surname" value="bbbb" id="txt_surname"/><br>
-    username: <input name="txt_username" value="userna" id="txt_username"/><br>
-  	password: <input type="password" name="txt_password" value="1234" id="txt_password"/><br>
-  	email: <input name="txt_email" value="mario.rossi@unitn.com" id="txt_email"/><br>
-    <button type="button" onclick="signInUser()">signIn</button><br>
-	</form>
-
+  <header>
+    <h1>TheCameron</h1>
+  </header>
+  <nav class="flex-container">
+    <a id="header_home" href="">
+        Home
+    </a>
+    <div id="header_unlogged">
+        <a id="header_login" href="login.html">
+            Log in
+        </a>
+        <a id="header_signin" href="signin.html">
+            Sign in
+        </a>
+    </div>
+  </nav>
+  <div id="main_content_full">
+    <section id="centered_section">
+      <form id="formSignIn">
+        name: <input class="v-form" name="txt_name" value="aaaaa" id="txt_name" size="30"/><br>
+        surname: <input class="v-form" name="txt_surname" value="bbbb" id="txt_surname" size="30"/><br>
+        username: <input class="v-form" name="txt_username" value="userna" id="txt_username" size="30"/><br>
+        password: <input class="v-form" type="password" name="txt_password" value="1234" id="txt_password" size="30"/><br>
+        email: <input class="v-form" name="txt_email" value="mario.rossi@unitn.com" id="txt_email" size="30"/><br>
+        <button class="v-form" type="button" onclick="signInUser()">Sign in</button><br>
+      </form>
+    </section>
+  </div>
 </body>
