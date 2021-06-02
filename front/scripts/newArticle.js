@@ -6,7 +6,7 @@ function newArticle(){
   var text = document.getElementById("text").value;
   var tag = document.getElementById("tag").value;
 	var author = document.getElementById("author").value;
-
+	var restriction = document.getElementById("restriction").checked;
 	fetch(url, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -16,6 +16,7 @@ function newArticle(){
 				author : author,
 				text : text,
 				tag : tag,
+				restricted : restriction
 			}),
 	})
 	.then(function(response) {
