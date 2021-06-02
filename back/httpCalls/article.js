@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-//modello mongoose
 const Article = require('../models/Article');
-const User = require('../models/Users');
+const User = require('../models/User');
 
 router.get("/:id/:author",async (req,res)=>{
 

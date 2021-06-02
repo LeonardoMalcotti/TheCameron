@@ -63,7 +63,7 @@ router.get("/:username",async (req,res)=>{
 		res.status(404).send();
 		return;
 	}
-	console.log(user);
+
 	/*
 	if(user.length == 0){
 		res.status(404).json({errore: "Nessun user trovato"});

@@ -1,7 +1,7 @@
 const supertest = require('supertest');
 const app = require('../.././app');
 const request = supertest(app);
-//require("dotenv").config();
+require("dotenv").config();
 
 describe('POST /login', () =>{
 
