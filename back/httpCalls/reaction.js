@@ -26,18 +26,18 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
-  let user = await User.findOne({'username':req.body.username});
-  if(!user){
+  	let user = await User.findOne({'username':req.body.username});
+  	if(!user){
 		res.status(404).send();
 		return;
 	}
-  let article = await Article.findOne({'id':req.body.id, 'author':req.body.author});
-  if(!article){
+  	let article = await Article.findOne({'id':req.body.id, 'author':req.body.author});
+  	if(!article){
 		res.status(404).send();
 		return;
 	}
-  let react = await Reaction.findOne({'id':req.body.id, 'author':req.body.author, 'username':req.body.username});
-  if(react){
+  	let react = await Reaction.findOne({'id':req.body.id, 'author':req.body.author, 'username':req.body.username});
+  	if(react){
 		res.status(403).json({ error: "Reaction già presente" });
 		return;
 	}
@@ -58,14 +58,14 @@ router.post("/",async (req,res)=>{
 // reaction/:id/:author GET
 router.get("/:id/:author",async (req,res)=>{
 
-  let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
+  	let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
 	if(!article){
 		res.status(404).json({error: "Articolo non presente"});
 		return;
 	}
 
-  let reaction = await Reaction.findOne({'id':req.params.id, 'author':req.params.author})
-  if(!reaction){
+  	let reaction = await Reaction.findOne({'id':req.params.id, 'author':req.params.author})
+  	if(!reaction){
 		res.status(404).json({error: "Reaction non presente"});
 		return;
 	}
@@ -81,14 +81,14 @@ router.get("/:id/:author",async (req,res)=>{
 // reaction/:username GET
 router.get("/:username",async (req,res)=>{
 
-  let user = await User.findOne({'username':req.params.username});
+  	let user = await User.findOne({'username':req.params.username});
 	if(!user){
 		res.status(404).json({error: "Username non presente"});
 		return;
 	}
 
-  let reaction = await Reaction.find({'username':req.params.username})
-  if(!reaction){
+  	let reaction = await Reaction.find({'username':req.params.username})
+  	if(!reaction){
 		res.status(404).json({error: "Reaction non presente"});
 		return;
 	}

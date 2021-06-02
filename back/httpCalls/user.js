@@ -84,22 +84,22 @@ router.get("/:username",async (req,res)=>{
 router.post("/:username/subscription",async(req,res)=>{
 
 	let user = await User.findOne({'username':req.params.username});
-  let subscription = await Subscription.findOne({'username':req.params.username});
+  	let subscription = await Subscription.findOne({'username':req.params.username});
 
-  if(!user){
+  	if(!user){
 		res.status(404).json({errore:"Utente non presente"});
 		return;
 	}
 
-  if (!req.body.dateSubscription){
+  	if (!req.body.dateSubscription){
 		res.status(400).json({ error: "Data dell' iscrizione non specificata" });
 		return;
 	}
 
-  if(subscription){
+  	if(subscription){
 		res.status(404).json({errore:"Sei gia abbonato"});
 		return;
-  }
+ 	 }
 
 	let sub = new Subscription({
 		username : req.params.username,
@@ -114,7 +114,7 @@ router.post("/:username/subscription",async(req,res)=>{
 // user/:username/subscription GET
 router.get("/:username/subscription",async (req,res)=>{
 
-  let subscription = await Subscription.findOne({'username':req.params.username});
+  	let subscription = await Subscription.findOne({'username':req.params.username});
 
 	if(!subscription){
 		res.status(404).json({errore:"Non presente"});
@@ -126,16 +126,14 @@ router.get("/:username/subscription",async (req,res)=>{
 		return;
 	}
 
-	res.status(200).json({username : subscription.username,
-                        dateSubscription : subscription.dateSubscription
-                      });
+	res.status(200).json({username : subscription.username, dateSubscription : subscription.dateSubscription});
 
 })
 
 // user/:username/subscription DELETE
 router.delete("/:username/subscription",async (req,res)=>{
 
-  let subscription = await Subscription.findOne({'username':req.params.username});
+  	let subscription = await Subscription.findOne({'username':req.params.username});
 
 	if(!subscription){
 		res.status(404).send();

@@ -2,6 +2,7 @@ const supertest = require('supertest');
 const app = require('../../app');
 const request = supertest(app);
 
+
 describe('tag test',()=> {
 
 	let TagSpy;
@@ -17,14 +18,17 @@ describe('tag test',()=> {
     	Userspy = jest.spyOn(User,'findOne').mockImplementation((criterias) =>{
 			
 			if(criterias.username == "dantealighieri"){
+		        
 		        return {
 		  				name: "Dante",
 		          		surname: "Alighieri",
 		          		email: "dante.alighieri@loremipsum.it",
 		          		password: "12345678",
 		          		username: "dantealighieri"
-		  			};
+		  		};
+
       		}
+
       		return null;
 		});
 
@@ -42,31 +46,39 @@ describe('tag test',()=> {
         		id : 3,
         		name : "Humor"
       		}];
+
 			return ret;
 		});
 
 		TagSpyOne = jest.spyOn(Tag,'findOne').mockImplementation((criterias) =>{
+			
 			let ret = {
 				id : 1,
 				name : "Science"
 			};
+
 			if(criterias.id == "1"){
 				return ret;
 			}
+
 			if(criterias.name == "Science"){
 				return ret;
 			}
+
 			return null;
 		});
 
     	FavoriteSpy = jest.spyOn(Favorite,'findOne').mockImplementation((criterias) =>{
+			
 			let ret = {
 				username : "dantealighieri",
 				id : [1,2]
 			};
+
 			if(criterias.username == "dantealighieri"){
 				return ret;
 			}
+
 			return null;
 		});
 	});
@@ -161,4 +173,5 @@ describe('tag test',()=> {
     	expect(response.statusCode).toBe(404);
     	done();
   	});
+
 });
