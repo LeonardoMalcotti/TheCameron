@@ -13,8 +13,9 @@ const articles = require("./httpCalls/article.js");
 const users = require("./httpCalls/user.js");
 const login = require("./httpCalls/login.js");
 const reactions = require("./httpCalls/reaction.js");
+const tags = require("./httpCalls/tag.js");
 const restriction = require("./httpCalls/restriction.js")
-//-------------
+
 
 //punto d'entrata
 app.use('/',express.static('front/pages'));
@@ -25,7 +26,7 @@ app.use(express.static('front'));
 app.use("/user",users);
 app.use("/article", articles);
 app.use("/reaction", reactions);
-
+app.use("/tag", tags);
 //autenticazione
 app.use("/login",login);
 
