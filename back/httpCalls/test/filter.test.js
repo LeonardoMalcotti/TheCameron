@@ -12,56 +12,55 @@ describe('GET /article/filters', () =>{
 		
 		const Article = require("../../models/Article");
 		
-		ArticleFindSpy = jest.spyOn(Article, 'find').mockImplementation(() =>{
-			
-			let pool =[
-				{
-					id: "1", 
-					author: "tizio", 
-					title: "Breve guida su come testare con jest", 
-					summary: "summ",
-					text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-					date: "1",
-					tags: []
-				},
-				{
-					id: "2", 
-					author: "caio", 
-					title: "Come utilizzare jEsT e spyOn al meglio", 
-					summary: "summ",
-					text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-					date: "2",
-					tags: ["hello"]
-				},
-				{
-					id: "3", 
-					author: "tizio", 
-					title: "Altro titolo con jestAll'interno", 
-					summary: "summ",
-					text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-					date: "3",
-					tags: ["world"]
-				},
-				{
-					id: "4", 
-					author: "tizio", 
-					title: "Altro titolo", 
-					summary: "summ",
-					text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-					date: "4",
-					tags: ["hello", "world"]                    
-				},
-				{
-					id: "5", 
-					author: "caio", 
-					title: "Qualcos'altro a caso", 
-					summary: "summ",
-					text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-					date: "5",
-					tags: ["hello", "world", "thecameron"]
-				},
-			];
+		let pool =[
+		{
+			id: 1, 
+			author: "tizio", 
+			title: "Breve guida su come testare con jest", 
+			summary: "summ",
+			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			date: "1",
+			tags: []
+		},
+		{
+			id: 2, 
+			author: "caio", 
+			title: "Come utilizzare jEsT e spyOn al meglio", 
+			summary: "summ",
+			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			date: "2",
+			tags: [1]
+		},
+		{
+			id: 3, 
+			author: "tizio", 
+			title: "Altro titolo con jestAll'interno", 
+			summary: "summ",
+			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			date: "3",
+			tags: [2]
+		},
+		{
+			id: 4, 
+			author: "tizio", 
+			title: "Altro titolo", 
+			summary: "summ",
+			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			date: "4",
+			tags: [1,2]                    
+		},
+		{
+			id: 5, 
+			author: "caio", 
+			title: "Qualcos'altro a caso", 
+			summary: "summ",
+			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			date: "5",
+			tags: [1,2,3]
+		},
+		];
 
+		ArticleFindSpy = jest.spyOn(Article, 'find').mockImplementation(() =>{
 			return pool;
 		});
 
@@ -96,10 +95,10 @@ describe('GET /article/filters', () =>{
 		done();
 	});
 
-	test('GET /article/filters tags=[hello, world] success', async done =>{
+	test('GET /article/filters tags=[1, 2] success', async done =>{
 		
 		const response = await request
-			.get('/article/filters?tags[]=hello&tags[]=world')
+			.get('/article/filters?tags[]=1&tags[]=2')
 			.set('Accept', 'application/json')
 			.send();
 
@@ -108,10 +107,10 @@ describe('GET /article/filters', () =>{
 		done();
 	});
 
-	test('GET /article/filters author=caio tags=[world] success', async done =>{
+	test('GET /article/filters author=caio tags=[2] success', async done =>{
 		
 		const response = await request
-			.get('/article/filters?author=caio&tags[]=world')
+			.get('/article/filters?author=caio&tags[]=2')
 			.set('Accept', 'application/json')
 			.send();
 

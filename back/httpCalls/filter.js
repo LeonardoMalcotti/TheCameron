@@ -17,7 +17,9 @@ router.get("/",async(req,res)=>{
 		if(req.query.tags && ret){
 
 			for( t in req.query.tags ){
-				if(!article.tags.includes(req.query.tags[t])){
+				
+				//moltiplicare per un intero una stringa la converte in intero
+				if(!article.tags.includes(req.query.tags[t]*1)){
 					ret = false;
 				}
 			}
