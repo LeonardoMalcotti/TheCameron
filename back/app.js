@@ -28,7 +28,7 @@ app.use(express.static('front'));
 
 //collegamenti alle chiamate http
 
-app.use("/article", article);
+app.use("/article", articles);
 app.use("/followers", follow);
 app.use("/user", users);
 app.use("/article", articles);
@@ -47,7 +47,7 @@ app.use("qualcosa",tokenChecker);
 
 //è da aggiungere una chiamata a restriction per gli utenti non registrati
 //app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
-app.use("/restricted/article/:id/:author/user/:username",restriction);
+app.use("/restricted/article",restriction);
 
 //-------------
 

@@ -9,7 +9,7 @@ const User = require('../models/User');
 router.post("/user/:username",async(req,res)=>{
 
     let username = req.params.username;
-    let tag = req.body.tag;
+    let tags = req.body.tags;
 
     let existUser = await User.findOne({'username': username});
     if(!existUser){
@@ -17,7 +17,7 @@ router.post("/user/:username",async(req,res)=>{
         return;
     }
 
-    let existTag = await Tag.findOne({'id' : tag});
+    let existTag = await Tag.findOne({'id' : tags});
     if(!existTag){
         res.status(404).json({ error: "Nessun tag trovato"});
         return;
@@ -27,11 +27,11 @@ router.post("/user/:username",async(req,res)=>{
     if(!favoriteTags){
         favoriteTags = new FavoriteTags({
          username : username,
-         id : tag
+         id : tags
        });
     } else {
-      if(!favoriteTags.id.includes(tag)){
-        favoriteTags.id.push(tag)
+      if(!favoriteTags.id.includes(tags)){
+        favoriteTags.id.push(tags)
       }else{
         res.status(404).json({ error: "Tag gia inserito"});
         return;

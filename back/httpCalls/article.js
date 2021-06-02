@@ -90,7 +90,7 @@ router.get("/:id/:author",async (req,res)=>{
   	summary : article.summary,
   	text : article.text,
     date : article.date,
-    tag : article.tag,
+    tags : article.tags,
     restricted : article.restricted
 	});
 });
@@ -116,7 +116,7 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
-	if (!req.body.tag){
+	if (!req.body.tags){
 		res.status(400).json({ error: "Tag dell'articolo non specificati" });
 		return;
 	}
@@ -152,7 +152,7 @@ router.post("/",async (req,res)=>{
 		summary : req.body.summary,
 		text : req.body.text,
 		date : mm + '/' + dd + '/' + yyyy,
-		tag: req.body.tag.split(","),
+		tags: req.body.tags,
 		restricted : req.body.restricted
 	});
 	newArticle.save();
@@ -174,7 +174,7 @@ router.get("/:author",async (req,res)=>{
 	}
 
 	function mapFun(art){
-		return {id: art.id, author: art.author, title: art.title, summary: art.summary, text: art.text, date: art.date, tag: art.tag};
+		return {id: art.id, author: art.author, title: art.title, summary: art.summary, text: art.text, date: art.date, tags: art.tags};
 	}
 
 	res.status(200).json(filterArticle.map(mapFun));

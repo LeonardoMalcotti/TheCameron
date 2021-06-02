@@ -23,7 +23,7 @@ describe('reaction test', () =>{
                 title : "La divina commedia",
                 summary : "inferno",
                 text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
-                tag: "poema epico, italiano"
+                tags: "poema epico, italiano"
               };
           }else if(criterias.author == "AlessandroManzoni" && criterias.id == 1){
 	            return {
@@ -32,7 +32,7 @@ describe('reaction test', () =>{
                 title : "Promessi Sposi",
                 summary : "..",
                 text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-                tag: "romanzo, italiano"
+                tags: "romanzo, italiano"
               };
           }else{
 	        	return null;

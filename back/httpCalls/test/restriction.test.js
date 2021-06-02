@@ -44,7 +44,7 @@ describe("article restriction test", () =>{
                     summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
                     text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
                     date: "01012020",
-                    tags: "mock",
+                    tags: ["mock"],
                     restricted : true,
                 }];
             }else if(criterias.id=="2" && criterias.author == "decamerone"){
@@ -55,7 +55,7 @@ describe("article restriction test", () =>{
                     summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
                     text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
                     date: "01012020",
-                    tags: "mock",
+                    tags: ["mock","mock2"],
                     restricted : false,
                 }];
             }

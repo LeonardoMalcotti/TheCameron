@@ -5,7 +5,7 @@ const Article = require('../models/Article');
 const Subscription = require('../models/Subscription');
 const User = require('../models/User');
 
-router.get("",async (req,res)=>{
+router.get("/:id/:author/user/:username",async (req,res)=>{
 
 	if(!req.params.id){
 		res.status(400).json({error: "id articolo non specificato"});
