@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: '1.1'
+  version: '2.1'
   title: "TheCameron"
   description: TheCameron is an API that allows users to view and write articles, post reactions to them and follow and stay updated on the various authors
   license:
@@ -33,7 +33,7 @@ paths:
         '403':
           description: "Username already exist."
           
-    /user/{username}:
+  /user/{username}:
     get:
       description: >-
         Get the info about user.
@@ -199,6 +199,31 @@ paths:
                 $ref: '#/components/schemas/Article'
         '400':
           description: "missing parameter"
+  /article/{author}:
+    get:
+      description: >-
+        Get list of article.
+      summary: Get list of article
+      parameters:
+        - in: path
+          name: author
+          schema:
+            type: string
+            required: true
+            description: 'Author of articles.'
+      responses:
+        '200':
+          description: 'Articles.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '400':
+          description: 'Error.'
+        '404':
+          description: 'Error. The author does not exist.'
   /article/{id}/{author}:
     get:
       description: >-
@@ -230,6 +255,37 @@ paths:
           description: 'Error.'
         '404':
           description: 'Error. The author or id does not exist.'
+  /restricted/article/{id}/{author}/user/{username}/:
+    get:
+      description: >-
+        Tells if the article is restricted or not.
+      summary:  Tells if the article is restricted
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: author
+          schema:
+            type: string
+            required: true
+            description: 'Author of the article.'
+        - in: path
+          name: username
+          schema:
+            type: object
+            required: true
+            description: 'Username of the user.'
+      responses:
+        '204':
+          description: 'user can read'
+        '403':
+          description: 'user cannot read'
+        '404':
+          description: 'Error. The author or id or user does not exist.'
   /article/filters?:
     get:
       description: >-
@@ -358,6 +414,186 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reaction'
+  /followers/follow:
+    post:
+      description: >-
+        Add a target in the follow list of a user.
+      summary: Follow a user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FollowReq'
+      responses:
+        '204':
+          description: "success"
+        '400':
+          description: "missing parameter"
+  /followers/unfollow:
+    post:
+      description: >-
+        Remove a target in the follow list of a user.
+      summary: Unfollow a user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FollowReq'
+      responses:
+        '204':
+          description: "success"
+        '400':
+          description: "missing parameter or user equal to target"
+        '404':
+          description: "invalid user or target"
+  /followers/user/{username}/following:
+    get:
+      description: >-
+        Get the list of followed users [targets] by the given one
+      summary: Get Following.
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            description: "username of the user"
+      responses:
+        '200':
+          description: 'Followed users'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowRes'
+        '404':
+          description: 'no results'
+  /followers/user/{username}/followers:
+    get:
+      description: >-
+        Get the list of users that follow the given one
+      summary: Get followers.
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            description: "username of the user"
+      responses:
+        '200':
+          description: 'Following users'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowRes'
+        '404':
+          description: 'no results'
+  /tag/user/{username}:
+    post:
+      description: >-
+        Insert new tag in the preference
+      summary: Choose tag.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteTag'
+      responses:
+        '201':
+          description: "success"
+        '400':
+          description: "missing parameter or user "
+        '404':
+          description: "invalid user"
+  /tag/{name}:
+    post:
+      description: >-
+        Insert new general tag
+      summary: Insert tag.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+      responses:
+        '201':
+          description: "success"
+        '400':
+          description: "missing parameter "
+        '404':
+          description: "invalid parameter"
+  /tag/user/{username}:
+    get:
+      description: >-
+        Get the list of the preference tag of users
+      summary: Get preference tag of user.
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: object
+            description: "username of the user"
+      responses:
+        '200':
+          description: 'Tag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteTag'
+        '404':
+          description: 'no results'
+  /tag/{name}:
+    get:
+      description: >-
+        Get information about a tag
+      summary: Get tag.
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: object
+            description: "name of the tag"
+      responses:
+        '200':
+          description: 'ID of the tag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '404':
+          description: 'no results'
+  /tag/id/{id}:
+    get:
+      description: >-
+        Get information about a tag
+      summary: Get tag.
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: object
+            description: "id of the tag"
+      responses:
+        '200':
+          description: 'name of the tag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '404':
+          description: 'no results'
+  /tag:
+    get:
+      description: >-
+        Get the list of the tag
+      summary: Get list of tag.
+      responses:
+        '200':
+          description: 'All of tag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '404':
+          description: 'no results'
 components:
   schemas:
     User:
@@ -418,6 +654,7 @@ components:
         - text
         - date
         - tag
+        - restricted
       properties:
         id:
           type: number
@@ -440,6 +677,9 @@ components:
         tag:
           type: [string]
           description: 'Tag to describe the article'
+        restricted:
+          type: boolean
+          description: 'Tells if the article can be read by everyone or not'
     ArticleInfo:
       type: object
       required:
@@ -469,3 +709,47 @@ components:
           type: number
         reaction:
           type: number
+    FollowReq:
+      type: object
+      required:
+        - user
+        - target
+      properties:
+        user:
+          type: string
+          description: 'username of the user that follows'
+        target:
+          type: string
+          description: 'username of the target user'
+    FollowRes:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: [string]
+          description: 'list of requested usernames'
+    FavoriteTag:
+      type: object
+      required:
+        - username
+        - id
+      properties:
+        user:
+          type: string
+          description: 'username of the user'
+        target:
+          type: [number]
+          description: 'id of the tag'
+    Tag:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        user:
+          type: number
+          description: 'id of the tag'
+        target:
+          type: string
+          description: 'name of the tag'
