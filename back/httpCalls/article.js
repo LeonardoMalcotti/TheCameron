@@ -14,7 +14,7 @@ router.get("/filters",async(req,res)=>{
 	let art = await Article.find();
 
 	function checkFilters(article){
-		var ret = true;		
+		var ret = true;
 		if(req.query.author && ret){
 			ret = req.query.author == article.author;
 		}
@@ -27,7 +27,7 @@ router.get("/filters",async(req,res)=>{
 		}
 		return ret;
 	}
-	
+
 	function mapFun(article){
 		return {id: article.id, author: article.author, title: article.title, summary: article.summary};
 	}
@@ -50,13 +50,13 @@ router.get("/search/:title", async(req,res) => {
 	let allArticles = tmp.sort((a, b) => -(a - b));
 	// Filter them
 	let resArticles = allArticles.filter(inc);
-	// Mapping the output 
+	// Mapping the output
 	function mapFun(art){
 		return {id: art.id, author: art.author, title: art.title, summary: art.summary};
 	}
 
 	res.status(200).json(resArticles.map(mapFun));
-	
+
 });
 
 // Get last 50 articles
@@ -70,7 +70,7 @@ router.get("/search/", async(req,res) => {
 	}
 
 	res.status(200).json(article.map(mapFun));
-	
+
 });
 
 // user/:username GET
@@ -82,7 +82,7 @@ router.get("/:id/:author",async (req,res)=>{
 		res.status(404).json({error: "Autore o id non presente"});
 		return;
 	}
-  
+
 	res.status(200).json({
     id : article.id,
   	author : article.author,
@@ -161,5 +161,24 @@ router.post("/",async (req,res)=>{
 
 });
 
-module.exports = router;
+// article/:author GET
+router.get("/:author",async (req,res)=>{
 
+	let author = req.params.author;
+	let allArticle = await Article.find();
+	let filterArticle = allArticle.filter(x => x.author === author)
+
+	if(filterArticle.length == 0){
+		res.status(404).json({error: "Articoli o autore non presenti"});
+		return;
+	}
+
+	function mapFun(art){
+		return {id: art.id, author: art.author, title: art.title, summary: art.summary, text: art.text, date: art.date, tag: art.tag};
+	}
+
+	res.status(200).json(filterArticle.map(mapFun));
+});
+
+
+module.exports = router;

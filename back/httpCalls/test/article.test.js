@@ -213,6 +213,20 @@ describe('article test', () =>{
 
     done();
   });
+
+  test('GET /article/:author, success', async done =>{
+    const response = await request.get('/article/tizio');
+
+		expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBe(5);
+    done();
+  });
+
+  test('GET /article/:author, missing article', async done =>{
+    const response = await request.get('/article/Username');
+    expect(response.statusCode).toBe(404);
+    done();
+  });
 });
 
 
