@@ -2,30 +2,33 @@ const express = require('express');
 const router = express.Router();
 //modello mongoose
 const Article = require('../models/Article');
-
+const User = require('../models/Users');
 
 router.get("/:id/:author",async (req,res)=>{
 
   let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
 
 	if(!article){
-		res.status(404).json({error: "Autore o id non presente"});
-		return;
+			res.status(404).json({error: "Autore o id non presente"});
+			return;
 	}
 
 	res.status(200).json({
-    id : article.id,
-  	author : article.author,
-  	title : article.title,
-  	summary : article.summary,
-  	text : article.text,
-    date : article.date,
-    tags : article.tags,
-    restricted : article.restricted
+		id : article.id,
+  		author : article.author,
+  		title : article.title,
+  		summary : article.summary,
+  		text : article.text,
+    	date : article.date,
+    	tags : article.tags,
+    	restricted : article.restricted
 	});
+
 });
 
+
 router.post("/",async (req,res)=>{
+
 	if (!req.body.title){
 		res.status(400).json({ error: "Titolo dell'articolo non specificato" });
 		return;
@@ -73,7 +76,6 @@ router.post("/",async (req,res)=>{
 	 	id = ( filterArticle.length==0 ? 1 : Math.max(...ids) + 1);
 	}
 
-
 	//inserimento db
 	let newArticle = new Article({
 		id : id,
@@ -85,6 +87,7 @@ router.post("/",async (req,res)=>{
 		tags: req.body.tags,
 		restricted : req.body.restricted
 	});
+
 	newArticle.save();
 
 	res.location("/Article/" + newArticle.id+"/"+newArticle.author).status(201).send();
@@ -94,11 +97,17 @@ router.post("/",async (req,res)=>{
 router.get("/:author",async (req,res)=>{
 
 	let author = req.params.author;
+
+	if(! await User.findOne({ "username":author })){
+		res.status(404).json({error: "Autore non trovato"});
+		return;
+	}
+
 	let allArticle = await Article.find();
 	let filterArticle = allArticle.filter(x => x.author === author)
 
 	if(filterArticle.length == 0){
-		res.status(404).json({error: "Articoli o autore non presenti"});
+		res.status(404).json({error: "Articoli non trovati"});
 		return;
 	}
 
