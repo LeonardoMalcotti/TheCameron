@@ -20,7 +20,7 @@ const restriction = require("./httpCalls/restriction.js");
 
 //-------------
 
-const filters = require("./httpCalls/filters.js");
+const filters = require("./httpCalls/filter.js");
 const search = require("./httpCalls/search.js");
 
 //punto d'entrata
@@ -29,13 +29,13 @@ app.use(express.static('front'));
 
 //collegamenti alle chiamate http
 
-app.use("/article", articles);
 app.use("/followers", follow);
 app.use("/user", users);
 
+//assolutamente da mettere in questo ordine
+app.use("/article/filters", filters);
+app.use("/article/search", search);
 app.use("/article", articles);
-app.use("/article", filters);
-app.use("/article", search);
 
 app.use("/reaction", reactions);
 app.use("/savedArticle", savedArticle);
