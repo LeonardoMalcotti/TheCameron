@@ -5,11 +5,15 @@ const request = supertest(app);
 
 describe('GET /article/filters', () =>{
 
-	let findSpy;
+	let ArticleFindSpy;
+	//let UserFindOneSpy;
 
 	beforeAll( () => {
+		
 		const Article = require("../../models/Article");
-		findSpy = jest.spyOn(Article, 'find').mockImplementation(() =>{
+		
+		ArticleFindSpy = jest.spyOn(Article, 'find').mockImplementation(() =>{
+			
 			let pool =[
 				{
 					id: "1", 
@@ -57,35 +61,43 @@ describe('GET /article/filters', () =>{
 					tags: ["hello", "world", "thecameron"]
 				},
 			];
+
 			return pool;
 		});
+
 	});
+
 	afterAll( async () =>{
-		findSpy.mockRestore();
+		ArticleFindSpy.mockRestore();
 	});
 
 	//--------------------------------------------------------------------------
 	test('GET /article/filters no params', async done =>{
+		
 		const response = await request
 			.get('/article/filters')
 			.set('Accept', 'application/json')
 			.send();
+
 		expect(response.statusCode).toBe(201);
 		expect(response.body.length).toBe(5);
 		done();
 	});
 
 	test('GET /article/filters author=tizio ok', async done =>{
+		
 		const response = await request
 			.get('/article/filters?author=tizio')
 			.set('Accept', 'application/json')
 			.send();
+
 		expect(response.statusCode).toBe(201);
 		expect(response.body.length).toBe(3);
 		done();
 	});
 
 	test('GET /article/filters tags=[hello, world] success', async done =>{
+		
 		const response = await request
 			.get('/article/filters?tags[]=hello&tags[]=world')
 			.set('Accept', 'application/json')
@@ -97,6 +109,7 @@ describe('GET /article/filters', () =>{
 	});
 
 	test('GET /article/filters author=caio tags=[world] success', async done =>{
+		
 		const response = await request
 			.get('/article/filters?author=caio&tags[]=world')
 			.set('Accept', 'application/json')
@@ -108,6 +121,7 @@ describe('GET /article/filters', () =>{
 	});
 
 	test('GET /article/filters author=supermario success no results', async done =>{
+		
 		const response = await request
 			.get('/article/filters?author=supermario')
 			.set('Accept', 'application/json')
