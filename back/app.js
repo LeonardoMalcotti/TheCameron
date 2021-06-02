@@ -16,11 +16,12 @@ const reactions = require("./httpCalls/reaction.js");
 const savedArticle = require("./httpCalls/savedArticles.js");
 const follow = require("./httpCalls/follow.js");
 const tags = require("./httpCalls/tag.js");
-const restriction = require("./httpCalls/restriction.js")
+const restriction = require("./httpCalls/restriction.js");
 
 //-------------
 
-
+const filters = require("./httpCalls/filters.js");
+const search = require("./httpCalls/search.js");
 
 //punto d'entrata
 app.use('/',express.static('front/pages'));
@@ -31,7 +32,11 @@ app.use(express.static('front'));
 app.use("/article", articles);
 app.use("/followers", follow);
 app.use("/user", users);
+
 app.use("/article", articles);
+app.use("/article", filters);
+app.use("/article", search);
+
 app.use("/reaction", reactions);
 app.use("/savedArticle", savedArticle);
 app.use("/tag", tags);
