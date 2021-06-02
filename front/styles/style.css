@@ -9,6 +9,7 @@ body{
     width: 100vw;
     background-color: var(--color4); 
     margin: 0;
+    font-size: 16px;
 }
 header{
     padding: 30px;
@@ -95,4 +96,38 @@ aside{
 }
 #search_box button:hover{
     background-color: var(--color0);
+}
+
+#main_content_full{
+  padding: 15px;
+  margin: 15px;
+  font-size: 16px;
+}
+#main_content_full section{
+  background-color: var(--color3);
+  color: var(--color0);
+  margin: 5px;
+  padding: 15px 30px;
+  border-radius: 5px;
+  text-align: center;
+}
+#main_content_full .inline{
+  margin-right: 30px;
+}
+#main_content_full button{
+  background-color: var(--color4);
+  color: var(--color0);
+  border: none;
+  text-align: center; 
+  display: inline-block;
+  font-size: 16px;
+  padding: 15px 30px;
+}
+#main_content_full button:hover{
+  background-color: #a2927f;
+  color: var(--color0);
+}
+#main_content_full input{
+  padding: 6px 12px;
+  display: inline-block;
 }
