@@ -3,10 +3,11 @@
 
 <head>
 <script src="../scripts/article.js"></script>
+<script src="../scripts/savedArticle.js"></script>
 
 </head>
 
-<body onload="loadArticle()">
+<body onload="loadArticle(),loadSave()">
   <form id="formReadArticle">
 		Title: <label name="txt_title" id="txt_title"></label><br>
     Summary: <label name="txt_summary" id="txt_summary"></label><br>
@@ -18,7 +19,9 @@
     <input type="button" id="2" name="dislike" onclick="addReaction()">
     <input type="button" id="3" name="love" onclick="addReaction()">
     <input type="button" id="4" name="amazing" onclick="addReaction()">
+    <!--<span id="saveIfLogged"></span>-->
+  	<input type="button" onclick="Save(" + id + ", " + author + ")" value="Salva tra i preferiti">
   </form>
-  
+
 </body>
 </html>
