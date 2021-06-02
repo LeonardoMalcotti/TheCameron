@@ -3,77 +3,7 @@ const router = express.Router();
 //modello mongoose
 const Article = require('../models/Article');
 
-/*
-tipi di filtro:
-- genere
-- autore
-- data
-*/
 
-router.get("/filters",async(req,res)=>{
-	let art = await Article.find();
-
-	function checkFilters(article){
-		var ret = true;
-		if(req.query.author && ret){
-			ret = req.query.author == article.author;
-		}
-		if(req.query.tags && ret){
-			for( t in req.query.tags ){
-				if(!article.tags.includes(req.query.tags[t])){
-					ret = false;
-				}
-			}
-		}
-		return ret;
-	}
-
-	function mapFun(article){
-		return {id: article.id, author: article.author, title: article.title, summary: article.summary};
-	}
-
-	let risp = art.filter(checkFilters).map(mapFun);
-
-	res.status(201).json(risp);
-
-});
-
-// Search by title
-router.get("/search/:title", async(req,res) => {
-	// Filtering function
-	function inc(info){
-		let regexp = new RegExp(req.params.title, "i");
-		return regexp.test(info.title);
-	}
-	// Get all the articles
-	let tmp = await Article.find();
-	let allArticles = tmp.sort((a, b) => -(a - b));
-	// Filter them
-	let resArticles = allArticles.filter(inc);
-	// Mapping the output
-	function mapFun(art){
-		return {id: art.id, author: art.author, title: art.title, summary: art.summary};
-	}
-
-	res.status(200).json(resArticles.map(mapFun));
-
-});
-
-// Get last 50 articles
-router.get("/search/", async(req,res) => {
-
-	 let tmp = await Article.find();
-	 let article = tmp.sort((a, b) => -(a - b));
-
-	function mapFun(art){
-		return {id: art.id, author: art.author, title: art.title, summary: art.summary};
-	}
-
-	res.status(200).json(article.map(mapFun));
-
-});
-
-// user/:username GET
 router.get("/:id/:author",async (req,res)=>{
 
   let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
@@ -161,7 +91,6 @@ router.post("/",async (req,res)=>{
 
 });
 
-// article/:author GET
 router.get("/:author",async (req,res)=>{
 
 	let author = req.params.author;
