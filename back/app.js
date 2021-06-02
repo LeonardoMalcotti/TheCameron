@@ -14,7 +14,7 @@ const users = require("./httpCalls/user.js");
 const login = require("./httpCalls/login.js");
 const reactions = require("./httpCalls/reaction.js");
 const restriction = require("./httpCalls/restriction.js");
-const saveArticle = require("./httpCalls/SavedArticles.js");
+const savedArticle = require("./httpCalls/savedArticles.js");
 //-------------
 
 //punto d'entrata
@@ -26,7 +26,7 @@ app.use(express.static('front'));
 app.use("/user",users);
 app.use("/article", articles);
 app.use("/reaction", reactions);
-app.use("/saveArticle", saveArticle);
+app.use("/savedArticle", savedArticle);
 
 //autenticazione
 app.use("/login",login);

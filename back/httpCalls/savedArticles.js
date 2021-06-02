@@ -6,44 +6,64 @@ const User = require('../models/User');
 const Article = require('../models/Article');
 
 //Inserimento nuovo articolo salvato
-router.post("/:username/article/:author/:id",async(req,res)=>{
+router.post("/",async(req,res)=>{
 
-    let username = req.params.username;
-    let id = req.params.id;
-    let author = req.params.author;
+    let username = req.body.username;
+    let id = req.body.id;
+    let author = req.body.author;
 
-    //Controllo se esiste l'utente
+    // Controllo di aver ricevuto tutti i dati
+    if(!username || !id || !author){
+      res.status(404).json({error: "missing parameter(s) in body"});
+      return;
+    }
+
+    // Controllo se esiste l'utente
     let existUser = await User.findOne({'username': username});
     if(!existUser){
-        res.status(404).json({ error: "Nessun Username trovato"});
+        res.status(404).json({ error: "Nessun utente trovato"});
         return;
+    }
+    // Controllo se esiste l'articolo
+    let existArticle = await Article.findOne({'id':id, 'author':author})
+    if(!existArticle){
+      res.status(404).json({error: "Dati articolo non esistenti"});
+      return;
     }
 
     //Controllo se ha gia salvato articoli
-    let savedArticles = await SavedAritcles.findOne({'username':username});
-    if(!savedArticles){//se non ha salvato articoli lo creo
-        let savedArticles = new SavedArticles({
-          username : username,
-          id :id,
-          author: author
-        });
-    }else{//se ha gia salvato articoli
+    let savedArticles = await SavedArticles.findOne({'username':username});
+    if(!savedArticles){
+      // se non ha salvato articoli lo creo
+      let newArticle = new SavedArticles({
+        'username' : username,
+        'id': [id],
+        'author': [author]
+      });
+      newArticle.save();
+      res.status(200).send();
+      return;
+    }else{
+      // se ha gia salvato articoli
+      // scorro la lista e verifico che l'articolo "nuovo" non sia presente
       var esiste = false;
       for(i = 0; i < savedArticles.id.length; i++){
         if(savedArticles.id[i] == id && savedArticles.author[i] == author)
           esiste = true;
       }
-      if(esiste){//se l'articolo è gia stato salvato
+      if(esiste){
+        //se l'articolo è gia stato salvato
         res.status(403).json({ error: "Articolo già salvato" });
-        return;//aggiungo l'articolo alla lista
+        return;
       }else{
+        //aggiungo l'articolo alla lista
         savedArticles.id.push(id);
         savedArticles.author.push(author);
       }
     }
-
+    // Salviamo il record modificato, viene automaticamente svolta una update
     savedArticles.save();
-    res.location("/savedArticles/" + username+"/article/"+article.author+"/"+article.id).status(201).send();
+    res.status(201).send();
 })
 
 //GET articoli salvati da :username
@@ -60,61 +80,27 @@ router.get("/:username",async (req,res)=>{
 
     //Controllo se ha salvato articoli
     let savedArticles = await SavedArticles.findOne({'username': username});
-    if(!(savedArticles.id.length > 0)){
-        res.status(404).json({ error: "Nessun Articolo salvato"});
-        return;
+    // Gestiamo sia il caso sia undefined, sia il caso in cui esista ma non abbia articoli salvati
+    if(!savedArticles || savedArticles.id.length == 0  ){
+      res.status(404).json({ error: "Nessun Articolo salvato"});
+      return;
     }
+
 
     let art=[];
     for(i = 0; i < savedArticles.id.length; i++){
-        art[i] = await Article.findOne({'id':savedArticles.id[i],'author': savedArticles.author[i]});
+        art[i] = {'id':savedArticles.id[i],'author': savedArticles.author[i]};
     }
     res.status(201).json(art);
 });
 
-//GET articolo salvato
-router.get("/user/:username/article/:author/:id",async (req,res)=>{
 
-    let username = req.params.username;
-    let id = req.params.id;
-    let author = req.params.author;
 
-    //Controllo se esiste l'utente
-    let existUser = await User.findOne({'username': username});
-    if(!existUser){
-        res.status(404).json({ error: "Nessun Username trovato"});
-        return;
-    }
+router.delete("/",async (req,res)=>{
 
-    //Controlo se ha salvato articoli
-    let savedArticles = await SavedArticles.findOne({'username' : username});
-    if(!(savedArticles.id.length > 0)){
-        res.status(404).json({ error: "Nessun Articolo salvato"});
-        return;
-    }
-
-    //Controllo se esiste l'articolo tra i salvati
-    let art;
-    var esiste = false;
-    for(i = 0; i < savedArticles.id.length; i++){
-        if(savedArticles.id[i] == id && savedArticles.author[i] == author){
-          art = await Article.findOne({'id':savedArticles.id[i],'author': savedArticles.author[i]});
-          esiste = true;
-        }
-      }
-
-    if(!esiste){
-      res.status(404).json({ error: "Articolo non trovato"});
-      return;
-    }
-    res.status(201).json(art);
-});
-
-router.delete("/user/:username/article/:author/:id",async (req,res)=>{
-
-  let username = req.params.username;
-  let id = req.params.id;
-  let author = req.params.author;
+  let username = req.body.username;
+  let id = req.body.id;
+  let author = req.body.author;
 
   //Controllo se esiste l'utente
   let existUser = await User.findOne({'username': username});
@@ -131,7 +117,7 @@ router.delete("/user/:username/article/:author/:id",async (req,res)=>{
   }
 
   //Controllo se esiste l'articolo tra i salvati
-  let index;
+  let index = -1;
   var esiste = false;
   for(i = 0; i < savedArticles.id.length; i++){
       if(savedArticles.id[i] == id && savedArticles.author[i] == author){
@@ -139,28 +125,21 @@ router.delete("/user/:username/article/:author/:id",async (req,res)=>{
         esiste = true;
       }
     }
-
-  if(!esiste){
+    console.log(esiste);
+    console.log(index);
+  if(!esiste || index < 0){
+    // L'articolo non è salvato
     res.status(404).json({ error: "Articolo non trovato"});
     return;
+  }else{
+    // Rimuoviamo l'articolo dalle liste
+    savedArticles.id.splice(index, 1);
+    savedArticles.author.splice(index, 1);
+    // Salviamo l'articolo modificato
+    savedArticles.save();
+    res.status(204).send()
+    return;
   }
-
-  //Cancello dai preferiti l'articolo
-  let ret = await Subscription.deleteOne({'username':req.params.username});
-
-	if (ret) {
-		res.status(204).send();
-	} else {
-		res.status(400).send();
-		res.json({error: "Errore nella cancellazione dell'articolo salvato"});
-	}
-
-/*    delete saved.id[saved.id.indexOf(req.params.id)];
-    delete saved.author[saved.author.indexOf(req.params.author)];
-    saved.save();*/
-
-
-
 })
 
 module.exports = router;
