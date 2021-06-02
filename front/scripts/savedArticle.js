@@ -1,35 +1,54 @@
 var myStorage = window.sessionStorage;
 var loggedUser= myStorage.getItem('loggedUser');
+var articoli = [];
+
 function loadSave()
 {
     if(loggedUser.username){
-        var id = getUrlVars()["id"];
-        var author = getUrlVars()["author"];
-        var url = '../savedArticles/user/' + loggedUser.username + '/author/' + author+"/id"+id; 
+
+        var url = '../savedArticles/' + loggedUser.username;
         fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             })
             .then((resp) => resp.json())
-            .then(function(data) 
+            .then(function(data)
             {
-                if(data){
-                    document.getElementById("saveIfLogged").innerHTML= "<input type='button onclick='Save()' id='save'>";
-                }
+              // Facciamo la chiamata
+                  for(let i=0; i<data.length; i++){
+                      articoli[i] = data[i];
+                  }
+                  printArticles();
+              })
+            .catch( error => console.log(error));
+              return;
             });
     }
 }
 
-function Save(){
-    let url = "../savedArticles/user/"+loggedUser.username;
-    var id = getUrlVars()["id"];
-    var author = getUrlVars()["author"];
+function printArticles(){
+    let htmlOut = "";
+        for(i = 0; i < articoli.length; i++){
+            htmlOut += '<article onclick="openArticle(' + articoli[i].id + "," + articoli[i].author + ')">';
+            htmlOut += '<h2>' + articoli[i].title + '</h2>';
+            htmlOut += '<em> di ' + articoli[i].author + '</em>'
+            htmlOut += '</article>';
+        }
+    }
+    // Inseriamo gli articoli a schermo
+    document.getElementById("article_list").innerHTML += htmlOut;
+}
+
+function Save(id, author){
+
+    let url = "../savedArticles/";
+
     fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
-            id,
-            author,
+            id : id,
+            author : author
         }),
     })
     .then(function(response) {
@@ -46,35 +65,19 @@ function Save(){
     return;
 }
 
-function getArticles(){
-    let url = "../savedArticle/user/"+loggedUser.username;
-    var i;
-    var htmlOut="";
-    fetch(url, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        })
-        .then((resp) => resp.json())
-        .then(function(data) 
-        {
-            for( i=0;i<data.id.lenght;i++){
-                htmlOut+="<input type='button' onClick='operArticle("+data[i].id+","+data[i].author+")'><span>Title: "+data[i].title+"</span><br><span>Author :"+data[i].author+"</span><br><input type='button' onclick='deleteArticle("+data[i].id+","+data[i].author+")'>Cancella</input></input><br>";
-            }
-        })
-        .catch( error => console.log(error));
-    document.getElementById("savedArticles").innerHTML=htmlOut;
-    return;
-}
-
 function openArticle( id, author){
-    window.open("../pages/article?id="+id+"&author="+author);
+    window.open("..readArticle.html?id="+id+"&author="+author);
 }
 
-function deleteArticle( id, author){
-    var url = '../savedArticles/user/' + loggedUser.username + '/author/' + author+"/id"+id; 
+function deleteArticle(id, author){
+    var url = '../savedArticles/';
     fetch(url, {
         method: 'DELETE',
-        headers:{ 'Content-Type': 'application/json' }
+        headers:{ 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id : id,
+            author : author
+        }),
     })
     .then((response) => response.json())
     .then(function(response) {
@@ -91,3 +94,10 @@ function deleteArticle( id, author){
     return;
 }
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}

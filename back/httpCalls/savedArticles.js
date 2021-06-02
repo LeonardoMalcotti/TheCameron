@@ -86,15 +86,12 @@ router.get("/:username",async (req,res)=>{
       return;
     }
 
-
     let art=[];
     for(i = 0; i < savedArticles.id.length; i++){
         art[i] = {'id':savedArticles.id[i],'author': savedArticles.author[i]};
     }
     res.status(201).json(art);
 });
-
-
 
 router.delete("/",async (req,res)=>{
 
