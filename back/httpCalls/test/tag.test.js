@@ -128,7 +128,7 @@ describe('tag test',()=> {
     	const response = await request.get("/tag/user/dantealighieri").set('Accept', 'application/json');
 
 		expect(response.body.length).toBe(2);
-    	expect(response.statusCode).toBe(201);
+    	expect(response.statusCode).toBe(200);
     	done();
     });
 
@@ -145,7 +145,7 @@ describe('tag test',()=> {
     	const response = await request.get("/tag/Science").set('Accept', 'application/json');
 
 		expect(response.body.id).toBe(1);
-    	expect(response.statusCode).toBe(201);
+    	expect(response.statusCode).toBe(200);
     	done();
     });
 
@@ -162,7 +162,7 @@ describe('tag test',()=> {
     	const response = await request.get("/tag/id/1").set('Accept', 'application/json');
 
 		expect(response.body.name).toBe("Science");
-    	expect(response.statusCode).toBe(201);
+    	expect(response.statusCode).toBe(200);
     	done();
     });
 

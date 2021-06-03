@@ -85,7 +85,7 @@ router.get("/user/:username",async (req,res)=>{
 
   //se l'utente non ha tag favoriti si ritorna errore
   if(favoriteTags.id.length<=0){
-		res.status(404).send();
+		res.status(404).send({ error : "User non ha tag favoriti"});
 		return;
   }
 
@@ -93,7 +93,7 @@ router.get("/user/:username",async (req,res)=>{
   let final = tagName.filter(x => favoriteTags.id.includes(x.id));
 
 
-  res.status(201).json(final);
+  res.status(200).json(final);
 
 });
 
@@ -106,7 +106,7 @@ router.get("/:name",async (req,res)=>{
 		return;
 	}
 
-	res.status(201).json(tagName);
+	res.status(200).json(tagName);
 
 });
 
@@ -119,7 +119,7 @@ router.get("/id/:id",async (req,res)=>{
 		return;
 	}
 
-	res.status(201).json(tagName);
+	res.status(200).json(tagName);
 
 });
 
@@ -132,8 +132,8 @@ router.get("/",async (req,res)=>{
 		return;
 	}
 
-	res.status(201).json(tagName);
-	
+	res.status(200).json(tagName);
+
 });
 
 module.exports = router;
