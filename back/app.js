@@ -17,11 +17,13 @@ const savedArticle = require("./httpCalls/savedArticles.js");
 const follow = require("./httpCalls/follow.js");
 const tags = require("./httpCalls/tag.js");
 const restriction = require("./httpCalls/restriction.js");
+const filters = require("./httpCalls/filter.js");
+const search = require("./httpCalls/search.js");
+const favoriteTags = require("./httpCalls/favoriteTags.js");
 
 //-------------
 
-const filters = require("./httpCalls/filter.js");
-const search = require("./httpCalls/search.js");
+
 
 //punto d'entrata
 app.use('/',express.static('front/pages'));
@@ -39,6 +41,8 @@ app.use("/article", articles);
 
 app.use("/reaction", reactions);
 app.use("/savedArticle", savedArticle);
+
+app.use("/tag/user",favoriteTags);
 app.use("/tag", tags);
 
 //autenticazione
