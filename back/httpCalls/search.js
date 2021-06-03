@@ -3,7 +3,8 @@ const router = express.Router();
 const Article = require('../models/Article');
 
 
-// Search by title
+//Cerca gli articoli che corrispondono al titolo specificato
+//
 router.get("/:title", async(req,res) => {
 
 	// Filtering function
@@ -29,6 +30,7 @@ router.get("/:title", async(req,res) => {
 });
 
 // Get last 50 articles
+//
 router.get("/", async(req,res) => {
 
 	let tmp = await Article.find();

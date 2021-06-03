@@ -3,13 +3,15 @@ const router = express.Router();
 const Article = require('../models/Article');
 const User = require('../models/User');
 
+//Recupera le informazioni dell'articolo che ha id e autore specificati
+//
 router.get("/:id/:author",async (req,res)=>{
 
   let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
 
 	if(!article){
-			res.status(404).json({error: "Autore o id non presente"});
-			return;
+		res.status(404).json({error: "Autore o id non presente"});
+		return;
 	}
 
 	res.status(200).json({
@@ -26,7 +28,17 @@ router.get("/:id/:author",async (req,res)=>{
 });
 
 
+//Crea un nuovo articolo
+//- title
+//- summary
+//- author
+//- text
+//- tags
+//- restricted
+//
 router.post("/",async (req,res)=>{
+
+	//controlla che tutti i dati siano stati passati
 
 	if (!req.body.title){
 		res.status(400).json({ error: "Titolo dell'articolo non specificato" });
@@ -93,6 +105,9 @@ router.post("/",async (req,res)=>{
 
 });
 
+
+//Recupera le informazioni di tutti gli articoli dell'autore specificato
+//
 router.get("/:author",async (req,res)=>{
 
 	let author = req.params.author;
