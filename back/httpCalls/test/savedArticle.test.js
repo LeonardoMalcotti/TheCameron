@@ -4,7 +4,10 @@ const request = supertest(app);
 
 
 describe("saved articles tests", () =>{
-	let spyFindUser, spyFindArticle, spyFindSavedArticle;
+
+	let spyFindUser;
+	let spyFindArticle;
+	let spyFindSavedArticle;
 
 	beforeAll( () =>{
 		const User = require("../../models/User");
@@ -15,23 +18,25 @@ describe("saved articles tests", () =>{
 			
 			if(criterias.username == "dantealighieri"){
 				
-				return [{
+				return {
 					name: "Dante",
 					surname: "Alighieri",
 					username: "dantealighieri",
 					password: "12345678",
 					email: "dante.alighieri@loremipsum.it",
-				}];
+				};
 
-			} else if (criterias.username == "decamerone"){
+			} 
+
+			if (criterias.username == "decamerone"){
 				
-				return [{
+				return {
 					name: "Giovanni",
 					surname: "Boccaccio",
 					username: "decamerone",
 					password: "987654321",
 					email: "gio.boccaccio@loremipsum.it",
-				}];
+				};
 
 			}
 			
@@ -42,29 +47,46 @@ describe("saved articles tests", () =>{
 			
 			if(criterias.id == "1" && criterias.author == "decamerone"){
 				
-				return [{
+				return {
 					id: "1",
 					author: "decamerone",
 					title: "Lorem Ipsum",
 					summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 					text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
 					date: "01012020",
-					tags: ["mock"],
+					tags: [1],
 					restricted : false,
-				}];
+				};
 
-			} else if (criterias.id=="2" && criterias.author == "decamerone"){
+			} 
+
+			if (criterias.id=="2" && criterias.author == "decamerone"){
 				
-				return [{
+				return {
 					id: "2",
 					author: "decamerone",
 					title: "Lorem Ipsum2",
 					summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 					text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
 					date: "01012020",
-					tags: ["mock", "mock2"],
+					tags: [1,2],
 					restricted : false,
-				}];
+				};
+
+			}
+
+			if (criterias.id == 3 && criterias.author == "decamerone"){
+				
+				return {
+					id: 3,
+					author: "decamerone",
+					title: "Lorem Ipsum3",
+					summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+					text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
+					date: "01012020",
+					tags: [3],
+					restricted : false,
+				};
 
 			}
 			
@@ -77,8 +99,16 @@ describe("saved articles tests", () =>{
 				
 				return {
 					username: 'dantealighieri',
-					id: [1, 2],
-					author: ["decamerone", "decamerone"]
+					articles: [
+					{
+						id : 1,
+						author : "decamerone"
+					},
+					{
+						id : 2,
+						author : "decamerone"
+					}
+					]
 				};
 
 			}
@@ -93,25 +123,45 @@ describe("saved articles tests", () =>{
 		spyFindUser.mockRestore();
 	});
 
-	// Tests
+	// Tests ---------------------------------------------------------------
 
-	test('GET savedArticle/:username , Valid data, returns array of 2 elements (201)', async done =>{
+
+	test('POST savedArticle/:username, article alreasy saved', async done =>{
+
+		const response = await request.post("/savedArticle/dantealighieri")
+			.send({
+				id : 1,
+				author : "decamerone"
+			});
+		
+		expect(response.statusCode).toBe(403);
+		done();
+	});
+
+
+	test('GET savedArticle/:username , Valid data', async done =>{
+		
 		const response = await request.get("/savedArticle/dantealighieri");
+		
 		expect(response.statusCode).toBe(201);
 		expect(response.body.length).toBe(2);
 		done();
 	});
 
 
-	test('GET savedArticle/:username , Valid data, user has no saved articles (404)', async done =>{
+	test('GET savedArticle/:username , Valid data, no saved articles', async done =>{
+		
 		const response = await request.get("/savedArticle/decamerone");
+		
 		expect(response.statusCode).toBe(404);
 		done();
 	});
 
 
-	test('GET savedArticle/:username , wrong username (404)', async done =>{
+	test('GET savedArticle/:username , wrong username', async done =>{
+		
 		const response = await request.get("/savedArticle/boccaccio");
+		
 		expect(response.statusCode).toBe(404);
 		done();
 	});
