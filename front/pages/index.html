@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <title>TheCameron</title>
-  <script src="../scripts/homepage.js"></script>
-  <script src="../scripts/logout.js"></script>
+  <script src="../scripts/homepage.js"></script>  <!-- visualizzazione preview articoli -->
+  <script src="../scripts/search.js"></script>  <!-- ricerca avanzata -->
   <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body onload="setup_homepage()">
@@ -49,9 +49,19 @@
     <aside>
         <div id="search_box">
             <input type="text" id="txt_search" placeholder="Search.."> 
-            <button class="btn_search" onclick=""> Search </button> <!-- Missing link -->
+            <button class="btn_search" onclick="loadArticles()"> Search </button> <!-- Missing link -->
         </div>
-        <div id="tags_box"></div>
+        <div id="adv_search_box">
+          <div class="inline_label">
+              <label for="txt_author">Author: </label>
+              <input name="txt_author" value="" id="txt_author" placeholder="author's username"/> 
+          </div>
+          <div class="inline_label">
+              <label for="txt_author">Tags: </label>
+              <input name="txt_tags" value="" id="txt_tags" placeholder="Tag1,Tag2,Tag3,..."/>
+          </div>
+            <button type="button" onclick="applyFilter()">Cerca con filtri</button>
+        </div>
     </aside>
   
 

@@ -58,8 +58,17 @@ function printArticles(n){
 
 // Con questa funzione effettuiamo la chiamata http e salviamo gli articoli 
 function loadArticles(){
+    // Pulisco la lista
+    document.getElementById("article_list").innerHTML = "";
+    var text = document.getElementById("txt_search").value;
+    if(text && text != ""){
+        // Sanificazione dell'input
+        text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }else{
+        text="";
+    }
     // Facciamo la chiamata
-    fetch('../article/search/', {
+    fetch('../article/search/'+text, {
         method: 'GET',
         headers:{ 'Content-Type': 'application/json' }
     })
