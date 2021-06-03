@@ -1,27 +1,55 @@
 <!DOCTYPE html>
-<html lang="it">
-
+<html lang="en">
 <head>
-<script src="../scripts/newArticle.js"></script>
-
+  <title>TheCameron</title>
+  <script src="../scripts/newArticle.js"></script>  <!-- nuovo articolo & setup -->
+  <script src="../scripts/logout.js"></script>  <!-- logout -->
+  <link rel="stylesheet" href="../styles/style.css">
 </head>
-
-<body>
-
-	<form id="formNewArticle" >
-        <label>Titolo</label>
+<body onload="setup_newArt()">
+  <header>
+    <h1>TheCameron</h1>
+  </header>
+  <nav class="flex-container">
+    <a id="header_home" href="index.html">
+        Home
+    </a>
+    <div id="header_logged">
+        <a id="header_newArticle" class="active_page" href="newArticle.html"> 
+            Write article
+        </a>
+        <a id="header_profile"  href=""> <!-- Missing link -->
+            Your profile
+        </a>
+        <a id="header_logout" onclick="logOut()">
+            Log out
+        </a>
+    </div>
+  </nav> 
+  <div id="main_content_full">
+    <section id="centered_section">
+      <form id="formNewArticle" >
+        <label for="title">Title</label>
+        <br><br>
         <input type="text" id="title">
-        <label>Sottotitolo</label>
-        <input type="text" id="summary">
-        <label>Testo</label>
-        <input type="text" id="text">
-        <label>Tag</label>
-        <input type="text" id="tag">
-	<label>Autore</label>
-	<input type="text" id="author" value="username">
-	<label>Restriction</label>
-	<input type="checkbox" id="restriction">
-	<input type="button" onclick="newArticle()" value="Send Request">
-	</form>
-
+        <br><br>
+        <label for="summary">Summary</label>
+        <br><br>
+        <input type="text" id="summary" placeholder="Brief description of the article content">
+        <br><br>
+        <label for="text">Text</label>
+        <br><br>
+        <textarea type="text" id="text" placeholder="Lorem ipsum..."></textarea>
+        <br><br>
+        <label for="tag">Tags</label>
+        <br><br>
+        <input type="text" id="tag" placeholder="Tag1,Tag2,Tag3,...">
+        <br><br>
+        <label for="restriction">Mark as restricted</label>
+        <input type="checkbox" id="restriction">
+        <br><br>
+        <input type="button" onclick="newArticle()" value="Publish article">
+      </form>
+    </section>
+  </div>
 </body>

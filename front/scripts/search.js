@@ -20,22 +20,20 @@ function applyFilter() {
 		url += ('author='+author);
 	}
 	if(tags && tags.length>0 && tags[0]!=""){
-		for(let i=0; i<tags.length; i++){
-			fetch("/tag/",{
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .then((resp) => resp.json())
-      .then(function (data) {
-        for(x in data){
-          if(tags.includes(data[x].name)){
-            url += ('&tags[]='+data[x].id);
-          } 
-        }
-        advancedSearch(url);
-        return;
-      })      
-		}
+    fetch("/tag/",{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((resp) => resp.json())
+    .then(function (data) {
+      for(x in data){
+        if(tags.includes(data[x].name)){
+          url += ('&tags[]='+data[x].id);
+        } 
+      }
+      advancedSearch(url);
+      return;
+    })      
 	}else{
     advancedSearch(url);
     return;

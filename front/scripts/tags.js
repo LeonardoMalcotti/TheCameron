@@ -38,7 +38,7 @@ function loadTag(){
 
 }
 
-function find(int id){
+function find(id){
   fetch('../tag/id/' + id, {
       method: 'GET',
       headers:{ 'Content-Type': 'application/json' }

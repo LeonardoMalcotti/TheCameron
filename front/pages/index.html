@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <title>TheCameron</title>
-  <script src="../scripts/homepage.js"></script>  <!-- visualizzazione preview articoli -->
+  <script src="../scripts/homepage.js"></script>  <!-- setup e visualizzazione preview articoli + ricerca base -->
   <script src="../scripts/search.js"></script>  <!-- ricerca avanzata -->
+  <script src="../scripts/logout.js"></script>  <!-- logout -->
   <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body onload="setup_homepage()">
@@ -11,7 +12,7 @@
         <h1>TheCameron</h1>
     </header>
     <nav class="flex-container">
-        <a id="header_home" href="">
+        <a id="header_home" class="active_page" href="index.html">
             Home
         </a>
         <div id="header_unlogged">
