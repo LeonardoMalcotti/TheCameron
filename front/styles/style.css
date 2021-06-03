@@ -73,6 +73,20 @@ nav a:hover{
 #article_list article:hover{
     background-color: var(--color2);
 }
+#btn_loadMore{
+  background-color: var(--color0);
+  color: var(--color3);
+  border: none;
+  padding: 6px 12px;
+  font-size: 16px;
+  margin: 5px;
+  border-radius: 10px;
+}
+#btn_loadMore:hover{
+  background-color: var(--color3);
+  color: var(--color0);
+  border: none;
+}
 aside{
     width: 30%;
     padding:15px;

@@ -55,7 +55,7 @@ function printArticles(n){
     }
     // Se rimangono articoli da stampare aggiungiamo il pulsante
     if(n+10 < articoli.length){
-        htmlOut += '<button id="btn_loadMore" onclick="printArticles(' + n+10 + ')"></button>'
+        htmlOut += '<button id="btn_loadMore" onclick="printArticles(' + n+10 + ')">Carica altri articoli</button>'
     }
   }
   // Inseriamo gli articoli a schermo
