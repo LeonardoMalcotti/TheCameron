@@ -48,6 +48,7 @@ nav a:hover{
     padding: 15px;
     margin: 15px;
 }
+
 #article_show{
     background-color: var(--color3);
     padding: 30px;
@@ -73,6 +74,7 @@ nav a:hover{
 #article_list article:hover{
     background-color: var(--color2);
 }
+
 #btn_loadMore{
   background-color: var(--color0);
   color: var(--color3);
@@ -127,7 +129,7 @@ aside{
   margin: 5px;
   padding: 15px 30px;
   border-radius: 5px;
-  text-align: center;
+  text-align: center; 
 }
 #main_content_full .inline{
   margin-right: 30px;
@@ -262,4 +264,51 @@ aside{
   background-color: var(--color1);
   color: var(--color3);
   font-size: 18px;
+}
+/*lettura articolo*/
+#infoAutore{
+  width: 30%;
+  float: right;
+  background-color: var(--color2);
+  margin: 5px;
+  padding: 15px 30px;
+  border-radius: 5px;
+  display: inline-block;
+}
+#article{
+  text-align: justify;
+  background-color: var(--color3);
+  color: var(--color0);
+  margin: 5px;
+  padding: 15px 30px;
+  border-radius: 5px;
+  width: 60%;
+  display: inline-block;
+}
+#infoAutore{
+  text-align: center;
+}
+.title{
+  font-size: 3em;
+  font-weight: 1000;
+  margin-top:20px;
+  margin-bottom:5px;
+}
+.summary{
+  font-size: 2em;
+  font-weight: 500;
+  margin-top:5px;
+  margin-bottom:25px;
+}
+.text{
+  font-size: 1.5em;
+  font-weight: 450;
+}
+.autore{
+  font-size: 2em;
+  font-weight: 700;
+} 
+.btnSalva{
+  float: right;
+  font-weight: 700;
 }

@@ -101,3 +101,10 @@ function getUrlVars() {
     });
     return vars;
 }
+
+function checkSave(){
+    if(loggedUser.id){
+        var html="<button type='button' onclick='Save("+loggedUser.id+","+document.getElementById('author').value+") class='btnSalv'>Salva tra i preferiti</button>";
+        document.getElementById("saveIfLogged").innerHTML=html;
+    }
+}

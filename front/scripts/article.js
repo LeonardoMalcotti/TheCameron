@@ -18,7 +18,9 @@ function loadArticle(){
     document.getElementById('txt_author').innerHTML = data.author;
     document.getElementById('txt_text').innerHTML = data.text;
     document.getElementById('txt_date').innerHTML = data.date;
-    document.getElementById('txt_tag').innerHTML = data.tag;
+    var html;
+    data.tags.foreach(element=> html+="<span>+"+element+"</span>");
+    document.getElementById('txt_tag').innerHTML = html;
   })
   .catch( error => console.error(error) );
 

@@ -1,27 +1,47 @@
 <!DOCTYPE html>
-<html lang="it">
-
-<head>
-<script src="../scripts/article.js"></script>
-<script src="../scripts/savedArticle.js"></script>
-
-</head>
-
-<body onload="loadArticle(),loadSave()">
-  <form id="formReadArticle">
-		Title: <label name="txt_title" id="txt_title"></label><br>
-    Summary: <label name="txt_summary" id="txt_summary"></label><br>
-    Author: <label name="txt_author" id="txt_author"></label><br>
-  	Text: <label name="txt_text" id="txt_text"></label><br>
-  	Date: <label name="txt_date" id="txt_date"></label><br>
-    Tag: <label name="txt_tag" id="txt_tag"></label><br>
-    <input type="button" id="1" name="like" onclick="addReaction()">
-    <input type="button" id="2" name="dislike" onclick="addReaction()">
-    <input type="button" id="3" name="love" onclick="addReaction()">
-    <input type="button" id="4" name="amazing" onclick="addReaction()">
-    <!--<span id="saveIfLogged"></span>-->
-  	<input type="button" onclick="Save(" + id + ", " + author + ")" value="Salva tra i preferiti">
-  </form>
-
-</body>
+<html lang="en">
+  <head>
+    <title>TheCameron</title>
+    <script src="../scripts/article.js"></script>
+    <script src="../scripts/savedArticle.js"></script>
+    <link rel="stylesheet" href="../styles/style.css">
+  </head>
+  <body onload="loadArticle()">
+    <header>
+      <h1>TheCameron</h1>
+    </header>
+    <nav class="flex-container">
+      <a id="header_home" href="">
+          Home
+      </a>
+      <div id="header_unlogged">
+          <a id="header_login" class="active_page" href="login.html">
+              Log in
+          </a>
+          <a id="header_signin" href="signin.html">
+              Sign in
+          </a>
+      </div>
+    </nav>
+    <div id="main_content_full">
+      <div id="article">
+        <form id="formReadArticle">
+          <p name="txt_title" id="txt_title" class="title"></p>
+          <p name="txt_summary" id="txt_summary" class="summary"></p>
+          <p name="txt_text" id="txt_text" class="text"></p>
+          <p name="txt_date" id="txt_date" class="text"></p>
+          Tags:<p name="txt_tag" id="txt_tag"></p>
+          <button type="button" id="1" name="like" onclick="addReaction()">Like</button>
+          <button type="button" id="2" name="dislike" onclick="addReaction()">Dislike</button>
+          <button type="button" id="3" name="love" onclick="addReaction()">Love</button>
+          <button type="button" id="4" name="amazing" onclick="addReaction()">Amazing</button>
+          <span id="saveIfLogged" onload="checkSave()"></span>
+          </form>
+      </div>
+      <div id="infoAutore"> 
+          <p name="txt_author" id="txt_author" class="autore">Prova</p>
+      </div>
+    </div>
+  </body>
 </html>
+
