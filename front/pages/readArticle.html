@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>TheCameron</title>
+    <title>Letura articolo - TheCameron</title>
     <script src="../scripts/article.js"></script>
+    <script src="../scripts/logout.js"></script>
     <script src="../scripts/savedArticle.js"></script>
     <link rel="stylesheet" href="../styles/style.css">
   </head>
@@ -11,18 +12,29 @@
       <h1>TheCameron</h1>
     </header>
     <nav class="flex-container">
-      <a id="header_home" href="">
+      <a id="header_home" class="active_page" href="index.html">
           Home
       </a>
       <div id="header_unlogged">
-          <a id="header_login" class="active_page" href="login.html">
+          <a id="header_login" href="login.html">
               Log in
           </a>
           <a id="header_signin" href="signin.html">
               Sign in
           </a>
       </div>
-    </nav>
+      <div id="header_logged" hidden>
+          <a id="header_newArticle" href="newArticle.html"> 
+              Write article
+          </a>
+          <a id="header_profile" href="user.html"> 
+              Your profile
+          </a>
+          <a id="header_logout" onclick="logOut()">
+              Log out
+          </a>
+      </div>
+  </nav> 
     <div id="main_content_full">
       <div id="article">
         <form id="formReadArticle">

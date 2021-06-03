@@ -1,7 +1,18 @@
 var myStorage = window.sessionStorage;
-var loggedUser= myStorage.getItem('loggedUser');
+var loggedUser= {};
+var articolo = {};
 
 function loadArticle(){
+
+  if(sessionStorage.getItem('loggedUser')){
+    loggedUser.username = sessionStorage.getItem('loggedUser');
+    loggedUser.token = sessionStorage.getItem('token');
+    document.getElementById("header_profile").innerHTML = loggedUser.username + "'s profile";
+    document.getElementById("header_unlogged").hidden = true;
+    document.getElementById("header_logged").hidden = false;
+  }else{
+    loggedUser = {};
+  }
 
   var id = getUrlVars()["id"];
   var author = getUrlVars()["author"];
@@ -13,14 +24,21 @@ function loadArticle(){
   })
   .then((resp) => resp.json())
   .then(function(data) {
-    document.getElementById('txt_title').innerHTML = data.title;
-    document.getElementById('txt_summary').innerHTML = data.summary;
-    document.getElementById('txt_author').innerHTML = data.author;
-    document.getElementById('txt_text').innerHTML = data.text;
-    document.getElementById('txt_date').innerHTML = data.date;
-    var html;
-    data.tags.foreach(element=> html+="<span>+"+element+"</span>");
-    document.getElementById('txt_tag').innerHTML = html;
+    if(data.restricted){
+      articolo = data;
+      checkSubscription(loggedUser.username, id, author);
+    }else{
+      document.getElementById('txt_title').innerHTML = data.title;
+      document.getElementById('txt_summary').innerHTML = data.summary;
+      document.getElementById('txt_author').innerHTML = data.author;
+      document.getElementById('txt_text').innerHTML = data.text;
+      document.getElementById('txt_date').innerHTML = data.date;
+      var htmlOut="";
+      for(x in data.tags){
+        htmlOut += "<span>+"+data.tags[x]+"</span>"
+      }
+      document.getElementById('txt_tag').innerHTML = htmlOut;
+    }
   })
   .catch( error => console.error(error) );
 
@@ -48,9 +66,6 @@ function loadArticle(){
     document.getElementById('3').disabled=true;
     document.getElementById('4').disabled=true;
   }
-
-
-
 }
 
 function getUrlVars() {
@@ -76,7 +91,7 @@ function addReaction(){
   })
   .then(function(response) {
     if(response.ok){
-        alert("Articolo creato");
+        
     }
     else {
       response.json().then(data => {
@@ -87,4 +102,27 @@ function addReaction(){
   .catch( error => console.log(error));
   loadArticle();
   return;
+}
+
+function checkSubscription(user, id, author){
+  fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      id : getUrlVars()["id"],
+      author : document.getElementById("txt_summary").value,
+      username : loggedUser.username,
+      reaction : event.target.id,
+    }),
+  })
+  .then(function(response) {
+    if(response.ok){
+      document.getElementById('txt_title').innerHTML = articolo.title;
+      document.getElementById('txt_summary').innerHTML = articolo.summary;
+      document.getElementById('txt_author').innerHTML = articolo.author;
+      document.getElementById('txt_text').innerHTML = articolo.text;
+      document.getElementById('txt_date').innerHTML = articolo.date;
+    }
+  })
+  .catch( error => console.log(error));
 }

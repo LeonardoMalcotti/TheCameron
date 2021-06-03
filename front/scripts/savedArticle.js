@@ -22,7 +22,6 @@ function loadSave()
               })
             .catch( error => console.log(error));
               return;
-            });
     }
 }
 
@@ -34,7 +33,7 @@ function printArticles(){
             htmlOut += '<em> di ' + articoli[i].author + '</em>'
             htmlOut += '</article>';
         }
-    }
+    
     // Inseriamo gli articoli a schermo
     document.getElementById("article_list").innerHTML += htmlOut;
 }
