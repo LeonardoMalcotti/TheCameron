@@ -1,4 +1,5 @@
 loggedUser = {};
+savedArt = [];
 
 function setup_User(){
   if(sessionStorage.getItem('loggedUser')){
@@ -115,18 +116,68 @@ function getFollowing(user){
 }
 
 function getSavedArticles(user){
-  
+  fetch("/savedArticle/"+user, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'}
+  })
+  .then((resp) => resp.json())
+  .then(async function(data){
+    for(x in data){
+      savedArt.push({id: data[x].id, author: data[x].author});
+    } 
+    printSavedArticles();
+  })
+  .catch(error => console.log(error));
+}
+
+// Ci serve per ottenere il titolo degli articoli
+function printSavedArticles(){
+  document.getElementById("savedArticles").innerHTML = "Saved articles: <hr>";
+  if(savedArt.length > 0 && savedArt[0].id && savedArt[0].author){
+    for(i in savedArt){
+      fetch("../article/"+savedArt[i].id + "/" +savedArt[i].author, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+      })
+      .then((resp) => resp.json())
+      .then(function(data){
+        document.getElementById("savedArticles").innerHTML += data.title;
+        document.getElementById("savedArticles").innerHTML += "<button onclick='viewArticle(" + data.id + ", " + loggedUser.username +")'>Read article</button><br>";
+      })
+      .catch(error => console.error(error));
+    }
+  }else{
+    savedArt = [];
+  }
 }
 
 function getSavedTags(user){
-
+  fetch("../tag/user/"+user, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+  })
+    .then((resp) => resp.json())
+    .then(function(data) {
+      let htmlOut = "Saved tags: <hr>";
+      for(x in data){
+        htmlOut += (data[x].name + "<br>");
+      }
+      document.getElementById("savedTags").innerHTML = htmlOut;
+    })
+    .catch(error => console.error(error));
 }
 
 function deleteArticle(id, author){
-
+  fetch("../tag/user/"+user, {
+    method: 'DELETE',
+  }).then(function(data){
+    if(data.ok){
+      alert("Deleted");
+    }
+  }).catch(error => console.error(error));
 }
 function viewArticle(id, author){
-
+  document.location.href = "readArticle.html?id="+id+"&author="+author;
 }
 function redirectSubscription(){
   window.location.href = "subscribe.html";
