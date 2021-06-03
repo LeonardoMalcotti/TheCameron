@@ -65,7 +65,7 @@ function getMyArticles(user) {
     let htmlOut = "Your articles:<hr>"; 
     for(x in data){
       htmlOut += data[x].title;
-      htmlOut += " <button onclick='viewArticle(" + data[x].id + ", " + user +")'>Read article</button>";
+      htmlOut += " <button onclick='viewArticle(" + data[x].id + ", \"" + user +"\")'>Read article</button><br>";
     }
     document.getElementById("your_articles").innerHTML = htmlOut;
   })
