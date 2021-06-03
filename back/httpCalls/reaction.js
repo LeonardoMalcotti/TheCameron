@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-//modello mongoose
 const Reaction = require('../models/Reaction');
 const Article = require('../models/Article');
 const User = require('../models/User');

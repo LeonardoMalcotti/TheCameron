@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-//modello mongoose
 const Article = require('../models/Article');
 const Subscription = require('../models/Subscription');
 const User = require('../models/User');
@@ -32,7 +31,6 @@ router.get("/:id/:author/user/:username",async (req,res)=>{
 	}
 
 
-
 	let user = await User.findOne({'username':req.params.username});
 
 	if(!user){
@@ -46,13 +44,10 @@ router.get("/:id/:author/user/:username",async (req,res)=>{
 
 	//se l'articolo è ristretto e l'utente non ha un abbonamento restituisce forbidden
 	if(!sub && article[0].restricted){
-			res.status(403).send();
-			return;
+		res.status(403).send();
+		return;
 	}
 	
-	
-
-	//se l'utente ha un abbonamento allora ritorna un successo senza contenuto
 	res.status(204).send();
 });
 
