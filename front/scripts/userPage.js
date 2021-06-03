@@ -1,4 +1,5 @@
 loggedUser = {};
+savedArt = [];
 
 function setup_User(){
   if(sessionStorage.getItem('loggedUser')){
@@ -64,7 +65,6 @@ function getMyArticles(user) {
     let htmlOut = "Your articles:<hr>"; 
     for(x in data){
       htmlOut += data[x].title;
-      htmlOut += " <button onclick='deleteArticle(" + data[x].id + ", " + user +")'>Delete</button>";
       htmlOut += " <button onclick='viewArticle(" + data[x].id + ", " + user +")'>Read article</button>";
     }
     document.getElementById("your_articles").innerHTML = htmlOut;
@@ -115,19 +115,85 @@ function getFollowing(user){
 }
 
 function getSavedArticles(user){
-  
+  fetch("/savedArticle/"+user, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'}
+  })
+  .then((resp) => resp.json())
+  .then(async function(data){
+    for(x in data){
+      savedArt.push({id: data[x].id, author: data[x].author});
+    } 
+    printSavedArticles();
+  })
+  .catch(error => console.log(error));
+}
+
+// Ci serve per ottenere il titolo degli articoli
+function printSavedArticles(){
+  document.getElementById("savedArticles").innerHTML = "Saved articles: <hr>";
+  if(savedArt.length > 0 && savedArt[0].id && savedArt[0].author){
+    for(i in savedArt){
+      fetch("../article/"+savedArt[i].id + "/" +savedArt[i].author, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+      })
+      .then((resp) => resp.json())
+      .then(function(data){
+        document.getElementById("savedArticles").innerHTML += data.title;
+        document.getElementById("savedArticles").innerHTML += "<button onclick='viewArticle(" + data.id + ", " + loggedUser.username +")'>Read article</button><br>";
+      })
+      .catch(error => console.error(error));
+    }
+  }else{
+    savedArt = [];
+  }
 }
 
 function getSavedTags(user){
-
+  fetch("../tag/user/"+user, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+  })
+    .then((resp) => resp.json())
+    .then(function(data) {
+      let htmlOut = "Saved tags: <hr>";
+      for(x in data){
+        htmlOut += (data[x].name + "<br>");
+      }
+      document.getElementById("savedTags").innerHTML = htmlOut;
+    })
+    .catch(error => console.error(error));
 }
 
-function deleteArticle(id, author){
-
-}
 function viewArticle(id, author){
-
+  document.location.href = "readArticle.html?id="+id+"&author="+author;
 }
+
 function redirectSubscription(){
   window.location.href = "subscribe.html";
+}
+
+function unfollow(user, target){
+  fetch('followers/unfollow/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+          user: user,
+          target: target,
+      }),
+  })
+  .then(function(response) {
+      //la risposta è un successo
+      if(response.ok){
+          alert("Non più seguito!");
+      }
+      //Da una spiegazione nel caso di fallimento 
+      else {
+          response.json().then(data => {
+              alert(data.error)
+          })
+      }
+  })
+  .catch(error => console.log(error));
 }
