@@ -65,7 +65,6 @@ function getMyArticles(user) {
     let htmlOut = "Your articles:<hr>"; 
     for(x in data){
       htmlOut += data[x].title;
-      htmlOut += " <button onclick='deleteArticle(" + data[x].id + ", " + user +")'>Delete</button>";
       htmlOut += " <button onclick='viewArticle(" + data[x].id + ", " + user +")'>Read article</button>";
     }
     document.getElementById("your_articles").innerHTML = htmlOut;
@@ -167,18 +166,34 @@ function getSavedTags(user){
     .catch(error => console.error(error));
 }
 
-function deleteArticle(id, author){
-  fetch("../tag/user/"+user, {
-    method: 'DELETE',
-  }).then(function(data){
-    if(data.ok){
-      alert("Deleted");
-    }
-  }).catch(error => console.error(error));
-}
 function viewArticle(id, author){
   document.location.href = "readArticle.html?id="+id+"&author="+author;
 }
+
 function redirectSubscription(){
   window.location.href = "subscribe.html";
+}
+
+function unfollow(user, target){
+  fetch('followers/unfollow/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+          user: user,
+          target: target,
+      }),
+  })
+  .then(function(response) {
+      //la risposta è un successo
+      if(response.ok){
+          alert("Non più seguito!");
+      }
+      //Da una spiegazione nel caso di fallimento 
+      else {
+          response.json().then(data => {
+              alert(data.error)
+          })
+      }
+  })
+  .catch(error => console.log(error));
 }
