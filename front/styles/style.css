@@ -273,7 +273,7 @@ aside{
   margin: 5px;
   padding: 15px 30px;
   border-radius: 5px;
-  display: inline-block;
+  display: block;
 }
 #article{
   text-align: justify;
