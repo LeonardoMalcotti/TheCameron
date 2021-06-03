@@ -218,3 +218,48 @@ aside{
   background-color: var(--color0);
   color: var(--color4);
 }
+.half_space{
+  width: 46%;
+  padding: 1%;
+  float: left;
+}
+.full_space{
+  clear: both;
+}
+.user_content {
+  width: 65%;
+  float: left;
+}
+.user_content div{
+  background-color: var(--color3);
+  border-radius: 8px;
+  margin: 5px;
+  padding: 6px 12px;
+}
+#asideUser button{
+  background-color: var(--color3);
+  width: 100%;
+  color: var(--color0);
+  margin: auto;
+  border-radius: 5px;
+  padding: 5px 10px 5px 0px;
+  padding: 5px 20px;
+  border: 1px solid var(--color3);
+}
+#asideUser button:hover{
+  background-color: var(--color1);
+  color: var(--color3);
+  border: 1px solid var(--color3);
+}
+#asideUser button:disabled{
+  background-color: var(--color1);
+  color: var(--color3);
+  border: 1px solid var(--color3);
+}
+#infoUser{
+  border-radius: 5px;
+  padding: 6px 12px;
+  background-color: var(--color1);
+  color: var(--color3);
+  font-size: 18px;
+}
