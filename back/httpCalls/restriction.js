@@ -43,9 +43,8 @@ router.get("/:id/:author/user/:username",async (req,res)=>{
 	//controllo sulla restrizione
 
 	let sub = await Subscription.findOne({'username':req.params.username});
-
 	//se l'articolo è ristretto e l'utente non ha un abbonamento restituisce forbidden
-	if(!sub && article[0].restricted){
+	if(!sub && article.restricted){
 			res.status(403).send();
 			return;
 	}

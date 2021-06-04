@@ -2,6 +2,7 @@ var myStorage = window.sessionStorage;
 var loggedUser= {username:null, token:null};
 var articolo = {};
 var tagIds = [];
+var authorized;
 /*
 [done]
  loadArticles() effettua il fetch sull'articolo e lo salva, poi controlla la restrizione
@@ -72,6 +73,8 @@ function loadArticle(){
       // Articolo ristretto
       checkSubscription(sessionStorage.getItem("loggedUser"), id, author);
     }else{
+      // Imposto authorized = true
+      authorized = true;
       // Articolo non ristretto
       loadTags();
     }
@@ -83,25 +86,26 @@ function loadArticle(){
 
 // Controllo se l'utente è autorizzato
 function checkSubscription(user, id, author){
-  let url = "../restricted/article/"+id+"/"+author+"/user/"+user;
+  let url = "/restricted/article/"+id+"/"+author+"/user/"+user;
   fetch(url, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json'},
+    method: 'GET'
   })
   .then(function(response) {
     if(response.ok){
+      authorized = true;
       loadTags();
     }else{
-      // Cambio il testo delll'articolo
+      // setto authorized = false
+      authorized = false;
+      // Elimino il testo dell'articolo
       articolo.text = "<b>This article is restricted. Make a subscription to read it</b>";
       printArticle();
     }
   })
-  .catch( error => console.log(error));
+  .catch( error => console.error(error.status));
 }
 
 function loadTags(){
-  console.log("Tags");
   if(tagIds.length>0){
     // Ottengo la lista dei tag
     fetch('../tag', {
@@ -112,7 +116,7 @@ function loadTags(){
     .then(function(data){
         for(i in data){
           // Se fa parte dei tag dell'articolo (abbiamo gi id) aggiungiamo il nome alla lista dei tag in articolo
-          if(!(tagIds.includes(data[i].id))){
+          if(tagIds.includes(data[i].id.toString())){
             articolo.tags.push(data[i].name);
           }
         }
@@ -127,19 +131,32 @@ function loadTags(){
 }
 
 function printArticle(){
-  // Stampo le info dell'articolo
+  // Stampo le info "pubbliche" dell'articolo
   document.getElementById("txt_title").innerHTML = articolo.title;
   document.getElementById("txt_summary").innerHTML = articolo.summary;
-  document.getElementById("txt_text").innerHTML = articolo.text;
   document.getElementById("txt_date").innerHTML = articolo.date;
-  // Stampo i tags
-  text_tags = "";
-  for( x in articolo.tags){
-    text_tags += articolo.tags[x] + ", ";
+  // Avendone cambiato il testo in caso ristretto, stampo anche il testo
+  document.getElementById("txt_text").innerHTML = articolo.text;
+  // Controllo cosa devo stampare poi
+  // questa funzione viene chiamata dopo che authorized viene valorizzato
+  // non dovrebbe arrivarci un authorized non definito, ma controlliamo
+  if(authorized != false){
+    document.getElementById("txt_text").innerHTML = articolo.text;
+    // Stampo i tags
+    text_tags = "";
+    for( x in articolo.tags){
+      text_tags += articolo.tags[x] + ", ";
+    }
+    document.getElementById("txt_tag").innerHTML = text_tags;
+    // Procedo con l'ottenere info sull'autore dell'articolo
+    getAuthorInfo(articolo.author);
+  }else{
+    document.getElementById("span_Tags").innerHTML = '<button onclick="document.location.href=\'subscription.html\';';
+    // Blocco anche le info sull'autore
+    let htmlAuthor = "<p><b>" + articolo.author + "</b>";
+    htmlAuthor += " ha riservato questo articolo per i soli abbonati</p>";
+    document.getElementById("infoAutore").innerHTML = htmlAuthor;
   }
-  document.getElementById("txt_tag").innerHTML = text_tags;
-  // Procedo con l'ottenere info sull'autore dell'articolo
-  getAuthorInfo(articolo.author);
 }
 
 function getAuthorInfo(author){

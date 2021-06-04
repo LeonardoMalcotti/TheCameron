@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Letura articolo - TheCameron</title>
+    <title>Lettura articolo - TheCameron</title>
     <script src="../scripts/article.js"></script>
     <script src="../scripts/logout.js"></script>
     <script src="../scripts/savedArticle.js"></script>
@@ -12,7 +12,7 @@
       <h1>TheCameron</h1>
     </header>
     <nav class="flex-container">
-      <a id="header_home" class="active_page" href="index.html">
+      <a id="header_home" href="index.html">
           Home
       </a>
       <div id="header_unlogged">
@@ -42,7 +42,7 @@
           <p name="txt_summary" id="txt_summary" class="summary"></p>
           <p name="txt_text" id="txt_text" class="text"></p>
           <p name="txt_date" id="txt_date" class="text"></p>
-          Tags:<p name="txt_tag" id="txt_tag"></p>
+          <span id="span_Tags">Tags:</span><p name="txt_tag" id="txt_tag"></p>
           <button type="button" id="1" name="like" onclick="addReaction()">Like</button>
           <button type="button" id="2" name="dislike" onclick="addReaction()">Dislike</button>
           <button type="button" id="3" name="love" onclick="addReaction()">Love</button>
@@ -51,7 +51,7 @@
           </form>
       </div>
       <div id="infoAutore"> 
-          <p name="txt_author" id="txt_author" class="autore">Prova</p>
+          <p>Autore</p>
       </div>
     </div>
   </body>

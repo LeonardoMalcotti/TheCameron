@@ -37,7 +37,7 @@ describe("article restriction test", () =>{
 
         spyFindArticle = jest.spyOn(Article, 'findOne').mockImplementation((criterias) =>{ 
             if(criterias.id == "1" && criterias.author == "decamerone"){
-                return [{
+                return {
                     id: "1",  
                     author: "decamerone", 
                     title: "Lorem Ipsum", 
@@ -46,9 +46,9 @@ describe("article restriction test", () =>{
                     date: "01012020",
                     tags: ["mock"],
                     restricted : true,
-                }];
+                };
             }else if(criterias.id=="2" && criterias.author == "decamerone"){
-                return [{
+                return {
                     id: "2",  
                     author: "decamerone", 
                     title: "Lorem Ipsum2", 
@@ -57,7 +57,7 @@ describe("article restriction test", () =>{
                     date: "01012020",
                     tags: ["mock","mock2"],
                     restricted : false,
-                }];
+                };
             }
             else
             {
