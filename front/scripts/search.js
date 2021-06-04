@@ -33,7 +33,8 @@ function applyFilter() {
       }
       advancedSearch(url);
       return;
-    })      
+    })   
+    .catch( error => console.log(error));   
 	}else{
     advancedSearch(url);
     return;

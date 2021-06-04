@@ -47,6 +47,7 @@ function newArticle(){
         sendArticle(tagIds);
         return;
       })      
+      .catch( error => console.log(error));
     }
 
   }

@@ -21,7 +21,8 @@ function loadTag(){
         tag += find(data.id[i]) + " - ";
       }
       document.getElementById('txt_tag').innerHTML = tag;
-  });
+  })
+  .catch( error => console.log(error));
 
   fetch('../tag', {
       method: 'GET',
@@ -34,8 +35,8 @@ function loadTag(){
           htmlOutput += '<button type="button" id="' + data[i].id + '" name="' + data[i].name + '" onclick="addTag()"';
         }
       }
-  });
-
+  })
+  .catch( error => console.log(error));
 }
 
 function find(id){
@@ -48,6 +49,7 @@ function find(id){
     if(data.length > 0)
       return data.name;
   })
+  .catch( error => console.log(error));
 }
 
 function addTag(){
