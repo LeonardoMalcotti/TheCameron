@@ -40,30 +40,32 @@ function newArticle(){
           } 
         }
         // Aggiungiamo al db i tag nuovi
-        for(x in tags){
-          addTag(tags[x]);
-        }
+        addTagRec(tags,0);
         // lanciamo la funzione per la creazione dell'articolo 
         sendArticle(tagIds);
         return;
       })      
       .catch( error => console.log(error));
     }
-
   }
 }
 
-function addTag(tagName){
-  fetch("/tag/"+tagName, {
-    method:"post",
-  })
-  .then(function(response) {
-    if(!response.ok){
-      console.log(tagName + " non aggiunto");
-    }
+function addTagRec(tags, i){
+  if(i>=tags.length){
     return;
-  })
-  .catch( error => console.log(error));
+  }else{
+    fetch("/tag/"+tags[i], {
+      method:"POST",
+    })
+    .then(function(response) {
+      if(!response.ok){
+        console.log(tagName + " non aggiunto");
+      }
+      addTagRec(tags, i+1);
+      return;
+    })
+    .catch( error => console.log(error));
+  }
 }
 
 
