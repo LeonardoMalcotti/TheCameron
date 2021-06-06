@@ -94,9 +94,10 @@ describe('user test', () =>{
 	//--------------------------------------------------------------------------
 
 	test('POST /user, missing data', async done =>{
+		
 		const response = await request.post('/user');
+		
 		expect(response.statusCode).toBe(400);
-
 		done();
 	});
 
