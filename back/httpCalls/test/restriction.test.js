@@ -16,23 +16,23 @@ describe("Restrizione articoli", () =>{
 			
 			if(criterias.username == "dantealighieri"){
 				
-				return [{
+				return {
 					name: "Dante",  
 					surname: "Alighieri",
 					username: "dantealighieri",
 					password: "12345678", 
 					email: "dante.alighieri@loremipsum.it", 
-				}];
+				};
 
 			} else if (criterias.username == "boccaccio"){
 				
-				return [{
+				return {
 					name: "Giovanni",
 					surname: "Boccaccio",
 					username: "boccaccio",
 					password: "987654321",
 					email: "gio.boccaccio@loremipsum.it",
-				}];
+				};
 
 			} 
 		
@@ -43,7 +43,7 @@ describe("Restrizione articoli", () =>{
 			
 			if(criterias.id == "1" && criterias.author == "decamerone"){
 				
-				return [{
+				return {
 					id: "1",  
 					author: "decamerone", 
 					title: "Lorem Ipsum", 
@@ -52,11 +52,11 @@ describe("Restrizione articoli", () =>{
 					date: "01012020",
 					tags: ["mock"],
 					restricted : true,
-				}];
+				};
 
 			} else if (criterias.id=="2" && criterias.author == "decamerone"){
 				
-				return [{
+				return {
 					id: "2",  
 					author: "decamerone", 
 					title: "Lorem Ipsum2", 
@@ -65,7 +65,7 @@ describe("Restrizione articoli", () =>{
 					date: "01012020",
 					tags: ["mock","mock2"],
 					restricted : false,
-				}];
+				};
 
 			}
 			
@@ -76,10 +76,10 @@ describe("Restrizione articoli", () =>{
 			
 			if(criterias.username == "dantealighieri"){
 				
-				return [{
+				return {
 					username: "dantealighieri",
 					dateSubscription: "10102020"
-				}];
+				};
 
 			} 
 			return null;
