@@ -1,7 +1,7 @@
 const supertest = require('supertest');
 const app = require('../../app');
 const request = supertest(app);
-//require("dotenv").config();
+require("dotenv").config();
 
 describe('Follow', () => {
 
@@ -88,8 +88,16 @@ describe('Follow', () => {
 
 	test('POST /followers/follow, no target', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/follow')
+			.set('token',token)
 			.send({
 				user:"dantealighieri"
 			});
@@ -101,8 +109,16 @@ describe('Follow', () => {
 
 	test('POST /followers/follow, no user', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/follow')
+			.set('token',token)
 			.send({
 				target:"bea"
 			});
@@ -114,8 +130,16 @@ describe('Follow', () => {
 
 	test('POST /followers/follow, user non esiste', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/follow')
+			.set('token',token)
 			.send({
 				user:"npe",
 				target:"bea"
@@ -129,8 +153,16 @@ describe('Follow', () => {
 
 	test('POST /followers/follow, target non esiste', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/follow')
+			.set('token',token)
 			.send({
 				user:"dantealighieri",
 				target:"np"
@@ -144,8 +176,16 @@ describe('Follow', () => {
 
 	test('POST /followers/follow, target == user', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/follow')
+			.set('token', token)
 			.send({
 				user:"dantealighieri",
 				target:"dantealighieri"
@@ -158,8 +198,16 @@ describe('Follow', () => {
 
 	test('POST /followers/follow, user segue già target', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "bea",
+          		password: "qwerty",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/follow')
+			.set('token',token)
 			.send({
 				user:"bea",
 				target:"dantealighieri"
@@ -173,8 +221,16 @@ describe('Follow', () => {
 
 	test('POST /followers/unfollow, no target', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/unfollow')
+			.set('token',token)
 			.send({
 				user:"dantealighieri"
 			});
@@ -186,8 +242,16 @@ describe('Follow', () => {
 
 	test('POST /followers/unfollow, no user', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/unfollow')
+			.set('token',token)
 			.send({
 				target:"bea"
 			});
@@ -199,8 +263,16 @@ describe('Follow', () => {
 
 	test('POST /followers/unfollow, user non esiste', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/unfollow')
+			.set('token',token)
 			.send({
 				user:"npe",
 				target:"bea"
@@ -213,8 +285,16 @@ describe('Follow', () => {
 
 	test('POST /followers/unfollow, target non esiste', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/unfollow')
+			.set('token',token)
 			.send({
 				user:"dantealighieri",
 				target:"bea"
@@ -227,8 +307,16 @@ describe('Follow', () => {
 
 	test('POST /followers/unfollow, user non segue target', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "bea",
+          		password: "qwerty",
+        	})).body.token;
+
 		const response = await request
 			.post('/followers/unfollow')
+			.set('token',token)
 			.send({
 				user:"bea",
 				target:"bea"
