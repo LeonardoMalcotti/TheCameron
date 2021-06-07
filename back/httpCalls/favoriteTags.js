@@ -5,7 +5,14 @@ const FavoriteTags = require('../models/FavoriteTags');
 const User = require('../models/User');
 
 
+//Aggiunge un tag tra i favoriti di un utente
+//
 router.post("/:username",async(req,res)=>{
+
+	if(!req.body.tag){
+		res.status(400).({error:"Parametro tag non specificato"});
+		return;
+	}
 
 	let username = req.params.username;
 	let tag = req.body.tag;
@@ -20,7 +27,7 @@ router.post("/:username",async(req,res)=>{
 		return;
 	}
 
-	let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
+	let favoriteTags = await FavoriteTags.findOne({'username':username});
 
 	//se non esiste una entry dei favoriti per questo utente la crea
 	if(!favoriteTags){
@@ -44,7 +51,8 @@ router.post("/:username",async(req,res)=>{
 	res.location("/tag/" + username).status(201).send();
 });
 
-
+//Recupera i tag favoriti di un utente
+//
 router.get("/:username",async (req,res)=>{
 
 	let username = req.params.username;
@@ -54,7 +62,7 @@ router.get("/:username",async (req,res)=>{
 		return;
 	}
 
-	let favoriteTags = await FavoriteTags.findOne({'username':req.params.username});
+	let favoriteTags = await FavoriteTags.findOne({'username':username});
 
   	//se l'utente non ha tag favoriti si ritorna errore
   	if(favoriteTags.id.length<=0){
