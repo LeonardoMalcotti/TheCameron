@@ -32,8 +32,6 @@ app.use(express.static('front'));
 //autenticazione
 app.use("/login", login);
 
-//chiamate protette da token checker
-app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
 
 //collegamenti alle chiamate http
 
@@ -60,6 +58,9 @@ app.use("qualcosa",tokenChecker);
 //app.use("/followers", tokenChecker);
 
 
+//chiamate protette da token checker
+app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
+app.use("/article",tokenChecker);
 //-------------
 
 app.use((req, res) => {
