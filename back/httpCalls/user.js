@@ -68,7 +68,6 @@ router.get("/:username",async (req,res)=>{
 		name : user.name,
 		surname : user.surname,
 		username : user.username,
-		password : user.password,
 		email : user.email
 	});
 
