@@ -6,6 +6,7 @@ const Article = require('../models/Article');
 
 
 //Inserimento nuovo articolo salvato
+//
 router.post("/:username",async(req,res)=>{
 
 	// Controllo di aver ricevuto tutti i dati
@@ -76,7 +77,8 @@ router.post("/:username",async(req,res)=>{
 });
 
 
-//GET articoli salvati da :username
+//Recupera gli articoli salvati di un utente
+//
 router.get("/:username",async (req,res)=>{
 
 	// Controllo di aver ricevuto tutti i dati
@@ -104,7 +106,8 @@ router.get("/:username",async (req,res)=>{
 	res.status(200).json(savedArticles.articles);
 });
 
-
+//Rimuove un articolo salvato di un utente
+//
 router.delete("/",async (req,res)=>{
 
 	// Controllo di aver ricevuto tutti i dati

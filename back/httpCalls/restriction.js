@@ -4,6 +4,7 @@ const Article = require('../models/Article');
 const Subscription = require('../models/Subscription');
 const User = require('../models/User');
 
+
 //controlla se un utente registrato può accedere ad un articolo
 //
 router.get("/:id/:author/user/:username",async (req,res)=>{
@@ -51,7 +52,7 @@ router.get("/:id/:author",async(req,res)=>{
 		res.status(404).json({error: "Autore o id non presente"});
 		return;
 	}
-	
+
 	if(article.restricted){
 		res.status(403).send();
 		return;
