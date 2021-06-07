@@ -57,6 +57,7 @@ app.use("/followers/unfollow",tokenChecker);
 app.use("/reaction",tokenChecker);
 app.use("/savedArticle",tokenChecker);
 app.use("/savedArticle/:username",tokenChecker);
+app.use("/user/:username/subscription",tokenChecker);
 
 //-------------
 
