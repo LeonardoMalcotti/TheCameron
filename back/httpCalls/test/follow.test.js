@@ -3,27 +3,28 @@ const app = require('../../app');
 const request = supertest(app);
 //require("dotenv").config();
 
-describe('follow test', () => {
+describe('Follow', () => {
+
 	let SpyUserFindOne;
 	let SpyFollowFind;
 	let SpyFollowFindOne;
 
 
 	let mockUsers = [
-		{
-	        name: "Dante",
-	        surname: "Alighieri",
-	        email: "dante.alighieri@loremipsum.it",
-	        password: "12345678",
-	        username: "dantealighieri"
-	        },
-	        {
-	        name : "Beatrice",
-	        surname : "Portinari",
-	        email: "beatrix9@heaven.it",
-	        password: "qwerty",
-	        username: "bea"
-	        }
+	{
+		name: "Dante",
+		surname: "Alighieri",
+		email: "dante.alighieri@loremipsum.it",
+		password: "12345678",
+		username: "dantealighieri"
+	},
+	{
+		name : "Beatrice",
+		surname : "Portinari",
+		email: "beatrix9@heaven.it",
+		password: "qwerty",
+		username: "bea"
+	}
 	];
 
 	let mockFollows = [
@@ -86,6 +87,7 @@ describe('follow test', () => {
 	//tests-------------------------------------------------
 
 	test('POST /followers/follow, no target', async done =>{
+		
 		const response = await request
 			.post('/followers/follow')
 			.send({
@@ -98,6 +100,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/follow, no user', async done =>{
+		
 		const response = await request
 			.post('/followers/follow')
 			.send({
@@ -110,6 +113,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/follow, user non esiste', async done =>{
+		
 		const response = await request
 			.post('/followers/follow')
 			.send({
@@ -124,6 +128,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/follow, target non esiste', async done =>{
+		
 		const response = await request
 			.post('/followers/follow')
 			.send({
@@ -138,6 +143,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/follow, target == user', async done =>{
+		
 		const response = await request
 			.post('/followers/follow')
 			.send({
@@ -151,6 +157,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/follow, user segue già target', async done =>{
+		
 		const response = await request
 			.post('/followers/follow')
 			.send({
@@ -165,6 +172,7 @@ describe('follow test', () => {
 //---------------------------------------------------------------------------------
 
 	test('POST /followers/unfollow, no target', async done =>{
+		
 		const response = await request
 			.post('/followers/unfollow')
 			.send({
@@ -177,6 +185,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/unfollow, no user', async done =>{
+		
 		const response = await request
 			.post('/followers/unfollow')
 			.send({
@@ -189,6 +198,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/unfollow, user non esiste', async done =>{
+		
 		const response = await request
 			.post('/followers/unfollow')
 			.send({
@@ -202,6 +212,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/unfollow, target non esiste', async done =>{
+		
 		const response = await request
 			.post('/followers/unfollow')
 			.send({
@@ -215,6 +226,7 @@ describe('follow test', () => {
 
 
 	test('POST /followers/unfollow, user non segue target', async done =>{
+		
 		const response = await request
 			.post('/followers/unfollow')
 			.send({
@@ -229,19 +241,20 @@ describe('follow test', () => {
 //--------------------------------------------------------------------------------
 
 	test('GET /user/:username/following, success', async done =>{
+		
 		const response = await request.get('/followers/user/bea/following');
 
 		expect(response.body.users.length).toBe(1);
 		done();
 	});
 
+
 	test('GET /user/:username/followers, success', async done =>{
+		
 		const response = await request.get('/followers/user/dantealighieri/followers');
 		
 		expect(response.body.users.length).toBe(1);
 		done();
 	});
-
-
 });
 

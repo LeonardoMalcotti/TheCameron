@@ -3,7 +3,7 @@ const app = require('../.././app');
 const request = supertest(app);
 
 	
-describe('article test', () =>{
+describe('Article', () =>{
   	
   	let findOneSpy;
   	let findSpy;

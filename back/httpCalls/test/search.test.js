@@ -3,7 +3,7 @@ const app = require('../.././app');
 const request = supertest(app);
 
 
-describe('article search test', () =>{
+describe('Search', () =>{
 
 
 	let pool =[

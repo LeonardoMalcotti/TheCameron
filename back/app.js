@@ -29,6 +29,12 @@ const favoriteTags = require("./httpCalls/favoriteTags.js");
 app.use('/',express.static('front/pages'));
 app.use(express.static('front'));
 
+//autenticazione
+app.use("/login", login);
+
+//chiamate protette da token checker
+app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
+
 //collegamenti alle chiamate http
 
 app.use("/followers", follow);
@@ -45,8 +51,7 @@ app.use("/savedArticle", savedArticle);
 app.use("/tag/user",favoriteTags);
 app.use("/tag", tags);
 
-//autenticazione
-app.use("/login", login);
+app.use("/restricted/article",restriction);
 
 //chiamate http che hanno bisogno di un token
 /*
@@ -54,9 +59,6 @@ app.use("qualcosa",tokenChecker);
 */
 //app.use("/followers", tokenChecker);
 
-//è da aggiungere una chiamata a restriction per gli utenti non registrati
-//app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
-app.use("/restricted/article",restriction);
 
 //-------------
 

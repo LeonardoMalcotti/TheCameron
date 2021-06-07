@@ -3,7 +3,7 @@ const app = require('../.././app');
 const request = supertest(app);
 
 
-describe('reaction test', () =>{
+describe('Reaction', () =>{
 
 	let findArticleSpy;
 	let findUserSpy;
@@ -132,57 +132,62 @@ describe('reaction test', () =>{
 	});
 
 	//--------------------------------------------------------------------------
+
+
 	test('POST /reaction missing data', async done =>{
 
 		const response = await request
-		.post('/reaction')
-		.set('Accept', 'application/json')
-		.send({author : "AlessandroManzoni",});
+			.post('/reaction')
+			.set('Accept', 'application/json')
+			.send({author : "AlessandroManzoni",});
 		
 		expect(response.statusCode).toBe(400);
 		done();
 	});
 
+
 	test('POST /reaction missing User or Article', async done =>{
 
 		const response = await request
-		.post('/reaction')
-		.set('Accept', 'application/json')
-		.send({ id : 1,
-			author : "dantealighieri",
-			username : "Username",
-			reaction: 3
-		});
+			.post('/reaction')
+			.set('Accept', 'application/json')
+			.send({ id : 1,
+				author : "dantealighieri",
+				username : "Username",
+				reaction: 3
+			});
 
 		expect(response.statusCode).toBe(404);
 		done();
 	});
 
+
 	test('POST /reaction already exist', async done =>{
 
 		const response = await request
-		.post('/reaction')
-		.set('Accept', 'application/json')
-		.send({ id : 1,
-			author : "DanteAlighieri",
-			username : "dantealighieri",
-			reaction: 3
-		});
+			.post('/reaction')
+			.set('Accept', 'application/json')
+			.send({ id : 1,
+				author : "DanteAlighieri",
+				username : "dantealighieri",
+				reaction: 3
+			});
 		
 		expect(response.statusCode).toBe(403);
 		done();
 	});
 
+
 	test('POST /reaction valid data', async done =>{
 
 		const response = await request
-		.post('/reaction')
-		.set('Accept', 'application/json')
-		.send({ id : 1,
-			author : "AlessandroManzoni",
-			username : "giovannipascoli",
-			reaction: 3
-		});
+			.post('/reaction')
+			.set('Accept', 'application/json')
+			.send({ id : 1,
+				author : "AlessandroManzoni",
+				username : "giovannipascoli",
+				reaction: 3
+			});
 
 		expect(response.statusCode).toBe(201);
 		done();
@@ -207,6 +212,7 @@ describe('reaction test', () =>{
 		done();
 	});
 
+
 	test('GET /reaction/:id/:author, missing article', async done =>{
 		
 		const response = await request.get('/reaction/3/AlessandroManzoni');
@@ -215,6 +221,7 @@ describe('reaction test', () =>{
 		done();
 	});
 
+
 	test('GET /reaction/:id/:author, missing reaction', async done =>{
 		
 		const response = await request.get('/reaction/1/AlessandroManzoni');
@@ -222,6 +229,7 @@ describe('reaction test', () =>{
 		expect(response.statusCode).toBe(404);
 		done();
 	});
+
 
 	test('GET /reaction/:username, success', async done =>{
 		
@@ -248,6 +256,7 @@ describe('reaction test', () =>{
 		done();
 	});
 
+
 	test('GET /reaction/:username, missing user', async done =>{
 		
 		const response = await request.get('/reaction/Username');
@@ -256,6 +265,7 @@ describe('reaction test', () =>{
 		done();
 	});
 
+
 	test('GET /reaction/:username, missing reaction', async done =>{
 		
 		const response = await request.get('/reaction/alessandromanzoni');
@@ -263,5 +273,4 @@ describe('reaction test', () =>{
 		expect(response.statusCode).toBe(404);
 		done();
 	});
-
 });

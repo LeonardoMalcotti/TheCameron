@@ -3,15 +3,14 @@ const app = require('../../app');
 const request = supertest(app);
 
 
-describe('user test', () =>{
+describe('User', () =>{
 
-	//mock function per il metodo find in post /user/username/subscribe
 	let findSpyUser;
 	let findSpySub;
-  	//mock function per il metodo find in post /user
   	let findSpy;
   
   	beforeAll( () => {
+
   		const User = require("../../models/User");
   		const Subscription = require("../../models/Subscription");
 
@@ -90,8 +89,9 @@ describe('user test', () =>{
   		findSpy.mockRestore();
   	});
 
-	//Test User
+
 	//--------------------------------------------------------------------------
+
 
 	test('POST /user, missing data', async done =>{
 		
@@ -146,8 +146,10 @@ describe('user test', () =>{
 		done();
 	});
 	
+
 	//Test Subscription
 	//--------------------------------------------------------------------------
+
 
 	test('POST /user/:username/subscription, missing data', async done =>{
 		
@@ -158,6 +160,7 @@ describe('user test', () =>{
 		expect(response.statusCode).toBe(400);
 		done();
 	});
+
 
 	test('POST /user/:username/subscription, valid data', async done =>{
 		
@@ -170,6 +173,7 @@ describe('user test', () =>{
 		done();
 	});
 
+
 	test('POST /user/:username/subscription, subscription already exists', async done =>{
 		
 		const response = await request
@@ -181,6 +185,7 @@ describe('user test', () =>{
 		done();
 	});
 	
+
 	test('POST /user/:username/subscription, user not exist', async done =>{
 		
 		const response = await request
@@ -191,6 +196,7 @@ describe('user test', () =>{
 		done();
 	});
 	
+
 	test('GET /user/:username/subscription, subscription not exist', async done =>{
 		
 		const response = await request.get('/user/loremipsum/subscription');
@@ -198,6 +204,7 @@ describe('user test', () =>{
 		expect(response.statusCode).toBe(404);
 		done();
 	});
+
 
 	test('GET /user/:username/subscription, succes', async done =>{
 		
@@ -209,6 +216,7 @@ describe('user test', () =>{
 		done();
 	});
 
+
 	test('DELETE /user/:username/subscription, succes', async done =>{
 		
 		const response = await request.delete("/user/dantealighieri/subscription");
@@ -216,5 +224,4 @@ describe('user test', () =>{
 		expect(response.statusCode).toBe(204);
 		done();
 	});
-
 });

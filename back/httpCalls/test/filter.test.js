@@ -3,10 +3,9 @@ const app = require('../.././app');
 const request = supertest(app);
 
 
-describe('GET /article/filters', () =>{
+describe('Filters', () =>{
 
 	let ArticleFindSpy;
-	//let UserFindOneSpy;
 
 	beforeAll( () => {
 		

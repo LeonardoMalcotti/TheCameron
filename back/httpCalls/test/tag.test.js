@@ -3,7 +3,7 @@ const app = require('../../app');
 const request = supertest(app);
 
 
-describe('tag test',()=> {
+describe('Tag',()=> {
 
 	let TagSpy;
 	let FavoriteSpy;

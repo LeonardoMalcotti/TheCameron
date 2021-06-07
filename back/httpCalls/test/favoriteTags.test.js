@@ -2,7 +2,8 @@ const supertest = require('supertest');
 const app = require('../../app');
 const request = supertest(app);
 
-describe('favoriteTag test',()=> {
+
+describe('Favorite tags',()=> {
 
 	let TagSpy;
 	let FavoriteSpy;
@@ -90,6 +91,7 @@ describe('favoriteTag test',()=> {
 
 
 	test("GET tag/user/:username", async done =>{
+    	
     	const response = await request.get("/tag/user/dantealighieri").set('Accept', 'application/json');
 
 		expect(response.body.length).toBe(2);
@@ -99,6 +101,7 @@ describe('favoriteTag test',()=> {
 
 
 	test("GET tag/user/:username, miss user", async done =>{
+    	
     	const response = await request.get("/tag/user/username").set('Accept', 'application/json');
 
     	expect(response.statusCode).toBe(404);
