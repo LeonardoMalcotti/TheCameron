@@ -3,14 +3,21 @@ const router = express.Router();
 const Article = require('../models/Article');
 const User = require('../models/User');
 
+
 //Recupera le informazioni dell'articolo che ha id e autore specificati
 //
 router.get("/:id/:author",async (req,res)=>{
 
-  let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
+  	let article = await Article.findOne({'id':req.params.id, 'author':req.params.author});
+
+  	//controlla l'esistenza dell'autore
+	if(! await User.findOne({'username':req.params.author})){
+		res.status(404).json({error: "Autore non trovato"});
+		return;
+	}
 
 	if(!article){
-		res.status(404).json({error: "Autore o id non presente"});
+		res.status(404).json({error: "Articolo non presente"});
 		return;
 	}
 
@@ -70,6 +77,12 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
+	//controlla l'esistenza dell'autore
+	if(! await User.findOne({'username':req.body.author})){
+		res.status(404).json({error: "Autore non trovato"});
+		return;
+	}
+
 	//creazione data
 	var today = new Date();
 	var dd = String(today.getDate()).padStart(2, '0');
@@ -112,6 +125,7 @@ router.get("/:author",async (req,res)=>{
 
 	let author = req.params.author;
 
+	//controlla l'esistenza dell'autore
 	if(! await User.findOne({ "username":author })){
 		res.status(404).json({error: "Autore non trovato"});
 		return;
