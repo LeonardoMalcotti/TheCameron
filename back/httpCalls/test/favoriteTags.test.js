@@ -87,7 +87,9 @@ describe('Favorite tags',()=> {
 		TagSpyOne.mockRestore();
    	});
 
-//Test---------------------------------------------------------------
+	//Test---------------------------------------------------------------
+	//il post non ha un test in quanto c'è un problema con jest e la funzione save di mongoose
+	//
 
 
 	test("GET tag/user/:username", async done =>{
