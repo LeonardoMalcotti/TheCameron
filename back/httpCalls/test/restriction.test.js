@@ -3,8 +3,8 @@ const app = require('../.././app');
 const request = supertest(app);
 
 
-describe("article restriction test", () =>{
-	//mock function per findOne di User, Article e Subscription
+describe("Restrizione articoli", () =>{
+
 	let spyFindUser, spyFindSub, spyFindArticle;
 
 	beforeAll( () =>{
@@ -93,9 +93,22 @@ describe("article restriction test", () =>{
 		spyFindUser.mockRestore();
 	});
 
-	// Tests
+
+	//Tests----------------------------------------------------------
+
+
+	// valid user with valid sub, non restricted article 
+	test('GET /restricted/article/:id/:author/user/:username, access granted to subbed user', async done =>{
+		
+		const response = await request.get("/restricted/article/2/decamerone/user/dantealighieri");
+		
+		expect(response.statusCode).toBe(204);
+		done();
+	});
+
+
 	// valid user with valid sub, restricted article 
-	test('GET /restricted/article/:id/:author/user/:username, access granted', async done =>{
+	test('GET /restricted/article/:id/:author/user/:username, access granted to subbed user, restricted article', async done =>{
 		
 		const response = await request.get("/restricted/article/1/decamerone/user/dantealighieri");
 		
@@ -103,8 +116,9 @@ describe("article restriction test", () =>{
 		done();
 	});
 
+
    	// valid user with no sub, non restricted article 
-   	test('GET /restricted/article/:id/:author/user/:username, non restricted article => access granted', async done =>{
+   	test('GET /restricted/article/:id/:author/user/:username, access granted to non restricted article', async done =>{
    		
    		const response = await request.get("/restricted/article/2/decamerone/user/boccaccio");
    		
@@ -112,14 +126,16 @@ describe("article restriction test", () =>{
    		done();
    	});
 
+
 	// valid user with no sub, restricted article     
-	test('GET /restricted/article/:id/:author/user/:username, access denied', async done =>{
+	test('GET /restricted/article/:id/:author/user/:username, access denied to restricted article', async done =>{
 		
 		const response = await request.get("/restricted/article/1/decamerone/user/boccaccio");
 		
 		expect(response.statusCode).toBe(403);
 		done();
 	});
+
 
 	// non valid username 
 	test('GET /restricted/article/:id/:author/user/:username, non valid username', async done =>{
@@ -130,12 +146,33 @@ describe("article restriction test", () =>{
 		done();
 	});
 
+
    	// non vaid article
    	test('GET /restricted/article/:id/:author/user/:username, non valid article', async done =>{
    		
    		const response = await request.get("/restricted/article/2/boccaccio/user/dantealighieri");
    		
    		expect(response.statusCode).toBe(404);
+   		done();
+   	});
+
+
+   	// access to article to non registered user
+   	test('GET /restricted/article/:id/:author, non registered user non restricted article', async done =>{
+   		
+   		const response = await request.get("/restricted/article/2/decamerone");
+   		
+   		expect(response.statusCode).toBe(204);
+   		done();
+   	});
+
+
+   	// access denied to article to non registered user
+   	test('GET /restricted/article/:id/:author, non registered user restricted article', async done =>{
+   		
+   		const response = await request.get("/restricted/article/1/decamerone");
+   		
+   		expect(response.statusCode).toBe(403);
    		done();
    	});
 
