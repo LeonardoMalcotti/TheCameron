@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-//const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,8 +21,6 @@ const search = require("./httpCalls/search.js");
 const favoriteTags = require("./httpCalls/favoriteTags.js");
 
 //-------------
-
-
 
 //punto d'entrata
 app.use('/',express.static('front/pages'));
@@ -51,21 +48,16 @@ app.use("/tag", tags);
 
 app.use("/restricted/article",restriction);
 
-//chiamate http che hanno bisogno di un token
-/*
-app.use("qualcosa",tokenChecker);
-*/
-//app.use("/followers", tokenChecker);
-
-
 //chiamate protette da token checker
 app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
 app.use("/article",tokenChecker);
+app.use("/tag/user/:username",tokenChecker);
+
 //-------------
 
 app.use((req, res) => {
     res.status(404);
-    res.json({ error: 'Not found' });
+    res.json({ error: 'Call not found' });
 });
 
 module.exports = app;
