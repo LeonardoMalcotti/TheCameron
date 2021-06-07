@@ -4,6 +4,8 @@ const User = require('../models/User');
 const Subscription = require('../models/Subscription');
 
 
+//Crea un nuovo utente
+//
 router.post("/",async (req,res)=>{
 	
 	//controlla che tutti i dati siano specificati
@@ -55,6 +57,8 @@ router.post("/",async (req,res)=>{
 });
 
 
+//Recupera le informazioni di un utente specificato per username
+//
 router.get("/:username",async (req,res)=>{
 
   	let user = await User.findOne({'username':req.params.username});

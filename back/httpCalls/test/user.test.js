@@ -1,6 +1,7 @@
 const supertest = require('supertest');
 const app = require('../../app');
 const request = supertest(app);
+require("dotenv").config();
 
 
 describe('User', () =>{
@@ -153,9 +154,17 @@ describe('User', () =>{
 
 	test('POST /user/:username/subscription, missing data', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/user/dantealighieri/subscription')
-			.set('Accept', 'application/json');
+			.set('Accept', 'application/json')
+			.set('token',token);
 
 		expect(response.statusCode).toBe(400);
 		done();
@@ -164,9 +173,17 @@ describe('User', () =>{
 
 	test('POST /user/:username/subscription, valid data', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "giovannipascoli",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/user/giovannipascoli/subscription')
 			.set('Accept', 'application/json')
+			.set('token',token)
 			.send({"dateSubscription": "12/05/2020"});
 
 		expect(response.statusCode).toBe(201);
@@ -176,9 +193,17 @@ describe('User', () =>{
 
 	test('POST /user/:username/subscription, subscription already exists', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/user/dantealighieri/subscription')
 			.set('Accept', 'application/json')
+			.set('token',token)
 			.send({"dateSubscription": "1/04/2021"});
 
 		expect(response.statusCode).toBe(404);
@@ -188,9 +213,17 @@ describe('User', () =>{
 
 	test('POST /user/:username/subscription, user not exist', async done =>{
 		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request
 			.post('/user/loremipsum/subscription')
-			.set('Accept', 'application/json');
+			.set('Accept', 'application/json')
+			.set('token',token);
 
 		expect(response.statusCode).toBe(404);
 		done();
@@ -199,7 +232,15 @@ describe('User', () =>{
 
 	test('GET /user/:username/subscription, subscription not exist', async done =>{
 		
-		const response = await request.get('/user/loremipsum/subscription');
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "giovannipascoli",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request.get('/user/giovannipascoli/subscription')
+			.set('token',token);
 		
 		expect(response.statusCode).toBe(404);
 		done();
@@ -208,7 +249,15 @@ describe('User', () =>{
 
 	test('GET /user/:username/subscription, succes', async done =>{
 		
-		const response = await request.get('/user/dantealighieri/subscription');
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request.get('/user/dantealighieri/subscription')
+			.set('token',token);
 		
 		expect(response.statusCode).toBe(200);
 		expect(response.body.username).toBe('dantealighieri');
@@ -219,7 +268,15 @@ describe('User', () =>{
 
 	test('DELETE /user/:username/subscription, succes', async done =>{
 		
-		const response = await request.delete("/user/dantealighieri/subscription");
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request.delete("/user/dantealighieri/subscription")
+			.set('token',token);
 
 		expect(response.statusCode).toBe(204);
 		done();
