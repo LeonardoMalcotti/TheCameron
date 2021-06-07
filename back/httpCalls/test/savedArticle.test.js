@@ -1,6 +1,7 @@
 const supertest = require('supertest');
 const app = require('../.././app');
 const request = supertest(app);
+require("dotenv").config();
 
 
 describe("Saved articles", () =>{
@@ -31,11 +32,11 @@ describe("Saved articles", () =>{
 			if (criterias.username == "decamerone"){
 				
 				return {
-					name: "Giovanni",
-					surname: "Boccaccio",
+					name: "de",
+					surname: "camerone",
 					username: "decamerone",
 					password: "987654321",
-					email: "gio.boccaccio@loremipsum.it",
+					email: "camerone@loremipsum.it",
 				};
 
 			}
@@ -99,16 +100,13 @@ describe("Saved articles", () =>{
 				
 				return {
 					username: 'dantealighieri',
-					articles: [
-					{
+					articles: [{
 						id : 1,
 						author : "decamerone"
-					},
-					{
+					},{
 						id : 2,
 						author : "decamerone"
-					}
-					]
+					}]
 				};
 
 			}
@@ -128,7 +126,15 @@ describe("Saved articles", () =>{
 
 	test('POST savedArticle/:username, article alreasy saved', async done =>{
 
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
 		const response = await request.post("/savedArticle/dantealighieri")
+			.set('token',token)
 			.send({
 				id : 1,
 				author : "decamerone"
@@ -141,8 +147,16 @@ describe("Saved articles", () =>{
 
 	test('GET savedArticle/:username , Valid data', async done =>{
 		
-		const response = await request.get("/savedArticle/dantealighieri");
-		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request.get("/savedArticle/dantealighieri")
+			.set('token',token);
+
 		expect(response.statusCode).toBe(200);
 		expect(response.body.length).toBe(2);
 		done();
@@ -151,8 +165,16 @@ describe("Saved articles", () =>{
 
 	test('GET savedArticle/:username , Valid data, no saved articles', async done =>{
 		
-		const response = await request.get("/savedArticle/decamerone");
-		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "decamerone",
+          		password: "987654321",
+        	})).body.token;
+
+		const response = await request.get("/savedArticle/decamerone")
+			.set('token',token);
+
 		expect(response.statusCode).toBe(404);
 		done();
 	});
@@ -160,8 +182,16 @@ describe("Saved articles", () =>{
 
 	test('GET savedArticle/:username , wrong username', async done =>{
 		
-		const response = await request.get("/savedArticle/boccaccio");
-		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "decamerone",
+          		password: "987654321",
+        	})).body.token;
+
+		const response = await request.get("/savedArticle/boccaccio")
+			.set('token',token);
+
 		expect(response.statusCode).toBe(404);
 		done();
 	});
