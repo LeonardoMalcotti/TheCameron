@@ -52,8 +52,9 @@ app.use("/restricted/article",restriction);
 app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
 app.use("/article",tokenChecker);
 app.use("/tag/user/:username",tokenChecker);
-app.use("followers/follow",tokenChecker);
-app.use("followers/unfollow",tokenChecker);
+app.use("/followers/follow",tokenChecker);
+app.use("/followers/unfollow",tokenChecker);
+app.use("/reaction",tokenChecker);
 
 //-------------
 
