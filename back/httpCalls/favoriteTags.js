@@ -10,7 +10,7 @@ const User = require('../models/User');
 router.post("/:username",async(req,res)=>{
 
 	if(!req.body.tag){
-		res.status(400).({error:"Parametro tag non specificato"});
+		res.status(400).json({error:"Parametro tag non specificato"});
 		return;
 	}
 
