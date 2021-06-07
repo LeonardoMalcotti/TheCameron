@@ -321,7 +321,33 @@ paths:
           description: 'Error. User can not read.'
         '404':
           description: 'Error. Author or id or user does not exist.'
-          
+  /resticted/article/{id}/{author}:
+    get:
+      description: >-
+        Tells if the article is restricted or not and the user is not logged.
+      summary:  Tells if the article is restricted
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: author
+          schema:
+            type: string
+            required: true
+            description: 'Author of the article.'
+      responses:
+        '204':
+          description: 'User can read.'
+        '400':
+          description: 'Error. Missing params.'
+        '403':
+          description: 'Error. User can not read.'
+        '404':
+          description: 'Error. Author or id or user does not exist.'        
   /reaction:
     post:
       description: >-
