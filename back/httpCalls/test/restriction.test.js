@@ -1,13 +1,14 @@
 const supertest = require('supertest');
 const app = require('../.././app');
 const request = supertest(app);
-
+require("dotenv").config();
 
 describe("Restrizione articoli", () =>{
 
 	let spyFindUser, spyFindSub, spyFindArticle;
 
 	beforeAll( () =>{
+		
 		const User = require("../../models/User");
 		const Subscription = require("../../models/Subscription");
 		const Article = require("../../models/Article");
@@ -85,6 +86,7 @@ describe("Restrizione articoli", () =>{
 			return null;
 			
 		});
+
 	});
 
 	afterAll( async () =>{
@@ -100,7 +102,15 @@ describe("Restrizione articoli", () =>{
 	// valid user with valid sub, non restricted article 
 	test('GET /restricted/article/:id/:author/user/:username, access granted to subbed user', async done =>{
 		
-		const response = await request.get("/restricted/article/2/decamerone/user/dantealighieri");
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request.get("/restricted/article/2/decamerone/user/dantealighieri")
+			.set('token', token);
 		
 		expect(response.statusCode).toBe(204);
 		done();
@@ -110,7 +120,15 @@ describe("Restrizione articoli", () =>{
 	// valid user with valid sub, restricted article 
 	test('GET /restricted/article/:id/:author/user/:username, access granted to subbed user, restricted article', async done =>{
 		
-		const response = await request.get("/restricted/article/1/decamerone/user/dantealighieri");
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request.get("/restricted/article/1/decamerone/user/dantealighieri")
+			.set('token', token);
 		
 		expect(response.statusCode).toBe(204);
 		done();
@@ -120,7 +138,15 @@ describe("Restrizione articoli", () =>{
    	// valid user with no sub, non restricted article 
    	test('GET /restricted/article/:id/:author/user/:username, access granted to non restricted article', async done =>{
    		
-   		const response = await request.get("/restricted/article/2/decamerone/user/boccaccio");
+   		//recupera il token jwt del login per l'utente
+   		const token = (await request.post('/login')
+        	.send({
+          		username: "boccaccio",
+          		password: "987654321",
+        	})).body.token;
+
+   		const response = await request.get("/restricted/article/2/decamerone/user/boccaccio")
+   			.set('token', token);
    		
    		expect(response.statusCode).toBe(204);
    		done();
@@ -130,7 +156,15 @@ describe("Restrizione articoli", () =>{
 	// valid user with no sub, restricted article     
 	test('GET /restricted/article/:id/:author/user/:username, access denied to restricted article', async done =>{
 		
-		const response = await request.get("/restricted/article/1/decamerone/user/boccaccio");
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "boccaccio",
+          		password: "987654321",
+        	})).body.token;
+
+		const response = await request.get("/restricted/article/1/decamerone/user/boccaccio")
+			.set('token', token);
 		
 		expect(response.statusCode).toBe(403);
 		done();
@@ -140,7 +174,15 @@ describe("Restrizione articoli", () =>{
 	// non valid username 
 	test('GET /restricted/article/:id/:author/user/:username, non valid username', async done =>{
 		
-		const response = await request.get("/restricted/article/1/decamerone/user/manzoni");
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request.get("/restricted/article/1/decamerone/user/manzoni")
+			.set('token', token);
 		
 		expect(response.statusCode).toBe(404);
 		done();
@@ -150,12 +192,21 @@ describe("Restrizione articoli", () =>{
    	// non vaid article
    	test('GET /restricted/article/:id/:author/user/:username, non valid article', async done =>{
    		
-   		const response = await request.get("/restricted/article/2/boccaccio/user/dantealighieri");
+   		//recupera il token jwt del login per l'utente
+   		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+   		const response = await request.get("/restricted/article/2/boccaccio/user/dantealighieri")
+   			.set('token', token);
    		
    		expect(response.statusCode).toBe(404);
    		done();
    	});
 
+	//-------------------------------------------------------------
 
    	// access to article to non registered user
    	test('GET /restricted/article/:id/:author, non registered user non restricted article', async done =>{
