@@ -37,18 +37,31 @@
   </nav> 
     <div id="main_content_full">
       <div id="article">
-        <form id="formReadArticle">
-          <p name="txt_title" id="txt_title" class="title"></p>
-          <p name="txt_summary" id="txt_summary" class="summary"></p>
-          <p name="txt_text" id="txt_text" class="text"></p>
-          <p name="txt_date" id="txt_date" class="text"></p>
-          <span id="span_Tags">Tags:</span><p name="txt_tag" id="txt_tag"></p>
-          <button type="button" id="1" name="like" onclick="addReaction()">Like</button>
-          <button type="button" id="2" name="dislike" onclick="addReaction()">Dislike</button>
-          <button type="button" id="3" name="love" onclick="addReaction()">Love</button>
-          <button type="button" id="4" name="amazing" onclick="addReaction()">Amazing</button>
-          <span id="saveIfLogged" onload="checkSave()"></span>
-          </form>
+        <p name="txt_title" id="txt_title" class="title"></p>
+        <p name="txt_summary" id="txt_summary" class="summary"></p>
+        <p name="txt_text" id="txt_text" class="text"></p>
+        <p name="txt_date" id="txt_date" class="text"></p>
+        <span id="span_Tags">Tags:</span><p name="txt_tag" id="txt_tag"></p>
+        <div id="reactions">
+          <button class="reaction" type="button" id="btn_react_1" name="like" onclick="addReaction(1)">
+            <span>Like</span>
+            <span class="react_badge" id="react_badge_1">?</span>
+          </button>
+          <button class="reaction" type="button" id="btn_react_2" name="dislike" onclick="addReaction(2)">
+            <span>Dislike</span>
+            <span class="react_badge" id="react_badge_2">?</span>
+          </button>
+          <button class="reaction" type="button" id="btn_react_3" name="love" onclick="addReaction(3)">
+            <span>Love it</span>
+            <span class="react_badge" id="react_badge_3">?</span>
+          </button>
+          <button class="reaction" type="button" id="btn_react_4" name="amazing" onclick="addReaction(4)">
+            <span>Wow</span>
+            <span class="react_badge" id="react_badge_4">?</span>
+          </button>
+        </div>
+        <hr>
+        <button id="btn_saveArticle" onclick="saveArticle()" disabled>Salva questo articolo</button>
       </div>
       <div id="infoAutore"> 
           <p>Autore</p>

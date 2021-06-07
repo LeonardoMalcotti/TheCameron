@@ -22,11 +22,17 @@ Salva i nomi dei tag tra le info dell'articolo e chiama printArticle()
 [done]
 printArticle() stampa le info presenti in articolo, poi chiama getInfoAuthor()
 
-[to-do]
+[done]
 getInfoAuthor() ottiene info sull'autore dell'articolo e le stampa a video nell'<aside>
 
-[to-do]
+[da testare]
 handleReactions() si occupa ottenere le reazioni sull'articolo, visualizzarle, e gestire i pulsanti (dipende dall'utente)
+
+[da testare]
+addReaction() aggiunge una reazione
+
+[da testare]
+saveArticle() salva l'articolo tra i preferiti dell'utente
 */
 
 function loadArticle(){
@@ -39,6 +45,12 @@ function loadArticle(){
     document.getElementById("header_logged").hidden = false;
   }else{
     loggedUser = null;
+    // disablilito le reazioni
+    document.getElementById('btn_react_1').disabled=true;
+    document.getElementById('btn_react_2').disabled=true;
+    document.getElementById('btn_react_3').disabled=true;
+    document.getElementById('btn_react_4').disabled=true;
+    document.getElementById("btn_saveArticle").disabled = true;
   }
 
   var id = getUrlVars()["id"];
@@ -151,6 +163,8 @@ function printArticle(){
     document.getElementById("txt_tag").innerHTML = text_tags;
     // Procedo con l'ottenere info sull'autore dell'articolo
     getAuthorInfo(articolo.author);
+    // E lancio la funzione che si occupa delle reazioni
+    handleReactions();
   }else{
     document.getElementById("span_Tags").innerHTML = '<button onclick="document.location.href=\'subscription.html\';';
     // Blocco anche le info sull'autore
@@ -186,21 +200,22 @@ function getUrlVars() {
     return vars;
 }
 
-function addReaction(){
+function addReaction(num_reaction){
   var url="../reaction"
   fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify({
       id : getUrlVars()["id"],
-      author : document.getElementById("txt_summary").value,
+      author : getUrlVars()["author"],
       username : loggedUser.username,
-      reaction : event.target.id,
+      reaction : num_reaction,
     }),
   })
   .then(function(response) {
     if(response.ok){
-        
+      // Se è andata a buon fine ricarico le reazioni
+      handleReactions();
     }
     else {
       response.json().then(data => {
@@ -213,30 +228,49 @@ function addReaction(){
   return;
 }
 
-function handleReactions(id, author){
-   // Load the reactions to the article
-   url="../reaction/"+id+"/"+author;
-   fetch(url, {
-     method: 'GET',
-     headers: { 'Content-Type': 'application/json' },
-   })
-   .then((resp) => resp.json())
-   .then(function(data) {
-     /*var like=data.reaction.filter(tmp=> tmp.reaction=1);
-     var dislike=data.reaction.filter(tmp=> tmp.reaction=2);
-     var love=data.reaction.filter(tmp=> tmp.reaction=3);
-     var amazing=data.reaction.filter(tmp=> tmp.reaction=4);
-     document.getElementById('1').value =like.length ;
-     document.getElementById('2').value = dislike.length;
-     document.getElementById('3').value= love.length;
-     document.getElementById('4').value = amazing.length;*/
-   })
-   .catch( error => console.error(error) );
- 
-   if(loggedUser==null){
-     document.getElementById('1').disabled=true;
-     document.getElementById('2').disabled=true;
-     document.getElementById('3').disabled=true;
-     document.getElementById('4').disabled=true;
-   }
+function handleReactions(){
+  let id = getUrlVars()["id"];
+  let author = getUrlVars()["author"];
+  let num_reactions = [0,0,0,0];
+  
+  // Carica le reazioni
+  url="../reaction/"+id+"/"+author;
+  fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+  .then((resp) => resp.json())
+  .then(function(data) {
+  for(x in data){
+    num_reactions[parseInt(data.reaction,10)-1]++;
+  } 
+  document.getElementById('react_badge_1').innerHTML = ""+num_reactions[0];
+  document.getElementById('react_badge_2').innerHTML = ""+num_reactions[1];
+  document.getElementById('react_badge_3').innerHTML = ""+num_reactions[2];
+  document.getElementById('react_badge_4').innerHTML = ""+num_reactions[3];
+  })
+  .catch( error => console.error(error) );
+}
+
+function saveArticle(){
+  // Aggiungo l'articolo ai salvati
+  fetch("../savedArticle/",{
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id : getUrlVars()["id"],
+      author : getUrlVars()["author"],
+      username : loggedUser.username,
+      reaction : num_reaction,
+    }),
+  })
+  .then(function(data) {
+    if(!data.ok){
+      alert("An error occurred while saving the article, maybe you already saved it?");
+    }
+    else{
+      alert("Article saved!");
+    }
+  })
+  .catch( error => console.error(error) );
 }

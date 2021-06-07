@@ -312,3 +312,12 @@ aside{
   float: right;
   font-weight: 700;
 }
+.reaction .react_badge{
+  position: relative;
+  top: 0px;
+  bottom: -5px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: var(--color1);
+  color: var(--color3);
+}
