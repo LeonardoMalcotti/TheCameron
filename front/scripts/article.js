@@ -38,7 +38,7 @@ function loadArticle(){
     document.getElementById("header_unlogged").hidden = true;
     document.getElementById("header_logged").hidden = false;
   }else{
-    loggedUser = {};
+    loggedUser = null;
   }
 
   var id = getUrlVars()["id"];
@@ -77,6 +77,7 @@ function loadArticle(){
       authorized = true;
       // Articolo non ristretto
       loadTags();
+      
     }
 
   })
@@ -160,7 +161,21 @@ function printArticle(){
 }
 
 function getAuthorInfo(author){
-  return;
+  fetch("../user/"+author, {
+    method: 'GET',
+  })
+  .then((resp) => resp.json())
+  .then(function(data) {
+    if(data){
+      let htmlAuthor = "<p>Scritto da: <b>"+data.name+" "+data.surname+"</b></p>";
+      htmlAuthor += "<p>email: "+data.email+"</p>";
+      htmlAuthor += "<p>username: "+data.username+"</p>";
+      document.getElementById("infoAutore").innerHTML = htmlAuthor;
+    }
+    else{
+      alert("Somethong went wrong while getting the author's infos");
+    }
+  })
 }
 
 function getUrlVars() {
