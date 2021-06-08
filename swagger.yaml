@@ -201,7 +201,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Article'
         '404':
-          description: 'Error. Author does not exist.'
+          description: 'Error. Author or article does not exist.'
   /article/{id}/{author}:
     get:
       description: >-
