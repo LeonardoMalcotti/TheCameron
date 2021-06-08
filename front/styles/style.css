@@ -134,7 +134,7 @@ aside{
 #main_content_full .inline{
   margin-right: 30px;
 }
-#main_content_full button{
+#main_content_full button, button.reaction, #btn_saveArticle{
   background-color: var(--color4);
   color: var(--color0);
   border: none;
@@ -143,7 +143,7 @@ aside{
   font-size: 16px;
   padding: 15px 30px;
 }
-#main_content_full button:hover{
+#main_content_full button:hover, button.reaction:hover, #btn_saveArticle:hover{
   background-color: #a2927f;
   color: var(--color0);
 }
@@ -173,15 +173,18 @@ aside{
   padding: 5px 20px;
   border: none;
 }
-#adv_search_box button{
+#adv_search_box button,
+#div_follow button{
   background-color: var(--color3);
   color: var(--color0);
+  width: 100%;
   margin: auto;
   padding: 5px 10px 5px 0px;
   padding: 5px 20px;
   border: 1px solid var(--color3);
 }
-#adv_search_box button:hover{
+#adv_search_box button:hover,
+#div_follow button:hover{
   background-color: var(--color1);
   color: var(--color3);
   border: 1px solid var(--color3);
@@ -266,15 +269,6 @@ aside{
   font-size: 18px;
 }
 /*lettura articolo*/
-#infoAutore{
-  width: 30%;
-  float: right;
-  background-color: var(--color2);
-  margin: 5px;
-  padding: 15px 30px;
-  border-radius: 5px;
-  display: block;
-}
 #article{
   text-align: justify;
   background-color: var(--color3);
@@ -282,8 +276,6 @@ aside{
   margin: 5px;
   padding: 15px 30px;
   border-radius: 5px;
-  width: 60%;
-  display: inline-block;
 }
 #infoAutore{
   text-align: center;

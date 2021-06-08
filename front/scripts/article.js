@@ -18,13 +18,20 @@ loadTags() effettua un fetch per ottenere tutti i tag e verifica quali tag ha l'
 
 printArticle() stampa le info presenti in articolo, poi chiama getInfoAuthor()
 
-getInfoAuthor() ottiene info sull'autore dell'articolo e le stampa a video nell'<aside>
+getAuthorInfo() ottiene info sull'autore dell'articolo e le stampa a video nell'<aside>
 
 handleReactions() si occupa ottenere le reazioni sull'articolo, visualizzarle, e gestire i pulsanti (dipende dall'utente)
 
 addReaction() aggiunge una reazione
 
 saveArticle() salva l'articolo tra i preferiti dell'utente
+
+isFollowing() controlla se l'autore è tra gli utenti seguiti e decide che pulsante stampare
+  viene chiamata solo se user != author e se l'utente ha fatto il login
+
+follow() aggiunge l'autore ai seguiti
+
+unfollow() toglie l'autore dai seguiti
 */
 
 function loadArticle(){
@@ -179,6 +186,10 @@ function getAuthorInfo(author){
       let htmlAuthor = "<p>Scritto da: <b>"+data.name+" "+data.surname+"</b></p>";
       htmlAuthor += "<p>email: "+data.email+"</p>";
       htmlAuthor += "<p>username: "+data.username+"</p>";
+      // Se l'utente è loggato e l'autore non è l'utente verifico i follow
+      if(loggedUser.username && data.username != loggedUser.username){
+        isFollowing(data.username);
+      }
       document.getElementById("infoAutore").innerHTML = htmlAuthor;
     }
     else{
@@ -277,6 +288,83 @@ function saveArticle(){
     .catch( error => console.error(error) );
   }else{
     alert(user + " " + id + " " + author);
-  }
-  
+  } 
+}
+
+function isFollowing(target){
+  fetch("../followers/user/"+loggedUser.username+"/following", {
+    method: 'GET',
+    headers: { 
+      'Content-Type': 'application/json',
+      'token': loggedUser.token
+    },
+  })
+  .then((resp) => resp.json())
+  .then(async function(data){
+    let flwd = [];
+    // We obtain an object containing an array named users
+    if(data.users){
+      flwd = data.users;
+    }    
+    htmlBtn = "";
+    // Utente già seguito
+    if(flwd.includes(target)){
+      htmlBtn += "<button onclick='unfollow(\""+target+"\")'>Unfollow</button>";
+    }// Utente non seguito
+    else{
+      htmlBtn += "<button onclick='follow(\""+target+"\")'>Follow</button>";
+    }
+    document.getElementById('div_follow').innerHTML = htmlBtn;   
+  })
+  .catch( error => console.error(error) );
+  return;
+}
+function follow(target){
+  fetch("../followers/follow", {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'token': loggedUser.token
+    },
+    body: JSON.stringify({
+      user: loggedUser.username,
+      target: target
+    }),
+  })
+  .then(function(data){
+    if(!data.ok){
+      data.json().then(data => {
+          alert(data.error)
+          console.log(loggedUser.username+" "+target);
+      })
+    }else{
+      alert("Hai iniziato a seguire "+target);
+      isFollowing(target);
+    }
+  })
+  .catch( error => console.error(error) );
+}
+function unfollow(target){
+  fetch("../followers/unfollow", {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'token': loggedUser.token
+    },
+    body: JSON.stringify({
+      user : loggedUser.username,
+      target : target,
+    }),
+  })
+  .then(function(data){
+    if(!data.ok){
+      response.json().then(data => {
+          alert(data.error)
+      })
+    }else{
+      alert("Non segui più "+target);
+      isFollowing(target);
+    }
+  })
+  .catch( error => console.error(error) );
 }
