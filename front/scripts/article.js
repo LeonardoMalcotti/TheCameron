@@ -4,42 +4,36 @@ var articolo = {};
 var tagIds = [];
 var authorized;
 /*
-[done]
- loadArticles() effettua il fetch sull'articolo e lo salva, poi controlla la restrizione
-- Se è ristretto lancia checkRestriction()
-- se non è ristretto procede con loadTags()
-infine chiama handleReaction() 
+loadArticles() effettua il fetch sull'articolo e lo salva, poi controlla la restrizione
+  - Se è ristretto lancia checkRestriction()
+  - se non è ristretto procede con loadTags()
+  infine chiama handleReaction() 
 
-[done]
 checkRestriction() effettua il fetch per verificare se l'utente è autorizzato
-- se lo è procede con loadTags()
-- se non lo è cambia il testo dell'articolo e procede con printArticle() (salta i tag)
+  - se lo è procede con loadTags()
+  - se non lo è cambia il testo dell'articolo e procede con printArticle() (salta i tag)
 
-[done]
 loadTags() effettua un fetch per ottenere tutti i tag e verifica quali tag ha l'articolo (salvati in tagIds[])
-Salva i nomi dei tag tra le info dell'articolo e chiama printArticle()
+  Salva i nomi dei tag tra le info dell'articolo e chiama printArticle()
 
-[done]
 printArticle() stampa le info presenti in articolo, poi chiama getInfoAuthor()
 
-[done]
 getInfoAuthor() ottiene info sull'autore dell'articolo e le stampa a video nell'<aside>
 
-[da testare]
 handleReactions() si occupa ottenere le reazioni sull'articolo, visualizzarle, e gestire i pulsanti (dipende dall'utente)
 
-[da testare]
 addReaction() aggiunge una reazione
 
-[da testare]
 saveArticle() salva l'articolo tra i preferiti dell'utente
 */
 
 function loadArticle(){
   // Se l'utente è loggato cambiamo il navbar di conseguenza
-  if(sessionStorage.getItem('loggedUser')){
-    loggedUser.username = sessionStorage.getItem('loggedUser');
-    loggedUser.token = sessionStorage.getItem('token');
+  if(sessionStorage.getItem('loggedUser') && sessionStorage.getItem('token')){
+    loggedUser = {
+      username: sessionStorage.getItem('loggedUser'),
+      token: sessionStorage.getItem('token')
+    }
     document.getElementById("header_profile").innerHTML = sessionStorage.loggedUser + "'s profile";
     document.getElementById("header_unlogged").hidden = true;
     document.getElementById("header_logged").hidden = false;
@@ -50,6 +44,7 @@ function loadArticle(){
     document.getElementById('btn_react_2').disabled=true;
     document.getElementById('btn_react_3').disabled=true;
     document.getElementById('btn_react_4').disabled=true;
+    // disabilito il pulsante per salvare l'articolo
     document.getElementById("btn_saveArticle").disabled = true;
   }
 
@@ -206,10 +201,10 @@ function addReaction(num_reaction){
     method: 'POST',
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify({
+      reaction : num_reaction,
       id : getUrlVars()["id"],
       author : getUrlVars()["author"],
       username : loggedUser.username,
-      reaction : num_reaction,
     }),
   })
   .then(function(response) {
@@ -253,24 +248,35 @@ function handleReactions(){
 }
 
 function saveArticle(){
-  // Aggiungo l'articolo ai salvati
-  fetch("../savedArticle/",{
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      id : getUrlVars()["id"],
-      author : getUrlVars()["author"],
-      username : loggedUser.username,
-      reaction : num_reaction,
-    }),
-  })
-  .then(function(data) {
-    if(!data.ok){
-      alert("An error occurred while saving the article, maybe you already saved it?");
-    }
-    else{
-      alert("Article saved!");
-    }
-  })
-  .catch( error => console.error(error) );
+  let user, id, author;
+  user = sessionStorage.getItem("loggedUser");
+  id = getUrlVars()["id"];
+  author = getUrlVars()["author"];
+  if(user && id && author){
+    // Aggiungo l'articolo ai salvati
+    fetch("../savedArticle/",{
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username : user,
+        id : id,
+        author : author,
+      }),
+    })
+    .then(function(data) {
+      if(!data.ok){
+        alert("An error occurred while saving the article, maybe you already saved it?");
+        data.json().then(data => {
+          console.log(data.error);
+      })
+      }
+      else{
+        alert("Article saved!");
+      }
+    })
+    .catch( error => console.error(error) );
+  }else{
+    alert(user + " " + id + " " + author);
+  }
+  
 }

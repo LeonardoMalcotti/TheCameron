@@ -1,5 +1,3 @@
-
-
 function applyFilter() {
 	var author = document.getElementById("txt_author").value;
 	var strTags = document.getElementById("txt_tags").value;

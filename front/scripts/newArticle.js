@@ -1,9 +1,11 @@
 loggedUser = {};
 
 function setup_newArt(){
-  if(sessionStorage.getItem('loggedUser')){
-    loggedUser.username = sessionStorage.getItem('loggedUser');
-    loggedUser.token = sessionStorage.getItem('token');
+  if(sessionStorage.getItem('loggedUser') && sessionStorage.getItem('token')){
+    loggedUser = {
+      username: sessionStorage.getItem('loggedUser'),
+      token: sessionStorage.getItem('token')
+    };
     document.getElementById("header_profile").innerHTML = loggedUser.username + "'s profile";
   }else{
     loggedUser = {};
