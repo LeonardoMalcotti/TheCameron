@@ -47,7 +47,7 @@ describe('Article', () =>{
   	},];
 
   	beforeAll( () => {
-  		
+
 		const Article = require("../../models/Article");
 		const User = require("../../models/User");
 
@@ -126,7 +126,7 @@ describe('Article', () =>{
 
   	test('GET /article/:id/:author, missing article', async done =>{
 		
-		const response = await request.get('/user/3/Alessandro Manzoni');
+		const response = await request.get('/article/3/Alessandro Manzoni');
 		
 		expect(response.statusCode).toBe(404);
 		done();
