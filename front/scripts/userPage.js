@@ -98,7 +98,10 @@ function getFollowers(user){
 function getFollowing(user){
   fetch('followers/user/' + user + '/following/', {
       method: 'GET',
-      headers: {'Content-Type': 'application/json'}
+      headers: {
+        'Content-Type': 'application/json',
+        'token': loggedUser.token
+      }
   })
   .then((resp) => resp.json())
   .then(async function(data){
@@ -119,7 +122,10 @@ function getFollowing(user){
 function getSavedArticles(user){
   fetch("/savedArticle/"+user, {
     method: 'GET',
-    headers: {'Content-Type': 'application/json'}
+    headers: {
+      'Content-Type': 'application/json',
+      'token': loggedUser.token
+    }
   })
   .then((resp) => resp.json())
   .then(async function(data){
@@ -155,7 +161,10 @@ function printSavedArticles(){
 function getSavedTags(user){
   fetch("../tag/user/"+user, {
     method: 'GET',
-    headers: {'Content-Type': 'application/json'},
+    headers: {
+      'Content-Type': 'application/json',
+      'token': loggedUser.token
+    },
   })
     .then((resp) => resp.json())
     .then(function(data) {
@@ -179,7 +188,10 @@ function redirectSubscription(){
 function unfollow(user, target){
   fetch('followers/unfollow/', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'token': loggedUser.token
+      },
       body: JSON.stringify({
           user: user,
           target: target,

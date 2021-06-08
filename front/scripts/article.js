@@ -103,7 +103,8 @@ function loadArticle(){
 function checkSubscription(user, id, author){
   let url = "/restricted/article/"+id+"/"+author+"/user/"+user;
   fetch(url, {
-    method: 'GET'
+    method: 'GET',
+    headers: {'token': loggedUser.token }
   })
   .then(function(response) {
     if(response.ok){
@@ -210,7 +211,10 @@ function addReaction(num_reaction){
   var url="../reaction"
   fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json'},
+    headers: { 
+      'Content-Type': 'application/json',
+      'token': loggedUser.token
+    },
     body: JSON.stringify({
       reaction : num_reaction,
       id : getUrlVars()["id"],
@@ -243,7 +247,10 @@ function handleReactions(){
   url="../reaction/"+id+"/"+author;
   fetch(url, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'token': loggedUser.token
+    },
   })
   .then((resp) => resp.json())
   .then(function(data) {
@@ -267,7 +274,10 @@ function saveArticle(){
     // Aggiungo l'articolo ai salvati
     fetch("../savedArticle/",{
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'token': loggedUser.token
+      },
       body: JSON.stringify({
         username : user,
         id : id,

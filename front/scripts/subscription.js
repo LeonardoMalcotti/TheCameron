@@ -7,7 +7,10 @@ function loadSubscription(){
 
 		fetch(url, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'token': loggedUser.token
+        },
     })
     .then((resp) => resp.json())
     .then(function(data) {
@@ -32,7 +35,10 @@ function addSubscription(){
 
 		fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'token': loggedUser.token
+      },
 				body: JSON.stringify({
             username : username,
             dateSubscription : date,

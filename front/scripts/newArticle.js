@@ -58,6 +58,9 @@ function addTagRec(tags, i){
   }else{
     fetch("/tag/"+tags[i], {
       method:"POST",
+      headers:{
+        'token': loggedUser.tokens
+      }
     })
     .then(function(response) {
       if(!response.ok){
@@ -100,7 +103,10 @@ function sendArticle(tags){
   }
     fetch(url, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 
+        'Content-Type': 'application/json',
+        'token': loggedUser.token
+    },
 			body: JSON.stringify({
 				title : title,
 				summary : summary,
