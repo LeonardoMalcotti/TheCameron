@@ -13,46 +13,50 @@ function setup_newArt(){
   }
 }
 
-function newArticle(){
-  if(confirm("Sicuro di voler inviare?")){
-   
-    var strTags = document.getElementById("tag").value;
-    
-    strTags.replace(/%20/g, '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/\s/g, '');
-	  var tags = [];
-    tags = strTags.split(",");
-    tagIds = [];
-    // Se ci sono tag ne ottengo gli id 
-    if(tags && tags.length>0 && tags[0]!=""){
-      fetch("/tag/",{
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .then((resp) => resp.json())
-      .then(function (data) {
-        for(x in data){
-          if(tags.includes(data[x].name)){
-            tagIds.push(data[x].id);
-            tags.splice(tags.indexOf(data[x].name), 1);
-          } 
-        }
-        // Aggiungiamo al db i tag nuovi
-        addTagRec(tags,0);
+function newArticle(){   
+  var strTags = document.getElementById("tag").value;
+  
+  strTags.replace(/%20/g, '')
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/\n/g, "<br>")
+  .replace(/\s/g, '');
+  var tags = [];
+  tags = strTags.split(",");
+  tagIds = [];
+  // Se ci sono tag ne ottengo gli id 
+  if(tags && tags.length>0 && tags[0]!=""){
+    fetch("/tag/",{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((resp) => resp.json())
+    .then(async function (data) {
+      for(x in data){
+        if(tags.includes(data[x].name)){
+          tagIds.push(data[x].id);
+          tags.splice(tags.indexOf(data[x].name), 1);
+        } 
+      }
+      // Aggiungiamo al db i tag nuovi
+      await addTagRec(tags,0);
+      if(tags.length>0){
+        // Invoco nuovamente la funzione, così mi assicuro di aggiungere tutti i tag
+        newArticle();
+      }else{
         // lanciamo la funzione per la creazione dell'articolo 
         sendArticle(tagIds);
-        return;
-      })      
-      .catch( error => console.log(error));
-    }
+      }
+
+      return;
+    })      
+    .catch( error => console.log(error));
   }
 }
 
-function addTagRec(tags, i){
+async function addTagRec(tags, i){
   if(i>=tags.length){
     return;
   }else{

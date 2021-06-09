@@ -189,16 +189,18 @@ function getSavedTags(user){
         resp.json().then(data =>{
           if(data && data[0]){
             for(x in data){
-              htmlOut += (data[x].name + "<br>");
+              htmlOut += data[x].name; 
+              htmlOut += "<br>";
             }
           }else{
             htmlOut += "You haven't saved any tag";
           }
+          document.getElementById("savedTags").innerHTML = htmlOut;
         })
       }else{
         htmlOut += "You haven't saved any tag";
+        document.getElementById("savedTags").innerHTML = htmlOut;
       }
-      document.getElementById("savedTags").innerHTML = htmlOut;
     })
     .catch(error => console.error(error));
 }
