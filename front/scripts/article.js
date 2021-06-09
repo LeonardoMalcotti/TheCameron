@@ -197,6 +197,7 @@ function getAuthorInfo(author){
       alert("Somethong went wrong while getting the author's infos");
     }
   })
+  .catch( error => console.log(error));
 }
 
 function getUrlVars() {

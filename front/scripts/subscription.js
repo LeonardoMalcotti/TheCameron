@@ -3,8 +3,6 @@ function loadSubscription(){
     var url = '../user/' + username + '/subscription';    //Costruisco l'url con l'id
     console.log("username: " + username);
 
-    //Controllo token se presente
-
 		fetch(url, {
         method: 'GET',
         headers: { 

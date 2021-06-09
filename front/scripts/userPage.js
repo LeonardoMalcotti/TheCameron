@@ -65,10 +65,15 @@ function getMyArticles(user) {
   .then((resp) => resp.json())
   .then(function (data){
     let htmlOut = "Your articles:<hr>"; 
-    for(x in data){
-      htmlOut += data[x].title;
-      htmlOut += " <button onclick='viewArticle(" + data[x].id + ", \"" + user +"\")'>Read article</button><br>";
+    if(data[0]){
+      for(x in data){
+        htmlOut += data[x].title;
+        htmlOut += " <button onclick='viewArticle(" + data[x].id + ", \"" + user +"\")'>Read article</button><br>";
+      }
+    }else{
+      htmlOut += "You haven't written any article";
     }
+    
     document.getElementById("your_articles").innerHTML = htmlOut;
   })
   .catch((error) => console.log("error: "+error));
@@ -85,10 +90,14 @@ function getFollowers(user){
       // We obtain an object containing an array named users
       let flwd = data.users;     
       let htmlOut = "Followed by: <hr>"
-      for(i in flwd){
-        htmlOut += ( flwd[i] + "<br>");
+      if(flwd && flwd[0]){
+        for(i in flwd){
+          htmlOut += ( flwd[i] + "<br>");
+        }
+      }else{
+        htmlOut += "0 users are following you";
       }
-      htmlOut += "</ul>";
+      
       document.getElementById("followers").innerHTML = htmlOut;
   })
   .catch(error => console.log(error));
@@ -105,16 +114,18 @@ function getFollowing(user){
   })
   .then((resp) => resp.json())
   .then(async function(data){
-      // We obtain an object containing an array named users
-      let flwd = data.users;     
-      let htmlOut = "Following: <hr>"
+    // We obtain an object containing an array named users
+    let flwd = data.users;     
+    let htmlOut = "Following:<hr>";
+    if(flwd && flwd[0]){
       for(i in flwd){
         htmlOut += flwd[i];
-        htmlOut += " <button onclick='unfollow(" + user + ", " + flwd[i] +")'>Unfollow</button><br>";
+        htmlOut += " <button onclick='unfollow(\"" + user + "\", \"" + flwd[i] +"\")'>Unfollow</button><br>";
       }
-      
-      document.getElementById("following").innerHTML = htmlOut;
-      
+    }else{
+      htmlOut += "You aren't following any user";
+    }
+    document.getElementById("following").innerHTML = htmlOut;
   })
   .catch(error => console.log(error));
 }
@@ -129,9 +140,11 @@ function getSavedArticles(user){
   })
   .then((resp) => resp.json())
   .then(async function(data){
-    for(x in data){
-      savedArt.push({id: data[x].id, author: data[x].author});
-    } 
+    if(data[0]){
+      for(x in data){
+        savedArt.push({id: data[x].id, author: data[x].author});
+      } 
+    }
     printSavedArticles();
   })
   .catch(error => console.log(error));
@@ -139,7 +152,7 @@ function getSavedArticles(user){
 
 // Ci serve per ottenere il titolo degli articoli
 function printSavedArticles(){
-  document.getElementById("savedArticles").innerHTML = "Saved articles: <hr>";
+  let htmlOut = "Saved articles: <hr>";
   if(savedArt.length > 0 && savedArt[0].id && savedArt[0].author){
     for(i in savedArt){
       fetch("../article/"+savedArt[i].id + "/" +savedArt[i].author, {
@@ -148,14 +161,18 @@ function printSavedArticles(){
       })
       .then((resp) => resp.json())
       .then(function(data){
-        document.getElementById("savedArticles").innerHTML += data.title;
-        document.getElementById("savedArticles").innerHTML += "<button onclick='viewArticle(" + data.id + ", " + loggedUser.username +")'>Read article</button><br>";
+        htmlOut += data.title;
+        htmlOut += "<button onclick='viewArticle(" + data.id + ", " + loggedUser.username +")'>Read article</button><br>";
+        document.getElementById("savedArticles").innerHTML = htmlOut;
       })
       .catch(error => console.error(error));
     }
   }else{
     savedArt = [];
+    htmlOut += "You have 0 saved articles";
+    document.getElementById("savedArticles").innerHTML = htmlOut;
   }
+  
 }
 
 function getSavedTags(user){
@@ -166,11 +183,20 @@ function getSavedTags(user){
       'token': loggedUser.token
     },
   })
-    .then((resp) => resp.json())
-    .then(function(data) {
+    .then(function(resp) {
       let htmlOut = "Saved tags: <hr>";
-      for(x in data){
-        htmlOut += (data[x].name + "<br>");
+      if(resp.ok){
+        resp.json().then(data =>{
+          if(data && data[0]){
+            for(x in data){
+              htmlOut += (data[x].name + "<br>");
+            }
+          }else{
+            htmlOut += "You haven't saved any tag";
+          }
+        })
+      }else{
+        htmlOut += "You haven't saved any tag";
       }
       document.getElementById("savedTags").innerHTML = htmlOut;
     })
@@ -182,7 +208,7 @@ function viewArticle(id, author){
 }
 
 function redirectSubscription(){
-  window.location.href = "subscribe.html";
+  window.location.href = "subscription.html";
 }
 
 function unfollow(user, target){
