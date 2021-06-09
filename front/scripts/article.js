@@ -21,8 +21,12 @@ printArticle() stampa le info presenti in articolo, poi chiama getInfoAuthor()
 getAuthorInfo() ottiene info sull'autore dell'articolo e le stampa a video nell'<aside>
 
 handleReactions() si occupa ottenere le reazioni sull'articolo, visualizzarle, e gestire i pulsanti (dipende dall'utente)
+  Verifica se è già presente una reazione e cambia il pulsante di conseguenza
 
 addReaction() aggiunge una reazione
+
+changeReaction() viene invocata da addReaction() qualora sia già presente una reazione all'articolo da parte dell'utente
+  , la rimuove, e se è stata scelta una nuova reazione la crea
 
 saveArticle() salva l'articolo tra i preferiti dell'utente
 
@@ -254,14 +258,39 @@ function handleReactions(){
     },
   })
   .then((resp) => resp.json())
-  .then(function(data) {
-  for(x in data){
-    num_reactions[parseInt(data.reaction,10)-1]++;
-  } 
-  document.getElementById('react_badge_1').innerHTML = ""+num_reactions[0];
-  document.getElementById('react_badge_2').innerHTML = ""+num_reactions[1];
-  document.getElementById('react_badge_3').innerHTML = ""+num_reactions[2];
-  document.getElementById('react_badge_4').innerHTML = ""+num_reactions[3];
+  .then(function(data) { 
+    for(x in data){
+      let myReact = parseInt(data.reaction,10);
+      if(data[x].username == loggedUser.username){
+        // Se l'utente ha già una reazione cerco quale pulsante modificare
+        let button, span;
+        if(myReact==1){
+          button = document.getElementById('btn_react_1');
+          span = document.getElementById('span_react_1');
+        } else
+        if(myReact==2){
+          button = document.getElementById('btn_react_2');
+          span = document.getElementById('span_react_2');
+        } else
+        if(myReact==3){
+          button = document.getElementById('btn_react_3');
+          span = document.getElementById('span_react_3');
+        } else
+        if(myReact==4){
+          button = document.getElementById('btn_react_4');
+          span = document.getElementById('span_react_4');
+        }
+        // Modifico il testo e il parametro passato
+        span.innerHTML += " &otimes; ";
+        button.addEventListener('click', addReaction(0)); 
+        button.style.border = "3px solid var(--color2)"
+      }
+      num_reactions[myReact-1]++;
+    } 
+    document.getElementById('react_badge_1').innerHTML = ""+num_reactions[0];
+    document.getElementById('react_badge_2').innerHTML = ""+num_reactions[1];
+    document.getElementById('react_badge_3').innerHTML = ""+num_reactions[2];
+    document.getElementById('react_badge_4').innerHTML = ""+num_reactions[3];
   })
   .catch( error => console.error(error) );
 }
