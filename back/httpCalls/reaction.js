@@ -16,6 +16,11 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
+	if(req.body.reaction > 4 || req.body.reaction < 0){
+		res.status(400).json({error : "Valore della reaction errato"});
+		return;
+	}
+
 	if (!req.body.id){
 		res.status(400).json({ error: "ID dell'articolo non specificato" });
 		return;
@@ -43,8 +48,21 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
-  	if(await Reaction.findOne({'id':req.body.id, 'author':req.body.author, 'username':req.body.username})){
-		res.status(403).json({ error: "Reaction già presente" });
+	let react = await Reaction.findOne({'id':req.body.id, 'author':req.body.author, 'username':req.body.username});
+
+	//se la rezione esiste già allora modifica quella
+  	if(react){
+		
+		//se la rezione passata è 0 allora la elimina
+		if(req.body.reaction == 0){
+			await Reaction.deleteOne({'id':req.body.id, 'author':req.body.author, 'username':req.body.username});
+			res.status(204).send();
+			return;
+		}
+
+		react.reaction = req.body.reaction;
+		react.save();
+		res.status(200).send();
 		return;
 	}
 

@@ -206,31 +206,6 @@ describe('Reaction', () =>{
 	});
 
 
-	test('POST /reaction already exist', async done =>{
-
-		//recupera il token jwt del login per l'utente
-		const token = (await request.post('/login')
-        	.send({
-          		username: "dantealighieri",
-          		password: "12345678",
-        	})).body.token;
-
-		const response = await request
-			.post('/reaction')
-			.set('Accept', 'application/json')
-			.set('token',token)
-			.send({ 
-				id : 1,
-				author : "alessandromanzoni",
-				username : "dantealighieri",
-				reaction: 3
-			});
-		
-		expect(response.statusCode).toBe(403);
-		done();
-	});
-
-
 	test('POST /reaction valid data', async done =>{
 
 		//recupera il token jwt del login per l'utente
