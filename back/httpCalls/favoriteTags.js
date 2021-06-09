@@ -65,7 +65,7 @@ router.get("/:username",async (req,res)=>{
 	let favoriteTags = await FavoriteTags.findOne({'username':username});
 
   	//se l'utente non ha tag favoriti si ritorna errore
-  	if(favoriteTags.id.length<=0){
+  	if(!favoriteTags || favoriteTags.id.length<=0){
   		res.status(404).send({ error : "User non ha tag favoriti"});
   		return;
   	}
