@@ -4,37 +4,35 @@
   <head>
     <title>TheCameron</title>
     <script src="../scripts/subscription.js"></script>
-    <!--<link rel="stylesheet" href="style.css">-->
+    <link rel="stylesheet" href="../styles/style.css">
   </head>
-
-  <body onload="loadSubscription();">
-
-  	<form id="formSubscription">
-      <span id="abbonamento"> </span>
-      <!--<div id="paypal-button-container-P-7TE65063DA5269340MBOF2AA"></div>
-      <script src="https://www.paypal.com/sdk/js?client-id=ARSxcy21WDx7itoe-HhZfWi5sYlb_-0mLrn3WUtIHrHEW6oqRVBtE0Eh9LsyWtOejkGlL1vIIzb-GAPs&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-      <script>
-        paypal.Buttons({
-            style: {
-                shape: 'pill',
-                color: 'blue',
-                layout: 'horizontal',
-                label: 'subscribe'
-            },
-            createSubscription: function(data, actions) {
-              return actions.subscription.create({
-                /* Creates the subscription */
-                plan_id: 'P-7TE65063DA5269340MBOF2AA'
-              });
-            },
-            onApprove: function(data, actions) {
-              alert(data.subscriptionID); // You can add optional success message for the subscriber here
-              alert("Ti sei abbonato")
-              addSubscription();
-            }
-        }).render('#paypal-button-container-P-7TE65063DA5269340MBOF2AA'); // Renders the PayPal button
-      </script>-->
-      <button id="subscription" onclick="addSubscription()">Crea l'abbonamento</button>
-    </form>
+  <body onload="loadSubscription()">
+    <header>
+      <h1>TheCameron</h1>
+    </header>
+    <nav class="flex-container">
+      <a id="header_home" href="index.html">
+          Home
+      </a>
+      <div id="header_logged">
+          <a id="header_newArticle" class="active_page" href="newArticle.html"> 
+              Write article
+          </a>
+          <a id="header_profile"  href="user.html"> 
+              Your profile
+          </a>
+          <a id="header_logout" onclick="logOut()">
+              Log out
+          </a>
+      </div>
+    </nav> 
+    <div id="main_content_full">
+      <section id="centered_section">
+        <div id="abbonato">
+          <h2>Abbonati a TheCameron</h2>
+          <button onclick="window.location.href('subscription.html')">Abbonati</button>
+        </div>
+      </section>
+    </div>
   </body>
 </html>
