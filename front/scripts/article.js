@@ -154,7 +154,7 @@ function printArticle(){
   // Stampo le info "pubbliche" dell'articolo
   document.getElementById("txt_title").innerHTML = articolo.title;
   document.getElementById("txt_summary").innerHTML = articolo.summary;
-  document.getElementById("txt_date").innerHTML = articolo.date;
+  document.getElementById("txt_date").innerHTML = prettyTimeDate(articolo.date);
   // Avendone cambiato il testo in caso ristretto, stampo anche il testo
   document.getElementById("txt_text").innerHTML = articolo.text;
   // Controllo cosa devo stampare poi
@@ -407,4 +407,16 @@ function unfollow(target){
     }
   })
   .catch( error => console.error(error) );
+}
+
+function prettyTimeDate(datetime){
+  // Date
+  let date = datetime.split("T")[0];
+  let ymd = date.split("-");
+
+  // Time
+  let timez = datetime.split("T")[1];
+  let time = timez.split(".")[0];
+
+  return (time + " - " + ymd[2]+"/"+ymd[1]+"/"+ymd[0]);
 }

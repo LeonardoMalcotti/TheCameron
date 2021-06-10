@@ -122,7 +122,7 @@ function openArticle(index){
       })
       .then((resp) => resp.json())
       .then(function(data){
-          htmlOut += '<em> Scritto da ' + data.author + ' - il ' + data.date + '</em>';
+          htmlOut += '<em> Scritto da ' + data.author + ' - il ' + prettyTimeDate(data.date) + '</em>';
           htmlOut += '<h2>' + data.title + '</h2>';
           htmlOut += '<p>' + data.summary + '</p>';
           htmlOut += '<br><a href="readArticle.html?id=' + data.id + '&author=' + data.author + '">Leggi tutto</a>'; 
@@ -150,4 +150,16 @@ function logOut(){
     loggedUser = {username: "", token: ""};    
     // Ricarico la pagina
     location.reload();
+}
+
+function prettyTimeDate(datetime){
+  // Date
+  let date = datetime.split("T")[0];
+  let ymd = date.split("-");
+
+  // Time
+  let timez = datetime.split("T")[1];
+  let time = timez.split(".")[0];
+
+  return (time + " - " + ymd[2]+"/"+ymd[1]+"/"+ymd[0]);
 }
