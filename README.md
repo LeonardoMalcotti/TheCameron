@@ -5,13 +5,17 @@ The Cameron è una web app di condivisione e pubblicazione articoli. L'utente ha
 ### Componenti gruppo
 
 - Leonardo Javier Malcotti
--> leonardo.malcotti@studenti.unitn.it
+
+> leonardo.malcotti@studenti.unitn.it
 - Francesca Elipanni
--> francesca.elipanni@studenti.unitn.it
+
+> francesca.elipanni@studenti.unitn.it
 - Andrea Lovo
--> andrea.lovo@studenti.unitn.it
+
+> andrea.lovo@studenti.unitn.it
 - Filippo Fanton 
--> filippo.fanton@studenti.unitn.it
+
+> filippo.fanton@studenti.unitn.it
 
 ### Architettura
 
