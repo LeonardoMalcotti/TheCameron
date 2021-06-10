@@ -29,7 +29,7 @@ The Cameron è una web app di condivisione e pubblicazione articoli. L'utente ha
 
 * [Brainstorming](https://github.com/LeonardoMalcotti/TheCameron/wiki/Brainstorming)
 
-* [Wiki](https://github.com/LeonardoMalcotti/TheCameron/wiki/Thecameron)
+* [Wiki](https://github.com/LeonardoMalcotti/TheCameron/wiki/The-Cameron)
 
 * [Product Backlog](https://docs.google.com/spreadsheets/d/1nT33xRQweB162Ilxq3Zt4q_0o57-XM8jJG8rS4yGwcM/edit#gid=0)
 
