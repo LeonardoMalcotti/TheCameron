@@ -1,241 +1,280 @@
 const supertest = require('supertest');
 const app = require('../.././app');
 const request = supertest(app);
+require("dotenv").config();
 
 
-describe('reaction test', () =>{
+describe('Reaction', () =>{
 
-    let findArticleSpy;
-    let findUserSpy;
-    let findOneSpy;
-    let findSpy;
+	let findArticleSpy;
+	let findUserSpy;
+	let findOneSpy;
+	let findSpy;
 
-    beforeAll( () => {
-        const Article = require("../../models/Article");
-        const Reaction = require("../../models/Reaction");
-        const User = require("../../models/User");
-
-        findArticleSpy = jest.spyOn(Article, 'findOne').mockImplementation((criterias) =>{
-        	if(criterias.author == "DanteAlighieri" && criterias.id == 1){
-	            return {
-                id : 1,
-                author : "DanteAlighieri",
-                title : "La divina commedia",
-                summary : "inferno",
-                text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
-                tag: "poema epico, italiano"
-              };
-          }else if(criterias.author == "AlessandroManzoni" && criterias.id == 1){
-	            return {
-                id: 1,
-                author : "AlessandroManzoni",
-                title : "Promessi Sposi",
-                summary : "..",
-                text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-                tag: "romanzo, italiano"
-              };
-          }else{
-	        	return null;
-	        }
-        });
-
-        findUserSpy = jest.spyOn(User, 'findOne').mockImplementation((criterias) =>{
-        	if(criterias.username == "dantealighieri"){
-	            return {
-                name: "Dante",
-                surname: "Alighieri",
-                email: "dante.alighieri@loremipsum.it",
-                password: "12345678",
-                username: "dantealighieri"
-              };
-          }else if(criterias.username == "giovannipascoli"){
-            return {
-              name: "Giovanni",
-              surname: "Pascoli",
-              email: "giovanni.pascoli@loremipsum.it",
-              password: "12345678",
-              username: "giovannipascoli"
-            };
-          }else if(criterias.username == "alessandromanzoni"){
-            return {
-              name: "Alessandro",
-              surname: "Manzoni",
-              email: "alessandro.manzoni@loremipsum.it",
-              password: "12345678",
-              username: "alessandromanzoni"
-            };
-          }else{
-	        	return null;
-	        }
-        });
-
-        findOneSpy = jest.spyOn(Reaction, 'findOne').mockImplementation((criterias) =>{
-          if(criterias.username = "dantealighieri" && criterias.id == 1 && criterias.author == "DanteAlighieri"){
-            return {
-                     id : 1,
-                     author : "DanteAlighieri",
-                     username : "dantealighieri",
-                     reaction: 3
-	           };
-           }else {
-            return null;
-          }
-        });
-
-        findSpy = jest.spyOn(Reaction, 'find').mockImplementation((criterias) =>{
-          if(criterias.username == "dantealighieri"){
-            return [{
-                     id : 1,
-                     author : "DanteAlighieri",
-                     username : "dantealighieri",
-                     reaction: 3
-                   },{
-                     id : 1,
-                     author : "AlessandroManzoni",
-                     username : "dantealighieri",
-                     reaction: 3
-                  }
-	           ];
-           }else {
-            return null;
-          }
-        })
-    });
-
-    afterAll( async () =>{
-        findArticleSpy.mockRestore();
-        findUserSpy.mockRestore();
-        findOneSpy.mockRestore();
-        findSpy.mockRestore();
-    });
-
-    //--------------------------------------------------------------------------
-    test('POST /reaction missing data', async done =>{
-
-        const response = await request
-        .post('/reaction')
-        .set('Accept', 'application/json')
-        .send({author : "AlessandroManzoni",});
-        expect(response.statusCode).toBe(400);
-
-        done();
-    });
-
-    test('POST /reaction missing User or Article', async done =>{
-
-        const response = await request
-        .post('/reaction')
-        .set('Accept', 'application/json')
-        .send({ id : 1,
-              	author : "dantealighieri",
-              	username : "Username",
-              	reaction: 3
-              });
-        expect(response.statusCode).toBe(404);
-
-        done();
-    });
-
-    test('POST /reaction already exist', async done =>{
-
-        const response = await request
-        .post('/reaction')
-        .set('Accept', 'application/json')
-        .send({ id : 1,
-              	author : "DanteAlighieri",
-              	username : "dantealighieri",
-              	reaction: 3
-              });
-        expect(response.statusCode).toBe(403);
-
-        done();
-    });
-
-    test('POST /reaction valid data', async done =>{
-
-        const response = await request
-        .post('/reaction')
-        .set('Accept', 'application/json')
-        .send({ id : 1,
-              	author : "AlessandroManzoni",
-              	username : "giovannipascoli",
-              	reaction: 3
-              });
-        expect(response.statusCode).toBe(201);
-
-        done();
-    });
+	let users = [{
+		name: "Dante",
+		surname: "Alighieri",
+		email: "dante.alighieri@loremipsum.it",
+		password: "12345678",
+		username: "dantealighieri"
+	},{
+		name: "Giovanni",
+		surname: "Pascoli",
+		email: "giovanni.pascoli@loremipsum.it",
+		password: "12345678",
+		username: "giovannipascoli"
+	},{
+		name: "Alessandro",
+		surname: "Manzoni",
+		email: "alessandro.manzoni@loremipsum.it",
+		password: "12345678",
+		username: "alessandromanzoni"
+	}];
 
 
-      test('GET /reaction/:id/:author, success', async done =>{
-        const response = await request.get('/reaction/1/DanteAlighieri');
-        let reaction = {
-            id : 1,
-            author : "DanteAlighieri",
-          	username : "dantealighieri",
-          	reaction : 3
-        };
-        expect(response.statusCode).toBe(200);
-        expect(response.body.id).toBe(reaction.id);
-        expect(response.body.author).toBe(reaction.author);
-        expect(response.body.username).toBe(reaction.username);
-        expect(response.body.reaction).toBe(reaction.reaction);
-        done();
+	let articles = [{
+		id : 1,
+		author : "dantealighieri",
+		title : "La divina commedia",
+		summary : "inferno",
+		text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
+		tags: "poema epico, italiano"
+	},{
+		id: 1,
+		author : "alessandromanzoni",
+		title : "Promessi Sposi",
+		summary : "..",
+		text : "Quel ramo del lago di Como, che volge a mezzogiorno",
+		tags: "romanzo, italiano"
+	},{
+		id: 2,
+		author : "alessandromanzoni",
+		title : "Promessi Sposi, la rivincita",
+		summary : "..",
+		text : "Quel ramo del lago di Como, che volge a mezzogiorno",
+		tags: "romanzo, italiano"
+	}];
 
 
-      });
-
-      test('GET /reaction/:id/:author, missing article', async done =>{
-        const response = await request.get('/reaction/3/AlessandroManzoni');
-
-        expect(response.statusCode).toBe(404);
-        done();
-      });
-
-      test('GET /reaction/:id/:author, missing reaction', async done =>{
-        const response = await request.get('/reaction/1/AlessandroManzoni');
-
-        expect(response.statusCode).toBe(404);
-        done();
-      });
-
-      test('GET /reaction/:username, success', async done =>{
-        const response = await request.get('/reaction/dantealighieri');
-        let reaction = [{
-                 id : 1,
-                 author : "DanteAlighieri",
-                 username : "dantealighieri",
-                 reaction: 3
-               },{
-                 id : 1,
-                 author : "AlessandroManzoni",
-                 username : "dantealighieri",
-                 reaction: 3
-              }
-         ];
-        expect(response.statusCode).toBe(200);
-        expect(response.body.id).toBe(reaction.id);
-        expect(response.body.author).toBe(reaction.author);
-        expect(response.body.username).toBe(reaction.username);
-        expect(response.body.reaction).toBe(reaction.reaction);
-        done();
+	let reactions = [{
+		id : 1,
+		author : "dantealighieri",
+		username : "alessandromanzoni",
+		reaction: 3
+	},{
+		id : 1,
+		author : "dantealighieri",
+		username : "giovannipascoli",
+		reaction: 3
+	},{
+		id : 1,
+		author : "alessandromanzoni",
+		username : "dantealighieri",
+		reaction: 3
+	}];
 
 
-      });
+	beforeAll( () => {
 
-      test('GET /reaction/:username, missing user', async done =>{
-        const response = await request.get('/reaction/Username');
+		const Article = require("../../models/Article");
+		const Reaction = require("../../models/Reaction");
+		const User = require("../../models/User");
 
-        expect(response.statusCode).toBe(404);
-        done();
-      });
+		findArticleSpy = jest.spyOn(Article, 'findOne').mockImplementation((criterias) =>{
 
-      test('GET /reaction/:username, missing reaction', async done =>{
-        const response = await request.get('/reaction/alessandromanzoni');
+			if(criterias.author == "dantealighieri" && criterias.id == 1){
+				return articles[0];
+			} 
 
-        expect(response.statusCode).toBe(404);
-        done();
-      });
+			if (criterias.author == "alessandromanzoni" && criterias.id == 1){
+				return articles[1];
+			}
 
+			if (criterias.author == "alessandromanzoni" && criterias.id == 2){
+				return articles[2];
+			}
+
+			return null;
+		});
+
+		findUserSpy = jest.spyOn(User, 'findOne').mockImplementation((criterias) =>{
+			
+			if(criterias.username == "dantealighieri"){
+				return users[0];
+			}
+
+			if (criterias.username == "giovannipascoli"){
+				return users[1];
+			}
+
+			if (criterias.username == "alessandromanzoni"){
+				return users[2];
+			}
+			
+			return null;
+		});
+
+		findOneSpy = jest.spyOn(Reaction, 'findOne').mockImplementation((criterias) =>{
+			
+			if(criterias.username = "alessandromanzoni" && criterias.id == 1 && criterias.author == "dantealighieri"){
+				return reactions[0];
+			}
+			
+			if(criterias.username = "giovannipascoli" && criterias.id == 1 && criterias.author == "dantealighieri"){
+				return reactions[1];
+			}
+
+			if(criterias.username = "dantealighieri" && criterias.id == 1 && criterias.author == "alessandromanzoni"){
+				return reactions[2];
+			}
+			
+			return null;
+		});
+
+		findSpy = jest.spyOn(Reaction, 'find').mockImplementation((criterias) =>{
+			
+			if(criterias.author == "dantealighieri" && criterias.id == 1){
+				return [reactions[0],reactions[1]];
+			}
+
+			if(criterias.author == "alessandromanzoni" && criterias.id == 1){
+				return [reactions[2]];
+			}
+
+			if(criterias.username == "dantealighieri"){
+				return [reactions[3]];
+			}
+			
+			return [];
+			
+		});
+
+	});
+
+	afterAll( async () =>{
+		findArticleSpy.mockRestore();
+		findUserSpy.mockRestore();
+		findOneSpy.mockRestore();
+		findSpy.mockRestore();
+	});
+
+	//--------------------------------------------------------------------------
+
+
+	test('POST /reaction missing data', async done =>{
+
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request
+			.post('/reaction')
+			.set('Accept', 'application/json')
+			.set('token',token)
+			.send({author : "alessandromanzoni",});
+		
+		expect(response.statusCode).toBe(400);
+		done();
+	});
+
+
+	test('POST /reaction missing User or Article', async done =>{
+
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "dantealighieri",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request
+			.post('/reaction')
+			.set('Accept', 'application/json')
+			.set('token',token)
+			.send({ 
+				id : 1,
+				author : "dantealighieri",
+				username : "Username",
+				reaction: 3
+			});
+
+		expect(response.statusCode).toBe(404);
+		done();
+	});
+
+
+	test('POST /reaction valid data', async done =>{
+
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "giovannipascoli",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request
+			.post('/reaction')
+			.set('Accept', 'application/json')
+			.set('token',token)
+			.send({ 
+				id : 2,
+				author : "alessandromanzoni",
+				username : "giovannipascoli",
+				reaction: 3
+			});
+
+		expect(response.statusCode).toBe(201);
+		done();
+	});
+
+
+	test('GET /reaction/:id/:author, success', async done =>{
+		
+		const response = await request.get('/reaction/1/dantealighieri');
+
+		expect(response.statusCode).toBe(200);
+		expect(response.body.length).toBe(2);
+		done();
+	});
+
+
+	test('GET /reaction/:id/:author, missing article', async done =>{
+		
+		const response = await request.get('/reaction/3/alessandromanzoni');
+
+		expect(response.statusCode).toBe(404);
+		done();
+	});
+
+
+	test('GET /reaction/:id/:author, missing reaction', async done =>{
+		
+		const response = await request.get('/reaction/2/alessandromanzoni');
+
+		expect(response.statusCode).toBe(404);
+		done();
+	});
+
+
+	test('GET /reaction/:username, success', async done =>{
+		
+		const response = await request.get('/reaction/dantealighieri');
+
+		expect(response.statusCode).toBe(200);
+		expect(response.body.length).toBe(1);
+		done();
+	});
+
+
+	test('GET /reaction/:username, missing user', async done =>{
+		
+		const response = await request.get('/reaction/Username');
+
+		expect(response.statusCode).toBe(404);
+		done();
+	});
 
 });

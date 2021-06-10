@@ -1,232 +1,205 @@
 const supertest = require('supertest');
 const app = require('../.././app');
 const request = supertest(app);
-
-	
-describe('article test', () =>{
-  let findOneSpy;
-  let findSpy;
-  let filterSpy;
-  beforeAll( () => {
-    const Article = require("../../models/Article");
-    findSpy = jest.spyOn(Article, 'find').mockImplementation((criterias) =>{
-      let pool =[
-        {
-          id: "1", 
-          author: "tizio", 
-          title: "Breve guida su come testare con jest", 
-          summary: "summ",
-          date: "1"
-        },
-        {
-          id: "2", 
-          author: "tizio", 
-          title: "Come utilizzare jEsT e spyOn al meglio", 
-          summary: "summ",
-          date: "2"
-        },
-        {
-          id: "3", 
-          author: "tizio", 
-          title: "Altro titolo con jestAll'interno", 
-          summary: "summ",
-          date: "3"
-        },
-        {
-          id: "4", 
-          author: "tizio", 
-          title: "Altro titolo", 
-          summary: "summ",
-          date: "4"
-        },
-        {
-          id: "5", 
-          author: "tizio", 
-          title: "Qualcos'altro a caso", 
-          summary: "summ",
-          date: "5"
-        },
-      ];
-      return pool;
-    });
-    
-    findOneSpy = jest.spyOn(Article, 'findOne').mockImplementation((criterias) =>{
-      if(criterias.author == "Dante Alighieri" && criterias.id == 1){
-        return {
-          id : 1,
-          author : "Dante Alighieri",
-          title : "La divina commedia",
-          summary : "inferno",
-          text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
-          tag: "poema epico, italiano"
-        };
-      }else if(criterias.author == "Alessandro Manzoni" && criterias.id == 1){
-        return {
-            id: 1,
-            author : "Alessandro Manzoni",
-            title : "Promessi Sposi",
-            summary : "..",
-            text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-            tag: "romanzo, italiano"
-        };
-      }else {
-        return null;
-      }
-    });
-
-    /* 
-      findSpy = jest.spyOn(Article, 'find').mockImplementation(() =>{
-      return [{
-        id : 1,
-        author : "Dante Alighieri",
-        title : "La divina commedia",
-        summary : "inferno",
-        text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
-        tag: "poema epico, italiano"
-      },{
-        id: 1,
-        author : "Alessandro Manzoni",
-        title : "Promessi Sposi",
-        summary : "..",
-        text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-        tag: "romanzo, italiano"
-      }];
-    });*/
-
-    filterSpy = jest.fn(Article, 'filter').mockImplementation((criterias) =>{
-      if(criterias.author == "Alessandro Manzoni"){
-        return [{
-          id: 1,
-          author : "Alessandro Manzoni",
-          title : "Promessi Sposi",
-          summary : "..",
-          text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-          tag: "romanzo, italiano"
-        }];
-      }
-    });
-  });
-
-  afterAll( async () =>{
-      findSpy.mockRestore();
-      filterSpy.mockRestore();
-      findOneSpy.mockRestore();
-  });
-
-    //--------------------------------------------------------------------------
+require("dotenv").config();
 
 
-  test('GET /article/search/:title, title = jest', async done =>{
-    const response = await request
-      .get('/article/search/jest')
-      .set('Accept', 'application/json')
-      .send();
+describe('Article', () =>{
+  	
+  	let findOneSpy;
+  	let findSpy;
+  	let findOneUser;
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBe(3);
-    done();
-  });
+  	let tags = [{
+  		id : 1,
+  		name : "italiano"
+  	},{
+  		id : 2,
+  		name : "romanzo"
+  	},{
+  		id : 3,
+  		name : "poema epico"
+  	},];
 
-  test('GET /article/search/:title, title = altro/Altro', async done =>{
-    const response1 = await request
-      .get('/article/search/altro')
-      .set('Accept', 'application/json')
-      .send();
+  	let articles = [{
+  		id: 1,
+  		author : "Alessandro Manzoni",
+  		title : "Promessi Sposi",
+  		summary : "..",
+  		text : "Quel ramo del lago di Como, che volge a mezzogiorno",
+  		tags: [1,2]
+  	},{
+  		id: 1, 
+  		author: "tizio", 
+  		title: "Breve guida su come testare con jest", 
+  		summary: "summ",
+  		text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  		date: "1",
+  		tags: []
+  	},{
+  		id: 2, 
+  		author: "tizio", 
+  		title: "Altro titolo con jestAll'interno", 
+  		summary: "summ",
+  		text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  		date: "3",
+  		tags: [2]
+  	},];
 
-    const response2 = await request
-      .get('/article/search/Altro')
-      .set('Accept', 'application/json')
-      .send();
+  	beforeAll( () => {
 
-    expect(response1.statusCode).toBe(200);
-    expect(response2.statusCode).toBe(200);
-    expect(response1.body.length).toBe(response2.body.length);
-    done();
-  });
+		const Article = require("../../models/Article");
+		const User = require("../../models/User");
 
-  test('GET /article/search/:title, title = ', async done =>{
-    const response = await request
-      .get('/article/search/ ')
-      .set('Accept', 'application/json')
-      .send();
+		findOneSpy = jest.spyOn(Article, 'findOne').mockImplementation((criterias) =>{
+			
+			if(criterias.author == "tizio" && criterias.id == 1){
+				return articles[1];
+			} 
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBe(5);
-    done();
-  });
+			if (criterias.author == "Alessandro Manzoni" && criterias.id == 1){
+				return articles[2];
+			} 
+
+			return null;
+
+		});
+
+		findSpy = jest.spyOn(Article, 'find').mockImplementation((criterias) => {
+			return articles;
+		});
+
+		findOneUser = jest.spyOn(User, 'findOne').mockImplementation((criterias) =>{
+
+			if(criterias.username == "tizio"){
+  				
+  				return {
+  					name: "tizio",
+  					surname: "tizio",
+  					email: "tizio.tizio@loremipsum.it",
+  					password: "12345678",
+  					username: "tizio"
+  				};
+
+  			}
+
+  			if(criterias.username == "Alessandro Manzoni"){
+
+  				return {
+  					name: "Alessandro",
+  					surname: "Manzoni",
+  					email: "ale.manz@loremipsum.it",
+  					password: "12345678",
+  					username: "Alessandro Manzoni"
+  				};
+
+  			}
+
+  			return null;
+		});
+ 	});
+
+  	afterAll( async () =>{
+	  	findOneUser.mockRestore();
+	  	findOneSpy.mockRestore();
+	  	findOneSpy.mockRestore();
+  	});
 
 
+  	// Tests --------------------------------------------------------------------------
 
 
-
-  test('GET /Article/:id/:author, success', async done =>{
-    const response = await request.get('/article/1/Dante Alighieri');
-    let article = {
-        id : 1,
-        author : "Dante Alighieri",
-        title : "La divina commedia",
-        summary : "inferno",
-        text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
-        tag: "poema epico, italiano"
-    }
-    expect(response.statusCode).toBe(200);
-    expect(response.body.id).toBe(article.id);
-    expect(response.body.author).toBe(article.author);
-    expect(response.body.title).toBe(article.title);
-    expect(response.body.summary).toBe(article.summary);
-    expect(response.body.text).toBe(article.text);
-    expect(response.body.tag).toBe(article.tag);
-    done();
-  });
-
-  test('GET /Article/:id/:author, missing article', async done =>{
-    const response = await request.get('/user/3/Alessandro Manzoni');
-    expect(response.statusCode).toBe(404);
-    done();
-  });
-
-  test('POST /article missing data', async done =>{
-    const response = await request
-      .post('/article')
-      .set('Accept', 'application/json')
-      .send({
-        author : "Alessandro Manzoni",
-        title : "Promessi Sposi",
-      });
-    expect(response.statusCode).toBe(400);
-    done();
-    });
-
-  test('POST /article valid data', async done =>{
-    const response = await request
-      .post('/article')
-      .set('Accept', 'application/json')
-      .send({
-              author : "Alessandro Manzoni",
-              title : "Promessi Sposi",
-              summary : "..",
-              text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-              tag: "romanzo, italiano"
-      });
-
-    expect(response.statusCode).toBe(201);
-
-    done();
-  });
-
-  test('GET /article/:author, success', async done =>{
-    const response = await request.get('/article/tizio');
+  	test('GET /article/:id/:author, success', async done =>{
+		
+		const response = await request.get('/article/1/tizio');
 
 		expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBe(5);
-    done();
-  });
+		expect(response.body.id).toBe(articles[1].id);
+		expect(response.body.author).toBe(articles[1].author);
+		expect(response.body.title).toBe(articles[1].title);
+		expect(response.body.summary).toBe(articles[1].summary);
+		expect(response.body.text).toBe(articles[1].text);
+		expect(response.body.tags).toStrictEqual(articles[1].tags);
+		done();
+  	});
 
-  test('GET /article/:author, missing article', async done =>{
-    const response = await request.get('/article/Username');
-    expect(response.statusCode).toBe(404);
-    done();
-  });
+
+  	test('GET /article/:id/:author, missing article', async done =>{
+		
+		const response = await request.get('/article/3/Alessandro Manzoni');
+		
+		expect(response.statusCode).toBe(404);
+		done();
+  	});
+
+
+  	test('POST /article missing data', async done =>{
+		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "Alessandro Manzoni",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request
+	  		.post('/article')
+	  		.set('Accept', 'application/json')
+	  		.set('token',token)
+	  		.send({
+				author : "Alessandro Manzoni",
+				title : "Promessi Sposi",
+	  		});
+	
+		expect(response.statusCode).toBe(400);
+		done();
+	});
+
+  
+	test('POST /article valid data', async done =>{
+		
+		//recupera il token jwt del login per l'utente
+		const token = (await request.post('/login')
+        	.send({
+          		username: "Alessandro Manzoni",
+          		password: "12345678",
+        	})).body.token;
+
+		const response = await request
+	  		.post('/article')
+	  		.set('Accept', 'application/json')
+	  		.set('token',token)
+	  		.send({
+				author : "Alessandro Manzoni",
+				title : "Promessi Sposi",
+				summary : "..",
+				text : "Quel ramo del lago di Como, che volge a mezzogiorno",
+				tags: [1,2],
+				restricted: 'false',
+			});
+	
+		expect(response.statusCode).toBe(201);
+		done();
+  	});
+  
+
+  	test('GET /article/:author, success', async done =>{
+		
+		const response = await request.get('/article/tizio');
+
+		expect(response.statusCode).toBe(200);
+		expect(response.body.length).toBe(2);
+		done();
+  	});
+
+
+  	test('GET /article/:author, missing article', async done =>{
+		
+		const response = await request.get('/article/Username');
+
+		expect(response.statusCode).toBe(404);
+		done();
+  	});
 });
 
 

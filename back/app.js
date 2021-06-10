@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,44 +15,55 @@ const reactions = require("./httpCalls/reaction.js");
 const savedArticle = require("./httpCalls/savedArticles.js");
 const follow = require("./httpCalls/follow.js");
 const tags = require("./httpCalls/tag.js");
-const restriction = require("./httpCalls/restriction.js")
+const restriction = require("./httpCalls/restriction.js");
+const filters = require("./httpCalls/filter.js");
+const search = require("./httpCalls/search.js");
+const favoriteTags = require("./httpCalls/favoriteTags.js");
 
 //-------------
-
-
 
 //punto d'entrata
 app.use('/',express.static('front/pages'));
 app.use(express.static('front'));
 
-//collegamenti alle chiamate http
-
-app.use("/article", article);
-app.use("/followers", follow);
-app.use("/user", users);
-app.use("/article", articles);
-app.use("/reaction", reactions);
-app.use("/savedArticle", savedArticle);
-app.use("/tag", tags);
-
 //autenticazione
 app.use("/login", login);
 
-//chiamate http che hanno bisogno di un token
-/*
-app.use("qualcosa",tokenChecker);
-*/
-//app.use("/followers", tokenChecker);
 
-//è da aggiungere una chiamata a restriction per gli utenti non registrati
-//app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
-app.use("/restricted/article/:id/:author/user/:username",restriction);
+//collegamenti alle chiamate http
+
+app.use("/followers", follow);
+app.use("/user", users);
+
+//assolutamente da mettere in questo ordine
+app.use("/article/filters", filters);
+app.use("/article/search", search);
+app.use("/article", articles);
+
+app.use("/reaction", reactions);
+app.use("/savedArticle", savedArticle);
+
+app.use("/tag/user",favoriteTags);
+app.use("/tag", tags);
+
+app.use("/restricted/article",restriction);
+
+//chiamate protette da token checker
+app.use("/restricted/article/:id/:author/user/:username",tokenChecker);
+app.use("/article",tokenChecker);
+app.use("/tag/user/:username",tokenChecker);
+app.use("/followers/follow",tokenChecker);
+app.use("/followers/unfollow",tokenChecker);
+app.use("/reaction",tokenChecker);
+app.use("/savedArticle",tokenChecker);
+app.use("/savedArticle/:username",tokenChecker);
+app.use("/user/:username/subscription",tokenChecker);
 
 //-------------
 
 app.use((req, res) => {
     res.status(404);
-    res.json({ error: 'Not found' });
+    res.json({ error: 'Call not found' });
 });
 
 module.exports = app;
