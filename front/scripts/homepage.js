@@ -69,6 +69,7 @@ function printArticles(n){
 function loadArticles(){
   // Pulisco la lista
   document.getElementById("article_list").innerHTML = "";
+  articoli = [];
   var text = document.getElementById("txt_search").value;
   if(text && text != ""){
       // Sanificazione dell'input
