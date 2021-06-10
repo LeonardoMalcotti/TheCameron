@@ -7,7 +7,7 @@ const User = require('../models/User');
 
 router.post("/",async (req,res)=>{
 	if (!req.body.reaction){
-		res.status(400).json({ error: "Reazione all'articolo non specificata" });
+		res.status(400).json({ error: "Reazione dell'articolo non specificata" });
 		return;
 	}
 
@@ -22,18 +22,18 @@ router.post("/",async (req,res)=>{
 	}
 
 	if (!req.body.username){
-		res.status(400).json({ error: "Username dell'utente non specificato" });
+		res.status(400).json({ error: "Username della reaction non specificato" });
 		return;
 	}
 
   let user = await User.findOne({'username':req.body.username});
   if(!user){
-		res.status(404).json({ error: "Utente inesistente"});
+		res.status(404).send();
 		return;
 	}
   let article = await Article.findOne({'id':req.body.id, 'author':req.body.author});
   if(!article){
-		res.status(404).json({ error: "Articolo inesistente"});
+		res.status(404).send();
 		return;
 	}
   let react = await Reaction.findOne({'id':req.body.id, 'author':req.body.author, 'username':req.body.username});

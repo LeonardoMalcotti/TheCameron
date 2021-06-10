@@ -58,7 +58,7 @@ describe('article test', () =>{
           title : "La divina commedia",
           summary : "inferno",
           text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
-          tags: "poema epico, italiano"
+          tag: "poema epico, italiano"
         };
       }else if(criterias.author == "Alessandro Manzoni" && criterias.id == 1){
         return {
@@ -67,12 +67,31 @@ describe('article test', () =>{
             title : "Promessi Sposi",
             summary : "..",
             text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-            tags: "romanzo, italiano"
+            tag: "romanzo, italiano"
         };
       }else {
         return null;
       }
     });
+
+    /* 
+      findSpy = jest.spyOn(Article, 'find').mockImplementation(() =>{
+      return [{
+        id : 1,
+        author : "Dante Alighieri",
+        title : "La divina commedia",
+        summary : "inferno",
+        text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
+        tag: "poema epico, italiano"
+      },{
+        id: 1,
+        author : "Alessandro Manzoni",
+        title : "Promessi Sposi",
+        summary : "..",
+        text : "Quel ramo del lago di Como, che volge a mezzogiorno",
+        tag: "romanzo, italiano"
+      }];
+    });*/
 
     filterSpy = jest.fn(Article, 'filter').mockImplementation((criterias) =>{
       if(criterias.author == "Alessandro Manzoni"){
@@ -82,7 +101,7 @@ describe('article test', () =>{
           title : "Promessi Sposi",
           summary : "..",
           text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-          tags: "romanzo, italiano"
+          tag: "romanzo, italiano"
         }];
       }
     });
@@ -94,7 +113,7 @@ describe('article test', () =>{
       findOneSpy.mockRestore();
   });
 
-  // Tests --------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
 
   test('GET /article/search/:title, title = jest', async done =>{
@@ -136,6 +155,10 @@ describe('article test', () =>{
     done();
   });
 
+
+
+
+
   test('GET /Article/:id/:author, success', async done =>{
     const response = await request.get('/article/1/Dante Alighieri');
     let article = {
@@ -144,7 +167,7 @@ describe('article test', () =>{
         title : "La divina commedia",
         summary : "inferno",
         text : "Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura",
-        tags: "poema epico, italiano"
+        tag: "poema epico, italiano"
     }
     expect(response.statusCode).toBe(200);
     expect(response.body.id).toBe(article.id);
@@ -152,7 +175,7 @@ describe('article test', () =>{
     expect(response.body.title).toBe(article.title);
     expect(response.body.summary).toBe(article.summary);
     expect(response.body.text).toBe(article.text);
-    expect(response.body.tags).toBe(article.tags);
+    expect(response.body.tag).toBe(article.tag);
     done();
   });
 
@@ -174,23 +197,23 @@ describe('article test', () =>{
     done();
     });
 
-  
-    test('POST /article valid data', async done =>{
+  test('POST /article valid data', async done =>{
     const response = await request
       .post('/article')
       .set('Accept', 'application/json')
       .send({
-        author : "Alessandro Manzoni",
-        title : "Promessi Sposi",
-        summary : "..",
-        text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-        tags: ["romanzo, italiano"],
-        restricted: 'false',
-        });
+              author : "Alessandro Manzoni",
+              title : "Promessi Sposi",
+              summary : "..",
+              text : "Quel ramo del lago di Como, che volge a mezzogiorno",
+              tag: "romanzo, italiano"
+      });
+
     expect(response.statusCode).toBe(201);
+
     done();
   });
-  
+
   test('GET /article/:author, success', async done =>{
     const response = await request.get('/article/tizio');
 

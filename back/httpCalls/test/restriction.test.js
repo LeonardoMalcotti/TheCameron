@@ -37,27 +37,27 @@ describe("article restriction test", () =>{
 
         spyFindArticle = jest.spyOn(Article, 'findOne').mockImplementation((criterias) =>{ 
             if(criterias.id == "1" && criterias.author == "decamerone"){
-                return {
+                return [{
                     id: "1",  
                     author: "decamerone", 
                     title: "Lorem Ipsum", 
                     summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
                     text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
                     date: "01012020",
-                    tags: ["mock"],
+                    tags: "mock",
                     restricted : true,
-                };
+                }];
             }else if(criterias.id=="2" && criterias.author == "decamerone"){
-                return {
+                return [{
                     id: "2",  
                     author: "decamerone", 
                     title: "Lorem Ipsum2", 
                     summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
                     text: "lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.",
                     date: "01012020",
-                    tags: ["mock","mock2"],
+                    tags: "mock",
                     restricted : false,
-                };
+                }];
             }
             else
             {

@@ -101,6 +101,7 @@ describe('user test', () =>{
             username: "dantealighieri"
         }
         expect(response.statusCode).toBe(200);
+        expect(response).toBe(user);
         done();
       });
       
@@ -109,12 +110,11 @@ describe('user test', () =>{
         const response = await request
             .post('/user')
             .set('Accept', 'application/json')
-            .send({
-                name: "Dante",  
-                surname: "Alighieri", 
-                email: "dante.alighieri@email.it", 
-                password: "12345678", 
-                username: "mock_dantealighieri"});
+            .send({name: "Filippo",  
+                   surname: "Fanton", 
+                   email: "filippo.fanton@studenti.unitn.it", 
+                   password: "12345678", 
+                   username: "filippofanton"});
 
         expect(response.statusCode).toBe(201);
         done();
