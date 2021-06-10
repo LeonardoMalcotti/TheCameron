@@ -108,7 +108,7 @@ router.post("/",async (req,res)=>{
 		summary : req.body.summary,
 		text : req.body.text,
 		date : mm + '/' + dd + '/' + yyyy,
-		tag: req.body.tag.split(","),
+		tag: req.body.tag,
 		restricted : req.body.restricted
 	});
 
