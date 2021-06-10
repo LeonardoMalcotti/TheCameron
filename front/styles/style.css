@@ -93,6 +93,7 @@ aside{
     width: 30%;
     padding:15px;
     margin: 15px;
+    margin-top: 30px;
     float: right;
     background-color: var(--color2);
 }
