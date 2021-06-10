@@ -162,7 +162,7 @@ function printSavedArticles(){
       .then((resp) => resp.json())
       .then(function(data){
         htmlOut += data.title;
-        htmlOut += "<button onclick='viewArticle(" + data.id + ", " + loggedUser.username +")'>Read article</button><br>";
+        htmlOut += "<button onclick='viewArticle(" + data.id + ", \"" + data.author +"\")'>Read article</button><br>";
         document.getElementById("savedArticles").innerHTML = htmlOut;
       })
       .catch(error => console.error(error));

@@ -18,6 +18,7 @@ function applyFilter() {
 		url += ('author='+author);
 	}
 	if(tags && tags.length>0 && tags[0]!=""){
+    let matched = 0;
     fetch("/tag/",{
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -27,7 +28,12 @@ function applyFilter() {
       for(x in data){
         if(tags.includes(data[x].name)){
           url += ('&tags[]='+data[x].id);
-        } 
+          matched++;
+        }
+      }
+      // Se l'utente ha cercato almeno un tag  insesistente aggiungiamo la ricerca per un tag il cui id non esiste
+      if(matched < tags.length){
+        url += ('&tags[]=0');
       }
       advancedSearch(url);
       return;
