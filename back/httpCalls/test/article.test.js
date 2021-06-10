@@ -3,7 +3,7 @@ const app = require('../.././app');
 const request = supertest(app);
 require("dotenv").config();
 
-	
+
 describe('Article', () =>{
   	
   	let findOneSpy;

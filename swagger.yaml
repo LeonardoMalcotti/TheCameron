@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: '2.1'
+  version: '3.0'
   title: "TheCameron"
   description: TheCameron is an API that allows users to view and write articles, post reactions to them and follow and stay updated on the various authors
   license:
@@ -14,7 +14,7 @@ paths:
     post:
       description: >-
         Create a new user.
-      summary: New user.
+      summary: New user
       requestBody:
         content:
           application/json:
@@ -29,14 +29,13 @@ paths:
                 type: string
                 description: Link to the new user.
         '400':
-          description: "Error."
+          description: "Error. Miss params."
         '403':
-          description: "Username already exist."
-          
+          description: "Error. Username already exist."
   /user/{username}:
     get:
       description: >-
-        Get the info about user.
+        Get info about user.
       summary: Get specific user
       parameters:
         - in: path
@@ -54,31 +53,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-        '400':
-          description: 'Error.'
         '404':
-          description: 'Error. The username does not exist.'     
-          
+          description: 'Error. Username does not exist.'     
   /user/{username}/subscription:
     post:
       description: >-
         Create a new subscription.
-      summary: New subscription.
+      summary: New subscription
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              required: 
-                - username
-                - dateSubscription
-              properties:
-                username:
-                  type: string
-                  description: "Username"
-                dateSubscription:
-                  type: date
-                  description: "Date Subscription"
+              $ref: '#/components/schemas/Subscription'
       responses:
         '201':
           description: "Created new subscription."
@@ -88,9 +74,9 @@ paths:
                 type: string
                 description: Link to the new subscription.
         '400':
-          description: "Error."
-        '403':
-          description: "Error. Subscription already exist."
+          description: "Error. Miss params."
+        '404':
+          description: "Error. Subscription already exist or user does not exist."
     get:
       description: >-
         Get the date of subscription about user.
@@ -111,14 +97,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Subscription'
-        '400':
-          description: 'Error.'
         '404':
-          description: 'Error. The username does not exist.'
+          description: 'Error. Username or subscription does not exist.'
     delete:
       description: >-
-        Delete subscription.
-      summary: Delete date payment
+        Delete date payment and subscription..
+      summary: Delete subscription
       parameters:
         - in: path
           name: username
@@ -128,21 +112,23 @@ paths:
             description: 'Username of the user.'
       responses:
         '204':
-          description: 'Delete payment.'
+          description: 'Delete subscription.'
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Subscription'
+        '400':
+          description: 'Error. Username or subscription does not exist.'
         '404':
-          description: 'Error. The username does not exist.'
+          description: 'Error. Failure.'
           
   /login:
     post:
       description: >-
         Autenticate an user.
-      summary: Authentication.
+      summary: Authentication
       requestBody:
         content:
           application/json:
@@ -154,31 +140,31 @@ paths:
               properties:
                 username:
                   type: string
-                  description: "Username"
+                  description: "Username."
                 email:
                   type: string
-                  description: "password"
+                  description: "Password."
       responses:
         '200':
-          description: "success"
+          description: "Success."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginRes'
         '403':
-          description: "failure"
+          description: "Error. Failed."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginRes'
         '400':
-          description: "missing parameter"
+          description: "Error. Miss params."
           
   /article:
     post:
       description: >-
-        Create an article.
-      summary: Creation of an article.
+        Create new article.
+      summary: Creation an article
       requestBody:
         content:
           application/json:
@@ -186,19 +172,13 @@ paths:
               $ref: '#/components/schemas/Article'
       responses:
         '200':
-          description: "success"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Article'
-        '403':
-          description: "failure"
+          description: "Success."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Article'
         '400':
-          description: "missing parameter"
+          description: "Error. Missing parameter."
   /article/{author}:
     get:
       description: >-
@@ -213,21 +193,19 @@ paths:
             description: 'Author of articles.'
       responses:
         '200':
-          description: 'Articles.'
+          description: 'List of articles.'
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Article'
-        '400':
-          description: 'Error.'
         '404':
-          description: 'Error. The author does not exist.'
+          description: 'Error. Author or article does not exist.'
   /article/{id}/{author}:
     get:
       description: >-
-        Get article.
+        Get specific article.
       summary: Get article
       parameters:
         - in: path
@@ -251,41 +229,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Article'
-        '400':
-          description: 'Error.'
         '404':
           description: 'Error. The author or id does not exist.'
-  /restricted/article/{id}/{author}/user/{username}/:
-    get:
-      description: >-
-        Tells if the article is restricted or not.
-      summary:  Tells if the article is restricted
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: number
-            required: true
-            description: 'ID of the article.'
-        - in: path
-          name: author
-          schema:
-            type: string
-            required: true
-            description: 'Author of the article.'
-        - in: path
-          name: username
-          schema:
-            type: object
-            required: true
-            description: 'Username of the user.'
-      responses:
-        '204':
-          description: 'user can read'
-        '403':
-          description: 'user cannot read'
-        '404':
-          description: 'Error. The author or id or user does not exist.'
+          
+  
   /article/filters?:
     get:
       description: >-
@@ -296,9 +243,9 @@ paths:
           name: filters
           schema:
             type: array
-            description: "The filters to applay"
+            description: "The filters to applay."
       responses:
-        '200':
+        '201':
           description: 'Filtered articles.'
           content:
             application/json:
@@ -340,32 +287,90 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ArticleInfo'
+                  
+  /resticted/article/{id}/{author}/user/{username}:
+    get:
+      description: >-
+        Tells if the article is restricted or not.
+      summary:  Tells if the article is restricted
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: author
+          schema:
+            type: string
+            required: true
+            description: 'Author of the article.'
+        - in: path
+          name: username
+          schema:
+            type: object
+            required: true
+            description: 'Username of the user.'
+      responses:
+        '204':
+          description: 'User can read.'
+        '400':
+          description: 'Error. Missing params.'
+        '403':
+          description: 'Error. User can not read.'
+        '404':
+          description: 'Error. Author or id or user does not exist.'
+  /resticted/article/{id}/{author}:
+    get:
+      description: >-
+        Tells if the article is restricted or not and the user is not logged.
+      summary:  Tells if the article is restricted
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            required: true
+            description: 'ID of the article.'
+        - in: path
+          name: author
+          schema:
+            type: string
+            required: true
+            description: 'Author of the article.'
+      responses:
+        '204':
+          description: 'User can read.'
+        '400':
+          description: 'Error. Missing params.'
+        '403':
+          description: 'Error. User can not read.'
+        '404':
+          description: 'Error. Author or id or user does not exist.'        
   /reaction:
     post:
       description: >-
         Create a reaction.
-      summary: Creation of a reaction.
+      summary: Creation of a reaction
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Reaction'
       responses:
-        '200':
+        '201':
           description: "success"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Reaction'
-        '403':
-          description: "failure"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Reaction'
         '400':
-          description: "missing parameter"
-    
+          description: "Error. Missing parameter."
+        '403':
+          description: "Error. Reaction already exist."
+        '404':
+          description: 'Error. Article or user does not exist.'
   /reaction/{id}/{author}:
     get:
       description: >-
@@ -393,10 +398,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reaction'
+        '404':
+          description: 'Error. Article or user does not exist.'
   /reaction/{username}:
     get:
       description: >-
-        Get reaction about an user .
+        Get reaction about an user.
       summary: Filter reaction
       parameters:
         - in: path
@@ -404,7 +411,7 @@ paths:
           schema:
             type: string
             required: true
-            description: 'user of the reaction.'
+            description: 'User of the reaction.'
       responses:
         '200':
           description: 'Filtered reaction.'
@@ -414,11 +421,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reaction'
+        '404':
+          description: 'Error. Reaction or user does not exist.'
+                  
   /followers/follow:
     post:
       description: >-
         Add a target in the follow list of a user.
-      summary: Follow a user.
+      summary: Follow a user
       requestBody:
         content:
           application/json:
@@ -426,14 +436,16 @@ paths:
               $ref: '#/components/schemas/FollowReq'
       responses:
         '204':
-          description: "success"
+          description: "Success."
         '400':
-          description: "missing parameter"
+          description: "Error. Missing parameter or user equal to target."
+        '404':
+          description: "Error. Invalid user or target."
   /followers/unfollow:
     post:
       description: >-
         Remove a target in the follow list of a user.
-      summary: Unfollow a user.
+      summary: Unfollow a user
       requestBody:
         content:
           application/json:
@@ -441,73 +453,71 @@ paths:
               $ref: '#/components/schemas/FollowReq'
       responses:
         '204':
-          description: "success"
+          description: "Success."
         '400':
-          description: "missing parameter or user equal to target"
+          description: "Error. Missing parameter or user equal to target."
         '404':
-          description: "invalid user or target"
+          description: "Error. Invalid user or target."
   /followers/user/{username}/following:
     get:
       description: >-
-        Get the list of followed users [targets] by the given one
-      summary: Get Following.
+        Get the list of followed users [targets] by the given one.
+      summary: Get Following
       parameters:
         - in: path
           name: username
           schema:
             type: object
-            description: "username of the user"
+            description: "Username of the user."
       responses:
         '200':
-          description: 'Followed users'
+          description: 'Followed users.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FollowRes'
         '404':
-          description: 'no results'
+          description: 'Error. No results.'
   /followers/user/{username}/followers:
     get:
       description: >-
-        Get the list of users that follow the given one
-      summary: Get followers.
+        Get the list of users that follow the given one.
+      summary: Get followers
       parameters:
         - in: path
           name: username
           schema:
             type: object
-            description: "username of the user"
+            description: "username of the user."
       responses:
         '200':
-          description: 'Following users'
+          description: 'Following users.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FollowRes'
         '404':
-          description: 'no results'
-  /tag/user/{username}:
-    post:
+          description: 'Error. No results.'
+     
+  /tag:     
+    get:
       description: >-
-        Insert new tag in the preference
-      summary: Choose tag.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FavoriteTag'
+        Get the list of the tag.
+      summary: Get list of tag
       responses:
-        '201':
-          description: "success"
-        '400':
-          description: "missing parameter or user "
+        '200':
+          description: 'All of tag.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
         '404':
-          description: "invalid user"
+          description: 'Error. No results.'
   /tag/{name}:
     post:
       description: >-
-        Insert new general tag
-      summary: Insert tag.
+        Insert new general tag.
+      summary: Insert tag
       requestBody:
         content:
           application/json:
@@ -515,85 +525,146 @@ paths:
               $ref: '#/components/schemas/Tag'
       responses:
         '201':
-          description: "success"
+          description: "Success"
         '400':
-          description: "missing parameter "
+          description: "Error. Missing parameter."
         '404':
-          description: "invalid parameter"
-  /tag/user/{username}:
+          description: "Error. Invalid parameter."
     get:
       description: >-
-        Get the list of the preference tag of users
-      summary: Get preference tag of user.
+        Get information about a tag.
+      summary: Get tag
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: object
+            description: "Name of the tag."
+      responses:
+        '200':
+          description: 'ID of the tag.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '404':
+          description: 'Error. No results.'
+  /tag/id/{id}:
+    get:
+      description: >-
+        Get information about a tag.
+      summary: Get tag
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: object
+            description: "ID of the tag."
+      responses:
+        '200':
+          description: 'Name of the tag.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '404':
+          description: 'Error. No results.'
+  /tag/user/{username}:
+    post:
+      description: >-
+        Insert new tag in the preference.
+      summary: Choose tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteTag'
+      responses:
+        '201':
+          description: "Success."
+        '400':
+          description: "Error. Missing parameter or user."
+        '404':
+          description: "Error. Invalid user."
+    get:
+      description: >-
+        Get the list of the preference tag of users.
+      summary: Get preference tag of user
       parameters:
         - in: path
           name: username
           schema:
             type: object
-            description: "username of the user"
+            description: "Username of the user."
       responses:
         '200':
-          description: 'Tag'
+          description: 'Tag.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FavoriteTag'
         '404':
-          description: 'no results'
-  /tag/{name}:
+          description: 'Error. No results.'
+          
+  /savedArticle:
+    delete:
+      description: >-
+        Remove saved article.
+      summary: Remove saved article
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedArticle'
+      responses:
+        '204':
+          description: 'Remove article.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '400':
+          description: 'Error. Article does not exist.'
+        '404':
+          description: 'Error. Failure.'
+  /savedArticle/{username}:
+    post:
+      description: >-
+        Save new article.
+      summary: Save article
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedArticle'
+      responses:
+        '201':
+          description: "Success"
+        '400':
+          description: "Error. Missing parameter."
+        '404':
+          description: "Error. Invalid parameter."
     get:
       description: >-
-        Get information about a tag
-      summary: Get tag.
+        Get list of article.
+      summary: Get list of favorite articles
       parameters:
         - in: path
-          name: name
+          name: username
           schema:
             type: object
-            description: "name of the tag"
+            description: "Name of the user."
       responses:
         '200':
-          description: 'ID of the tag'
+          description: 'List of article.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tag'
+                $ref: '#/components/schemas/SavedArticle'
         '404':
-          description: 'no results'
-  /tag/id/{id}:
-    get:
-      description: >-
-        Get information about a tag
-      summary: Get tag.
-      parameters:
-        - in: path
-          name: name
-          schema:
-            type: object
-            description: "id of the tag"
-      responses:
-        '200':
-          description: 'name of the tag'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '404':
-          description: 'no results'
-  /tag:
-    get:
-      description: >-
-        Get the list of the tag
-      summary: Get list of tag.
-      responses:
-        '200':
-          description: 'All of tag'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '404':
-          description: 'no results'
+          description: 'Error. No results.'
 components:
   schemas:
     User:
@@ -607,19 +678,19 @@ components:
       properties:
         name:
           type: string
-          description: "Name of the user"
+          description: "Name of the user."
         surname:
           type: string
-          description: "Surname of the user"
+          description: "Surname of the user."
         username:
           type: string
-          description: "Username, user key"
+          description: "Username, user key."
         email:
           type: string
-          description: "The email of the user"
+          description: "The email of the user."
         password:
           type: string
-          description: "Password fof authentication"
+          description: "Password for authentication."
     LoginRes:
       type: object
       required:
@@ -629,18 +700,22 @@ components:
       properties:
         success:
           type: boolean
-          description: "tell if the authentication was successful"
+          description: "Tell if the authentication was successful."
         message:
           type: string
-          descritpion: "description of the success or failure"
+          descritpion: "Description of the success or failure."
         token:
           type: string
-          description: "the token for the session"
+          description: "The token for the session."
     Subscription:
       type: object
       required:
+        - username
         - dateSubsription
       properties:
+        username:
+          type: string
+          description: 'Username of subscriber.'
         dateSubscription:
           type: date
           description: 'Date start the subscription.'
@@ -675,11 +750,11 @@ components:
           type: date
           description: 'Date when the article was written.'
         tag:
-          type: [string]
-          description: 'Tag to describe the article'
+          type: [number]
+          description: 'Tag to describe the article.'
         restricted:
           type: boolean
-          description: 'Tells if the article can be read by everyone or not'
+          description: 'Tells if the article can be read by everyone or not.'
     ArticleInfo:
       type: object
       required:
@@ -689,10 +764,13 @@ components:
       properties:
         id:
           type: number
+          description: 'Id of the article.'
         author:
           type: string
+          description: 'Author of the article.'
         title:
           type: string
+          description: 'Title of the article.'
     Reaction:
       type: object
       required:
@@ -703,12 +781,16 @@ components:
       properties:
         username:
           type: string
+          description: 'Username insert rection.'
         author:
           type: string
+          description: 'Author of the article.'
         id:
           type: number
+          description: 'Id of the article.'
         reaction:
           type: number
+          description: 'Reaction from user to article.'
     FollowReq:
       type: object
       required:
@@ -717,10 +799,10 @@ components:
       properties:
         user:
           type: string
-          description: 'username of the user that follows'
+          description: 'Username of the user that follows.'
         target:
           type: string
-          description: 'username of the target user'
+          description: 'Username of the target user.'
     FollowRes:
       type: object
       required:
@@ -728,7 +810,7 @@ components:
       properties:
         users:
           type: [string]
-          description: 'list of requested usernames'
+          description: 'List of requested usernames.'
     FavoriteTag:
       type: object
       required:
@@ -737,19 +819,31 @@ components:
       properties:
         user:
           type: string
-          description: 'username of the user'
-        target:
+          description: 'Username of the user.'
+        id:
           type: [number]
-          description: 'id of the tag'
+          description: 'ID of the tag.'
     Tag:
       type: object
       required:
         - id
         - name
       properties:
-        user:
+        id:
           type: number
-          description: 'id of the tag'
-        target:
+          description: 'ID of the tag.'
+        name:
           type: string
-          description: 'name of the tag'
+          description: 'Name of the tag.'
+    SavedArticle:
+      type: object
+      required:
+        - username
+        - articles
+      properties:
+        username:
+          type: string
+          description: 'Username.'
+        articles:
+          type: [ {Number; String} ]
+          description: 'List of saved article.'
