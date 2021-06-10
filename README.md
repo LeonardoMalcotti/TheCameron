@@ -4,15 +4,12 @@ The Cameron è una web app di condivisione e pubblicazione articoli. L'utente ha
 
 Componenti gruppo
 
-Leonardo Javier Malcotti , leonardo.malcotti@studenti.unitn.it
+- Leonardo Javier Malcotti , leonardo.malcotti@studenti.unitn.it
+- Francesca Elipanni , francesca.elipanni@studenti.unitn.it
+- Andrea Lovo , andrea.lovo@studenti.unitn.it
+- Filippo Fanton , filippo.fanton@studenti.unitn.it
 
-Francesca Elipanni , francesca.elipanni@studenti.unitn.it
-
-Andrea Lovo , andrea.lovo@studenti.unitn.it
-
-Filippo Fanton , filippo.fanton@studenti.unitn.it
-
-Link apiary
+Link apiary : https://app.apiary.io/thecameron/editor
 
 Link heroku
 
