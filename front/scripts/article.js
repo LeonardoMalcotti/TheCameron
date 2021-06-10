@@ -189,9 +189,9 @@ function getAuthorInfo(author){
   .then((resp) => resp.json())
   .then(function(data) {
     if(data){
-      let htmlAuthor = "<p>Scritto da: <b>"+data.name+" "+data.surname+"</b></p>";
-      htmlAuthor += "<p>email: "+data.email+"</p>";
-      htmlAuthor += "<p>username: "+data.username+"</p>";
+      let htmlAuthor = "<p>Written by: <b>"+data.name+" "+data.surname+"</b></p>";
+      htmlAuthor += "<p>Email: "+data.email+"</p>";
+      htmlAuthor += "<p>Username: "+data.username+"</p>";
       // Se l'utente è loggato e l'autore non è l'utente verifico i follow
       if(sessionStorage.getItem("loggedUser") && loggedUser.username && data.username != loggedUser.username){
         isFollowing(data.username);
