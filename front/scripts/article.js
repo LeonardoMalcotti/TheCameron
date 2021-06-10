@@ -3,8 +3,9 @@ var loggedUser= {username:null, token:null};
 var articolo = {};
 var tagIds = [];
 var authorized;
+var userReaction = 0;
 /*
-loadArticles() effettua il fetch sull'articolo e lo salva, poi controlla la restrizione
+loadArticle() effettua il fetch sull'articolo e lo salva, poi controlla la restrizione
   - Se è ristretto lancia checkRestriction()
   - se non è ristretto procede con loadTags()
   infine chiama handleReaction() 
@@ -136,7 +137,7 @@ function loadTags(){
     .then(function(data){
         for(i in data){
           // Se fa parte dei tag dell'articolo (abbiamo gi id) aggiungiamo il nome alla lista dei tag in articolo
-          if(tagIds.includes(data[i].id.toString())){
+          if(tagIds.includes(data[i].id)){
             articolo.tags.push(data[i].name);
           }
         }
@@ -192,7 +193,7 @@ function getAuthorInfo(author){
       htmlAuthor += "<p>email: "+data.email+"</p>";
       htmlAuthor += "<p>username: "+data.username+"</p>";
       // Se l'utente è loggato e l'autore non è l'utente verifico i follow
-      if(loggedUser.username && data.username != loggedUser.username){
+      if(sessionStorage.getItem("loggedUser") && loggedUser.username && data.username != loggedUser.username){
         isFollowing(data.username);
       }
       document.getElementById("infoAutore").innerHTML = htmlAuthor;
@@ -213,6 +214,10 @@ function getUrlVars() {
 }
 
 function addReaction(num_reaction){
+  if(num_reaction == userReaction){
+    num_reaction = 0;
+  }
+  userReaction = num_reaction;
   var url="../reaction"
   fetch(url, {
     method: 'POST',
@@ -254,38 +259,46 @@ function handleReactions(){
     method: 'GET',
     headers: { 
       'Content-Type': 'application/json',
-      'token': loggedUser.token
     },
   })
   .then((resp) => resp.json())
   .then(function(data) { 
     for(x in data){
-      let myReact = parseInt(data.reaction,10);
-      if(data[x].username == loggedUser.username){
+      if(parseInt(data[x].reaction,10) != 0){
+        // Aumento il numero di reazioni
+        num_reactions[parseInt(data[x].reaction,10)-1]++;
+      }
+      
+
+      let myReact = parseInt(data[x].reaction,10);
+      if(sessionStorage.getItem("loggedUser") && data[x].username == loggedUser.username){
+        // Mi salvo la reazione
+        userReaction = data[x].reaction;
         // Se l'utente ha già una reazione cerco quale pulsante modificare
-        let button, span;
+        // Resetto il colore dei bordi
+        document.getElementById('btn_react_1').style.border = "none";
+        document.getElementById('btn_react_2').style.border = "none";
+        document.getElementById('btn_react_3').style.border = "none";
+        document.getElementById('btn_react_4').style.border = "none";
+        // E lo setto di conseguenza
         if(myReact==1){
-          button = document.getElementById('btn_react_1');
-          span = document.getElementById('span_react_1');
+          //document.getElementById('btn_react_1').addEventListener('click', addReaction(0));
+          document.getElementById('btn_react_1').style.border = "3px solid var(--color2)";
         } else
         if(myReact==2){
-          button = document.getElementById('btn_react_2');
-          span = document.getElementById('span_react_2');
+          //document.getElementById('btn_react_2').addEventListener('click', addReaction(0)); 
+          document.getElementById('btn_react_2').style.border = "3px solid var(--color2)";
         } else
         if(myReact==3){
-          button = document.getElementById('btn_react_3');
-          span = document.getElementById('span_react_3');
+          //document.getElementById('btn_react_3').addEventListener('click', addReaction(0)); 
+          document.getElementById('btn_react_3').style.border = "3px solid var(--color2)";
         } else
         if(myReact==4){
-          button = document.getElementById('btn_react_4');
-          span = document.getElementById('span_react_4');
-        }
-        // Modifico il testo e il parametro passato
-        span.innerHTML += " &otimes; ";
-        button.addEventListener('click', addReaction(0)); 
-        button.style.border = "3px solid var(--color2)"
+          //document.getElementById('btn_react_4').addEventListener('click', addReaction(0)); 
+          document.getElementById('btn_react_4').style.border = "3px solid var(--color2)";
+        }  
       }
-      num_reactions[myReact-1]++;
+     
     } 
     document.getElementById('react_badge_1').innerHTML = ""+num_reactions[0];
     document.getElementById('react_badge_2').innerHTML = ""+num_reactions[1];
@@ -302,14 +315,13 @@ function saveArticle(){
   author = getUrlVars()["author"];
   if(user && id && author){
     // Aggiungo l'articolo ai salvati
-    fetch("../savedArticle/",{
+    fetch("../savedArticle/"+user,{
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
         'token': loggedUser.token
       },
       body: JSON.stringify({
-        username : user,
         id : id,
         author : author,
       }),
