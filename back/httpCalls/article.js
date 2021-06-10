@@ -67,7 +67,7 @@ router.post("/",async (req,res)=>{
 		return;
 	}
 
-	if (!req.body.tag){
+	if (!req.body.tags){
 		res.status(400).json({ error: "Tag dell'articolo non specificati" });
 		return;
 	}
@@ -108,7 +108,7 @@ router.post("/",async (req,res)=>{
 		summary : req.body.summary,
 		text : req.body.text,
 		date : mm + '/' + dd + '/' + yyyy,
-		tag: req.body.tag,
+		tags: req.body.tags,
 		restricted : req.body.restricted
 	});
 

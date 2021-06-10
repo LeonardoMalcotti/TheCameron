@@ -174,10 +174,10 @@ describe('Article', () =>{
 				title : "Promessi Sposi",
 				summary : "..",
 				text : "Quel ramo del lago di Como, che volge a mezzogiorno",
-				tag: [1,2],
+				tags: [1,2],
 				restricted: 'false',
 			});
-			
+
 		expect(response.statusCode).toBe(201);
 		done();
   	});
