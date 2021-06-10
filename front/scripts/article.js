@@ -296,7 +296,13 @@ function handleReactions(){
         if(myReact==4){
           //document.getElementById('btn_react_4').addEventListener('click', addReaction(0)); 
           document.getElementById('btn_react_4').style.border = "3px solid var(--color2)";
-        }  
+        } 
+      }
+      else{
+        document.getElementById('btn_react_1').style.border = "none";
+        document.getElementById('btn_react_2').style.border = "none";
+        document.getElementById('btn_react_3').style.border = "none";
+        document.getElementById('btn_react_4').style.border = "none";
       }
      
     } 
