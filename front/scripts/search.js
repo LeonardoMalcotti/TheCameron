@@ -54,7 +54,6 @@ function advancedSearch(url){
   .then(async function(data){
     articoli = [];
     for(i=0; i<data.length; i++){
-      console.log(data[i]);
       articoli[i] = data[i];
     }
     printArticles(0);
