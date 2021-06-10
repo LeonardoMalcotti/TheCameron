@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <title>TheCameron</title>
-  <script src="../scripts/homepage.js"></script>
-  <script src="../scripts/logout.js"></script>
+  <script src="../scripts/homepage.js"></script>  <!-- setup e visualizzazione preview articoli + ricerca base -->
+  <script src="../scripts/search.js"></script>  <!-- ricerca avanzata -->
+  <script src="../scripts/logout.js"></script>  <!-- logout -->
   <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body onload="setup_homepage()">
@@ -11,7 +12,7 @@
         <h1>TheCameron</h1>
     </header>
     <nav class="flex-container">
-        <a id="header_home" href="">
+        <a id="header_home" class="active_page" href="index.html">
             Home
         </a>
         <div id="header_unlogged">
@@ -26,7 +27,7 @@
             <a id="header_newArticle" href="newArticle.html"> 
                 Write article
             </a>
-            <a id="header_profile" href=""> <!-- Missing link -->
+            <a id="header_profile" href="user.html"> 
                 Your profile
             </a>
             <a id="header_logout" onclick="logOut()">
@@ -49,9 +50,19 @@
     <aside>
         <div id="search_box">
             <input type="text" id="txt_search" placeholder="Search.."> 
-            <button class="btn_search" onclick=""> Search </button> <!-- Missing link -->
+            <button class="btn_search" onclick="loadArticles()"> Search </button> <!-- Missing link -->
         </div>
-        <div id="tags_box"></div>
+        <div id="adv_search_box">
+          <div class="inline_label">
+              <label for="txt_author">Author: </label>
+              <input name="txt_author" value="" id="txt_author" placeholder="author's username"/> 
+          </div>
+          <div class="inline_label">
+              <label for="txt_author">Tags: </label>
+              <input name="txt_tags" value="" id="txt_tags" placeholder="Tag1,Tag2,Tag3,..."/>
+          </div>
+            <button type="button" onclick="applyFilter()">Cerca con filtri</button>
+        </div>
     </aside>
   
 

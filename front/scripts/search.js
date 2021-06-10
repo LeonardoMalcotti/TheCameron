@@ -1,41 +1,56 @@
-function searchArticles(){
+function applyFilter() {
+	var author = document.getElementById("txt_author").value;
+	var strTags = document.getElementById("txt_tags").value;
+	strTags.replace(/%20/g, '')
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;');
+	var tags = strTags.split(",");
 
-    var text = document.getElementById("txt_search").value;
-    let htmlOutput = "";
+	var url = '../article/filters?';
+	if(author && author != ""){
+		author.replace(/%20/g, '')
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;');
+		url += ('author='+author);
+	}
+	if(tags && tags.length>0 && tags[0]!=""){
+    fetch("/tag/",{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((resp) => resp.json())
+    .then(function (data) {
+      for(x in data){
+        if(tags.includes(data[x].name)){
+          url += ('&tags[]='+data[x].id);
+        } 
+      }
+      advancedSearch(url);
+      return;
+    })   
+    .catch( error => console.log(error));   
+	}else{
+    advancedSearch(url);
+    return;
+  }
+}
 
-    if(text && text != ""){
-        // Sanificazione dell'input
-        text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-        fetch('../article/search/'+text, {
-            method: 'GET',
-            headers:{ 'Content-Type': 'application/json' }
-        })
-        .then((resp) => resp.json())
-        .then(async function(data){
-            for(let i=0; i<data.length; i++){
-                console.log(data[i]);
-                htmlOutput += "<p>"+ data[i].title + " - di " + data[i].author+ "</p><hr>";
-            }
-            document.getElementById("searchResults").innerHTML = htmlOutput;
-            return;
-        })
+function advancedSearch(url){
+  fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+  .then((resp) => resp.json())
+  .then(async function(data){
+    articoli = [];
+    for(i=0; i<data.length; i++){
+      articoli[i] = data[i];
     }
-    else{
-        console.log("vuoto\n");
-        fetch('../article/search/', {
-            method: 'GET',
-            headers:{ 'Content-Type': 'application/json' }
-        })
-        .then((resp) => resp.json())
-        .then(async function(data){
-            for(let i=0; i<data.length; i++){
-                console.log(data[i]);
-                htmlOutput += "<p>"+ data[i].title + " - di " + data[i].author+ "</p><hr>";
-            }
-            document.getElementById("searchResults").innerHTML = htmlOutput;
-            return;
-        })
-    }
-    
+    printArticles(0);
+  })
+  .catch(error => console.log("errore: "+error));
 }

@@ -1,51 +1,73 @@
+var myStorage = window.sessionStorage;
+var loggedUser= {username:null, token:null};
+
 function loadSubscription(){
-    var username = decodeURIComponent(window.location.search).substring(10); //Recupero l'id
-    var url = '../user/' + username + '/subscription';    //Costruisco l'url con l'id
-    console.log("username: " + username);
+  // COntrolliamo se l'utente è loggato, in caso contrario lo mandiamo al login
+  if(sessionStorage.getItem('loggedUser') && sessionStorage.getItem('token')){
+    loggedUser = {
+      username: sessionStorage.getItem('loggedUser'),
+      token: sessionStorage.getItem('token')
+    }
+    document.getElementById("header_profile").innerHTML = sessionStorage.loggedUser + "'s profile";
+    //document.getElementById("header_unlogged").hidden = true;
+    document.getElementById("header_logged").hidden = false;
 
-    //Controllo token se presente
-
-		fetch(url, {
+    // Controllo se l'utente ha già una subscription
+    var url = '../user/' + loggedUser.username + '/subscription';    //Costruisco l'url con l'id
+    fetch(url, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'token': loggedUser.token
+        },
     })
-    .then((resp) => resp.json())
     .then(function(data) {
-        console.log("Data:" + data);
-        document.getElementById('abbonamento').innerHTML = "Sei abbonato dal " + data.dateSubscription;
-        //paypal non visibile
+      // Se troviamo una subscription converto data con .json() 
+        if(data.ok){
+            data.json().then(sub =>{
+              document.getElementById('abbonato').innerHTML = "<h3>Sei abbonato dal " + prettyDate(sub.dateSubscription) +"</h3>";
+            })
+        }
     })
-    .catch( error => console.error(error)
-        //document.getElementById('abbonamento').innerHTML = "Non sei abbonato ";
-        //paypal visibile
-    );
+    .catch( error => console.error(error));
+  }else{
+    loggedUser = null;
+    // redirect al login
+    document.location.href = "login.html";
+  }
+    
 }
 
 
 function addSubscription(){
-		var username = decodeURIComponent(window.location.search).substring(10); //Recupero l'id
-    var url = '../user/' + username + '/subscription';
+    var url = '../user/' + loggedUser.username + '/subscription';
     var date = new Date().toLocaleDateString("it-IT");
-
-    console.log("username: " + username);
-    console.log("date: " + date);
 
 		fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'token': loggedUser.token
+      },
 				body: JSON.stringify({
-            username : username,
+            username : loggedUser.username,
             dateSubscription : date,
         }),
     })
-    .then((resp) => resp.json())
-    .then(function(data) {
-        console.log(data);
-        document.getElementById('abbonato').innerHTML = "Ottimo! Ti sei abbonato";
+    .then(function(resp){
+      if(resp.ok){
+        document.getElementById('abbonato').innerHTML = "<h3>Ottimo! Ti sei abbonato</h3><button onclick='window.location.href=\"user.html\"'>Torna alla pagina utente</button>";
+      }
+      else{
+        document.getElementById('abbonato').innerHTML = "<h3>Si è verificato un errore, prova più tardi</h3><button onclick='window.location.href =\"user.html\"'>Torna alla pagina utente</button>";
+      }
     })
-    .catch( error => console.error(error)
-						//document.getElementById('abb').innerHTML = "Peccato! Non ti sei abbonato";
-		);
-
+    .catch( error => alert("error: "+error));
     return;
+}
+
+function prettyDate(datetime){
+  let date = datetime.split("T")[0];
+  let ymd = date.split("-");
+  return (ymd[2]+"/"+ymd[1]+"/"+ymd[0]);
 }

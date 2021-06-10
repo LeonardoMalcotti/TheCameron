@@ -8,20 +8,22 @@ function signInUser(){
     var email = document.getElementById("txt_email").value;
 
     fetch('../user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            name : name,
-			surname : surname,
-			username : username,
-			password : password,
-			email : email
-        }),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+          name : name,
+          surname : surname,
+          username : username,
+          password : password,
+          email : email
+      }),
     })
     .then(function(response) {
         //la risposta è un successo
         if(response.ok){
-            alert("Utente creato");
+            if(confirm("Utente creato, vuoi procedere con il login?")){
+              window.location.href = "./login.html";
+            }
         }
         //Da una spiegazione nel caso di fallimento 
         else {

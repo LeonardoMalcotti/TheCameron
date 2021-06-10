@@ -1,17 +1,34 @@
 <!DOCTYPE html>
-<html lang="it">
-
+<html lang="en">
 <head>
-<script src="../scripts/login.js"></script>
-
+  <title>TheCameron</title>
+  <script src="../scripts/login.js"></script>
+  <link rel="stylesheet" href="../styles/style.css">
 </head>
-
 <body>
-	
-	<form id="formLogIn">
-        username: <input name="txt_username" value="userna" id="txt_username"/><br>
-        password: <input type="password" name="txt_password" value="1234" id="txt_password"/><br>
-        <button type="button" onclick="LogInUser()" >LogIn</button><br>
-	</form>
-
+  <header>
+    <h1>TheCameron</h1>
+  </header>
+  <nav class="flex-container">
+    <a id="header_home" href="index.html">
+        Home
+    </a>
+    <div id="header_unlogged">
+        <a id="header_login" class="active_page" href="login.html">
+            Log in
+        </a>
+        <a id="header_signin" href="signin.html">
+            Sign in
+        </a>
+    </div>
+  </nav>
+  <div id="main_content_full">
+    <section id="centered_section">
+      <form id="formLogIn">
+        Username: <input class="inline" name="txt_username" value="userna" id="txt_username"/>
+        Password: <input class="inline" type="password" name="txt_password" value="1234" id="txt_password"/>
+        <button type="button" onclick="LogInUser()">LogIn</button>
+	    </form>
+    </section>
+  </div>
 </body>
