@@ -11,7 +11,7 @@ router.post("/",async (req,res)=>{
 
 	//controlla che vengano passati tutti i dati
 
-	if (!req.body.reaction){
+	if (req.body.reaction == null){
 		res.status(400).json({ error: "Reazione dell'articolo non specificata" });
 		return;
 	}
