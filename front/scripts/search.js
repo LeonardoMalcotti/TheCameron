@@ -61,7 +61,7 @@ function advancedSearch(url){
   .catch(error => console.log("errore: "+error));
 }
 
-function getTagList(){
+function getTagList(isLogged){
   // Ottengo la lista dei tag
   fetch('../tag', {
     method: 'GET',
@@ -71,10 +71,39 @@ function getTagList(){
   .then(function(data){
     let htmlOut = "Tag List<hr>";
     for(i in data){
-        htmlOut += ( data[i].name + "<br>" );
+        htmlOut += ( data[i].name);
+        if(isLogged){ // Se l'utente è loggato aggiungo il pulsante per salvare il tag
+          htmlOut += "<button onclick='saveTag("+data[i].id+")'>Salva</button>";
+        }
+        htmlOut += "<br>";
+
     }
     document.getElementById("aside_tags").innerHTML = htmlOut;
     
   })
   .catch( error => console.log(error));
+}
+
+function saveTag(tag_id){
+  if(sessionStorage.getItem('loggedUser')){
+    // Aggiungo il tag ai preferiti
+    fetch("../tag/"+sessionStorage.getItem('loggedUser'), {
+      method:'POST',
+      body: JSON.stringify({
+        tag: tag_id,
+      }),
+    })
+    .then(function(data) {
+      if(data.ok){
+        alert("tag salvato");
+      }
+      else{
+        data.json().then(data => {
+          console.log(data.error);
+        })
+      }
+    })
+  }else{
+    getTagList(false);
+  }
 }

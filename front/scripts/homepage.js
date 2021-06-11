@@ -5,6 +5,7 @@ var articoli = [];
 function setup_homepage(){
     // Se non è settato imposto i campi vuoti in modo che non dia errori
     if(sessionStorage.getItem('loggedUser') && sessionStorage.getItem('token')){
+      getTagList(true);
       loggedUser = {
         username: sessionStorage.getItem('loggedUser'),
         token: sessionStorage.getItem('token')
@@ -14,9 +15,10 @@ function setup_homepage(){
         document.getElementById("header_logged").hidden = false;
     }else{
         loggedUser = {};
+        getTagList(false);
     }
     loadArticles();
-    getTagList();
+    
 }
 
 
