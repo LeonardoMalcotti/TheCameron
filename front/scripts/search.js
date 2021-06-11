@@ -106,7 +106,7 @@ function saveTag(tag_id){
       if(data.ok){
         alert("tag salvato");
         // Nascondo il pulsante salva
-        document.getElementById("btn_save_tag_"+tag_id).style.visibility = "hidden";
+        document.getElementById("btn_tag_"+tag_id).style.visibility = "hidden";
       }
       else{
         data.json().then(data => {
