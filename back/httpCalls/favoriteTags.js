@@ -9,7 +9,7 @@ const User = require('../models/User');
 //
 router.post("/:username",async(req,res)=>{
 
-	if(!req.body.tag){
+	if(req.body.tag == null){
 		res.status(400).json({error:"Parametro tag non specificato"});
 		return;
 	}
@@ -39,12 +39,12 @@ router.post("/:username",async(req,res)=>{
 	}
 
 	//se il tag specificato è già un favorito si ritorna errore
-	if(favoriteTags.id.includes(tags)){
+	if(favoriteTags.id.includes(tag)){
 		res.status(400).json({ error: "Tag gia inserito"});
 		return;
 	}
 
-	favoriteTags.id.push(tags)
+	favoriteTags.id.push(tag)
 
 	favoriteTags.save();
 
