@@ -236,6 +236,7 @@ function unfollow(user, target){
               alert(data.error)
           })
       }
+      window.location.reload();
   })
   .catch(error => console.log(error));
 }

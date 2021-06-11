@@ -16,6 +16,7 @@ function setup_homepage(){
         loggedUser = {};
     }
     loadArticles();
+    getTagList();
 }
 
 

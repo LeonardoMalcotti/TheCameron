@@ -315,3 +315,11 @@ aside{
   background-color: var(--color1);
   color: var(--color3);
 }
+#aside_tags{
+  background-color: var(--color1);
+  text-align: center;
+  color: var(--color3);
+}
+#aside_tags hr{
+  color: var(--color4);
+}

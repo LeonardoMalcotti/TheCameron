@@ -60,3 +60,21 @@ function advancedSearch(url){
   })
   .catch(error => console.log("errore: "+error));
 }
+
+function getTagList(){
+  // Ottengo la lista dei tag
+  fetch('../tag', {
+    method: 'GET',
+    headers:{ 'Content-Type': 'application/json' }
+  })
+  .then((resp) => resp.json())
+  .then(function(data){
+    let htmlOut = "Tag List<hr>";
+    for(i in data){
+        htmlOut += ( data[i].name + "<br>" );
+    }
+    document.getElementById("aside_tags").innerHTML = htmlOut;
+    
+  })
+  .catch( error => console.log(error));
+}
