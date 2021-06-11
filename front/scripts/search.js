@@ -1,3 +1,5 @@
+var userTagIds = [];
+
 function applyFilter() {
 	var author = document.getElementById("txt_author").value;
 	var strTags = document.getElementById("txt_tags").value;
@@ -73,7 +75,12 @@ function getTagList(isLogged){
     for(i in data){
         htmlOut += ( data[i].name);
         if(isLogged){ // Se l'utente è loggato aggiungo il pulsante per salvare il tag
-          htmlOut += "<button onclick='saveTag("+data[i].id+")'>Salva</button>";
+          // Se il tag è salvato aggiungo il pulsante come hidden
+          if(userTagIds.includes(data[i].id)){
+            htmlOut += "<button id='btn_del_tag_"+data[i].id+"' onclick='saveTag("+data[i].id+")'hidden>Save</button>";
+          }else{
+            htmlOut += "<button id='btn_tag_"+data[i].id+"' onclick='saveTag("+data[i].id+")'>Save</button>";
+          }
         }
         htmlOut += "<br>";
 
@@ -87,7 +94,7 @@ function getTagList(isLogged){
 function saveTag(tag_id){
   if(sessionStorage.getItem('loggedUser')){
     // Aggiungo il tag ai preferiti
-    fetch("../tag/"+sessionStorage.getItem('loggedUser'), {
+    fetch("../tag/user/"+sessionStorage.getItem('loggedUser'), {
       method:'POST',
       body: JSON.stringify({
         tag: tag_id,
@@ -96,6 +103,8 @@ function saveTag(tag_id){
     .then(function(data) {
       if(data.ok){
         alert("tag salvato");
+        // Nascondo il pulsante salva
+        document.getElementById("btn_save_tag_"+tag_id).style.visibility = "hidden";
       }
       else{
         data.json().then(data => {
@@ -103,6 +112,29 @@ function saveTag(tag_id){
         })
       }
     })
+  }else{
+    getTagList(false);
+  }
+}
+
+function getUserTagList(){
+  if(sessionStorage.getItem('loggedUser')){
+    // Ottengo la lista dei tag
+    fetch('../tag/user/'+sessionStorage.getItem('loggedUser'), {
+      method: 'GET',
+      headers:{ 'Content-Type': 'application/json' }
+    })
+    .then((resp) => resp.json())
+    .then(function(data){
+      userTags = [];
+      if(!data.error){
+        for(i in data){
+          userTagIds[i] = data[i].id;
+        }
+      }
+      getTagList(true);
+    })
+    .catch( error => console.log(error));
   }else{
     getTagList(false);
   }

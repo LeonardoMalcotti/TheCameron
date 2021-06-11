@@ -5,7 +5,7 @@ var articoli = [];
 function setup_homepage(){
     // Se non è settato imposto i campi vuoti in modo che non dia errori
     if(sessionStorage.getItem('loggedUser') && sessionStorage.getItem('token')){
-      getTagList(true);
+      getUserTagList(true);
       loggedUser = {
         username: sessionStorage.getItem('loggedUser'),
         token: sessionStorage.getItem('token')
