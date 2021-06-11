@@ -75,12 +75,18 @@ function getTagList(isLogged){
     for(i in data){
         htmlOut += ( data[i].name);
         if(isLogged){ // Se l'utente è loggato aggiungo il pulsante per salvare il tag
-          // Aggiungo il pulsante come hidden
-          htmlOut += "<button id='btn_tag_"+data[i].id+"' onclick='saveTag("+data[i].id+")'>Save</button>";          
+          // Se il tag è salvato aggiungo il pulsante come hidden
+          if(userTagIds.includes(data[i].id)){
+            htmlOut += "<button id='btn_del_tag_"+data[i].id+"' onclick='saveTag("+data[i].id+")'hidden>Save</button>";
+          }else{
+            htmlOut += "<button id='btn_tag_"+data[i].id+"' onclick='saveTag("+data[i].id+")'>Save</button>";
+          }
         }
         htmlOut += "<br>";
+
     }
-    document.getElementById("aside_tags").innerHTML = htmlOut;  
+    document.getElementById("aside_tags").innerHTML = htmlOut;
+    
   })
   .catch( error => console.log(error));
 }
