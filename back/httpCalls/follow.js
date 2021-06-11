@@ -53,6 +53,7 @@ router.post("/follow", async (req,res)=>{
 
 		newFollow.save();
 		res.status(200).send();
+		return;
 	}
 
 
