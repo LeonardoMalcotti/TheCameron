@@ -50,7 +50,7 @@ function loadArticle(){
     document.getElementById("header_unlogged").hidden = true;
     document.getElementById("header_logged").hidden = false;
   }else{
-    loggedUser = null;
+    loggedUser = {username:null, token:null};
     // disablilito le reazioni
     document.getElementById('btn_react_1').disabled=true;
     document.getElementById('btn_react_2').disabled=true;
