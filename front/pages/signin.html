@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <title>TheCameron</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />  <!-- favicon -->
   <script src="../scripts/signin.js"></script>
   <link rel="stylesheet" href="../styles/style.css">
 </head>
@@ -25,11 +26,11 @@
   <div id="main_content_full">
     <section id="centered_section">
       <form id="formSignIn">
-        name: <input class="v-form" name="txt_name" value="aaaaa" id="txt_name" size="30"/><br>
-        surname: <input class="v-form" name="txt_surname" value="bbbb" id="txt_surname" size="30"/><br>
-        username: <input class="v-form" name="txt_username" value="userna" id="txt_username" size="30"/><br>
-        password: <input class="v-form" type="password" name="txt_password" value="1234" id="txt_password" size="30"/><br>
-        email: <input class="v-form" name="txt_email" value="mario.rossi@unitn.com" id="txt_email" size="30"/><br>
+        Name: <input class="v-form" name="txt_name" placeholder="Mario" id="txt_name" size="30"/><br>
+        Surname: <input class="v-form" name="txt_surname" placeholder="Rossi" id="txt_surname" size="30"/><br>
+        Username: <input class="v-form" name="txt_username" placeholder="supermario" id="txt_username" size="30"/><br>
+        Password: <input class="v-form" type="password" name="txt_password" value="" id="txt_password" size="30"/><br>
+        Email: <input class="v-form" name="txt_email" placeholder="mario.rossi@email.web" id="txt_email" size="30"/><br>
         <button class="v-form" type="button" onclick="signInUser()">Sign in</button><br>
       </form>
     </section>

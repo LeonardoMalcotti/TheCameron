@@ -36,6 +36,8 @@ Il parametro n è l'indice in articoli del prossimo elemento da stampare
 */
 
 function printArticles(n){
+  // Torno alla lista articoli
+  backToList();
   if(n>0){
     // Se la chiamata proviene da pulsante "Carica altri" rimuoviamo il pulsante
     document.getElementById("btn_loadMore").remove();
@@ -67,6 +69,8 @@ function printArticles(n){
 
 // Con questa funzione effettuiamo la chiamata http e salviamo gli articoli 
 function loadArticles(){
+  // Torno alla lista articoli
+  backToList();
   // Pulisco la lista
   document.getElementById("article_list").innerHTML = "";
   articoli = [];

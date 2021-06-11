@@ -95,6 +95,7 @@ aside{
     margin: 15px;
     margin-top: 30px;
     float: right;
+    border-radius: 5px;
     background-color: var(--color2);
 }
 #search_box{
