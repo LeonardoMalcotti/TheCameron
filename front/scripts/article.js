@@ -120,6 +120,11 @@ function checkSubscription(user, id, author){
       authorized = false;
       // Elimino il testo dell'articolo
       articolo.text = "<b>This article is restricted. Make a subscription to read it</b>";
+      // disablilito le reazioni
+      document.getElementById('btn_react_1').disabled=true;
+      document.getElementById('btn_react_2').disabled=true;
+      document.getElementById('btn_react_3').disabled=true;
+      document.getElementById('btn_react_4').disabled=true;
       printArticle();
     }
   })
