@@ -92,13 +92,15 @@ function getTagList(isLogged){
 }
 
 function saveTag(tag_id){
-  if(sessionStorage.getItem('loggedUser')){
+  if(sessionStorage.getItem('loggedUser') && sessionStorage.getItem('token')){
     // Aggiungo il tag ai preferiti
     fetch("../tag/user/"+sessionStorage.getItem('loggedUser'), {
       method:'POST',
-      body: JSON.stringify({
-        tag: tag_id,
-      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'token': sessionStorage.getItem('token')
+      },
+      body: JSON.stringify({tag : tag_id}),
     })
     .then(function(data) {
       if(data.ok){
